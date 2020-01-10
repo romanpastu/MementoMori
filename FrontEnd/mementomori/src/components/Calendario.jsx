@@ -8,25 +8,41 @@ class Calendario extends React.Component {
             birth_date : new Date(),
             years_to_live: 10,
             death_date: "",
-            death_date_string: ""
+
         };
+
+        this.getLivedWeeks = this.getLivedWeeks.bind(this);
 
     }
 
     componentDidMount() {
-        var death_date = this.state.birth_date.setFullYear(this.state.birth_date.getFullYear() + this.state.years_to_live) //this is should result in the current date +1
+        
+        //Sets the death date state given the birth date and the years to live
+        var death = new Date(this.state.birth_date.getTime());
+        death.setFullYear(this.state.birth_date.getFullYear() + this.state.years_to_live);
+
         this.setState({ 
-            death_date : new Date(death_date),
-            death_date_string :  new Date(death_date).toString()
+            death_date : new Date(death),
         });
+
+
+        
+    }
+    
+    getLivedWeeks(){
+       var lived_seconds = (new Date(this.state.death_date) - new Date(this.state.birth_date))/1000;
+       var lived_weeks = lived_seconds/60/60/24/7;
+       //Returns week rounded to upper number
+       return Math.ceil(lived_weeks);
     }
 
     render() {
         return (
             <div>
                 <p>Hello world!</p>
-                <p>{this.state.death_date_string}</p>
-                
+                <p><b>Birth date:</b> {this.state.birth_date.toString()}</p>
+                <p><b>Death date:</b> {this.state.death_date.toString()}</p>
+                <p><b>Lived weeks:</b> {this.getLivedWeeks()}</p>
             </div>
         )
     }
