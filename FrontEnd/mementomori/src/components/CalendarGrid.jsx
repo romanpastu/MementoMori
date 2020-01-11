@@ -6,10 +6,10 @@ import './CalendarGrid.css'
 class CalendarGrid extends React.Component {
   render() {
     let rows = []
-    for (let i = 0; i<this.props.weeks;i++){
-      rows.push(<CalendarFields key={i} />)
+    for (let i = 0; i<this.props.totalWeeks;i++){
+      rows.push(<CalendarFields key={i} weekId={i} livedWeeks={this.props.livedWeeks}/>)
     }
-    return <h1>{rows}</h1>
+    return <div className="elements">{rows}</div>
 
   }
 }
