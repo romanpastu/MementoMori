@@ -15,7 +15,7 @@ class Calendario extends React.Component {
         };
 
         this.getWeeksToLive = this.getWeeksToLive.bind(this);
-
+        this.getCurrentWeek = this.getCurrentWeek.bind(this);
     }
 
     componentDidMount() {
@@ -40,15 +40,27 @@ class Calendario extends React.Component {
 
     //this function is used to get the weeks until registration date, but its now implemented up to current date, you should have a registration date in the database
     getWeeksToDate() {
-        var current_date = new Date();
+        var current_date = new Date(); //this should be the register date
         console.log(current_date) //Sat Jan 11 2020 17:07:30 GMT+0100 (Central European Standard Time)
         console.log(new Date(555555558555)); //Mon Aug 10 1987 02:59:18 GMT+0200 (Central European Summer Time)
-        var seconds_to_date = (new Date(current_date) - new Date(555555558555)) / 1000 //The second new Date() is the birth date, right now theres a mockup to simulate a birth date
+        var seconds_to_date = (new Date(current_date) - new Date(881535600000)) / 1000 //The second new Date() is the birth date, right now theres a mockup to simulate a birth date
         var weeks_to_date = seconds_to_date / 60 / 60 / 24 / 7;
         console.log("semanas vividas:" + Math.floor(weeks_to_date));
         //Returns lived weeks to date rounded to lower number because we dont want to overwrite the current ongoing week
         return Math.floor(weeks_to_date);
     }
+
+    getCurrentWeek(){
+        var current_date = new Date();
+        console.log(current_date) //Sat Jan 11 2020 17:07:30 GMT+0100 (Central European Standard Time)
+        console.log(new Date(555555558555)); //Mon Aug 10 1987 02:59:18 GMT+0200 (Central European Summer Time)
+        var seconds_to_date = (new Date(current_date) - new Date(881535600000)) / 1000 //The second new Date() is the birth date, right now theres a mockup to simulate a birth date
+        var weeks_to_date = seconds_to_date / 60 / 60 / 24 / 7;
+        console.log("semanas vividas:" + Math.floor(weeks_to_date));
+        //Returns lived weeks to date rounded to lower number because we dont want to overwrite the current ongoing week
+        return Math.floor(weeks_to_date);
+    }
+
 
     render() {
         return (
@@ -57,7 +69,7 @@ class Calendario extends React.Component {
                 <p><b>Birth date:</b> {this.state.birth_date.toString()}</p>
                 <p><b>Death date:</b> {this.state.death_date.toString()}</p>
                 <p><b>Lived weeks:</b> {this.getLivedWeeks()}</p> */}
-                <CalendarGrid livedWeeks={this.getWeeksToDate()} totalWeeks={this.getWeeksToLive()} />
+                <CalendarGrid livedWeeks={this.getWeeksToDate()} totalWeeks={this.getWeeksToLive()} currentWeek={this.getCurrentWeek()} />
             </div>
         )
     }

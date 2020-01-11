@@ -13,7 +13,15 @@ class CalendarFields extends React.Component{
     render(){
         var weekId = this.props.weekId;
         if(weekId <= this.props.livedWeeks){
-            return <div id={weekId} className="cube-lived"></div>
+            if(weekId == this.props.currentWeek){
+                return <div id={weekId} title={weekId} className="cube green"> </div>
+            }else{
+                return <div id={weekId} className="cube-lived"></div>
+            }
+        }else if(weekId == this.props.currentWeek){
+            
+                return <div id={weekId} title={weekId} className="cube green"> </div>
+            
         }else{
             return <div id={weekId} title={weekId} className="cube white"> </div>
         }
