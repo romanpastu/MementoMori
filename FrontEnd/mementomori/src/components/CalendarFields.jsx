@@ -5,7 +5,7 @@ class CalendarFields extends React.Component{
     constructor(props) {
         super(props);
 
-      console.log(props) //week number, begining with 0
+      console.log(props) //week number, beginning with 0
     
     }
 
@@ -15,7 +15,7 @@ class CalendarFields extends React.Component{
         if(weekId <= this.props.livedWeeks){
             return <div id={weekId} className="cube-lived"></div>
         }else{
-            return <div id={weekId} className="cube white"></div>
+            return <div id={weekId} title={weekId} className="cube white"> </div>
         }
         
     }

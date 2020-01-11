@@ -33,20 +33,21 @@ class Calendario extends React.Component {
     getWeeksToLive() {
         var seconds_to_live = (new Date(this.state.death_date) - new Date(this.state.birth_date)) / 1000;
         var weeks_to_live = seconds_to_live / 60 / 60 / 24 / 7;
-        //Returns week rounded to upper number
+        //Returns week rounded to upper number 
         console.log("Semanas a vivir : " + Math.ceil(weeks_to_live))
         return Math.ceil(weeks_to_live);
     }
 
+    //this function is used to get the weeks until registration date, but its now implemented up to current date, you should have a registration date in the database
     getWeeksToDate() {
         var current_date = new Date();
         console.log(current_date) //Sat Jan 11 2020 17:07:30 GMT+0100 (Central European Standard Time)
         console.log(new Date(555555558555)); //Mon Aug 10 1987 02:59:18 GMT+0200 (Central European Summer Time)
         var seconds_to_date = (new Date(current_date) - new Date(555555558555)) / 1000 //The second new Date() is the birth date, right now theres a mockup to simulate a birth date
         var weeks_to_date = seconds_to_date / 60 / 60 / 24 / 7;
-        console.log("semanas vividas:" + Math.ceil(weeks_to_date));
-        //Returns lived weeks to date rounded to upper number
-        return Math.ceil(weeks_to_date);
+        console.log("semanas vividas:" + Math.floor(weeks_to_date));
+        //Returns lived weeks to date rounded to lower number because we dont want to overwrite the current ongoing week
+        return Math.floor(weeks_to_date);
     }
 
     render() {
