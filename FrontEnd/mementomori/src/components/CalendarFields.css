@@ -9,7 +9,7 @@
   }
 
   .cube:hover{
-    background:rgb(186, 189, 186);
+    background:red;
   }
 
   .cube-lived{
@@ -18,7 +18,7 @@
     height: 20px;
     border: 1px solid rgba(0, 0, 0, .2);
     margin: 1px;
-    background: rgb(73, 9, 9);
+    background: rgb(150, 146, 146);
   }
   
   .purple {
@@ -35,4 +35,8 @@
 
   .green{
     background: green;
+  }
+
+  .red{
+    background: red
   }

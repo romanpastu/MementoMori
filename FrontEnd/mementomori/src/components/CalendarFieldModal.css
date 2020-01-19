@@ -1,0 +1,8 @@
+.cube-to-spawn{
+    float: left;
+    width: 20px;
+    height: 20px;
+    border: 1px solid rgba(0, 0, 0, .2);
+    margin: 1px;
+    background:purple
+}
