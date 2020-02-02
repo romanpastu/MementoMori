@@ -1,6 +1,4 @@
-
-  
-  .cube-to-spawn{
+.cube-to-spawn{
     float: left;
     width: 20px;
     height: 20px;
@@ -12,8 +10,19 @@
 .modal-window{
   position:fixed;
   z-index: 1;
-  background-color:blue;
+  background-color:rgb(228, 228, 228);
   left:35vw;
-  top: 40vh;
+  top: 35vh;
+  border-radius: 30px;
   
+}
+
+.modalBg{
+  height:100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background-color:rgba(169, 169, 169, 0.568);
+  position: fixed;
+  z-index: 1;
 }

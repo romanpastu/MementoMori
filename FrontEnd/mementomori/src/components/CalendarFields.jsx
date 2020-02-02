@@ -11,7 +11,7 @@ class CalendarFields extends React.Component {
             description: "",
             showModal: false
         };
-        console.log(props) //week number, beginning with 0
+        //console.log(props) //week number, beginning with 0
         this.showModal = this.showModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
     }
@@ -63,11 +63,11 @@ class CalendarFields extends React.Component {
             return <div id={weekId} className="cube-lived"></div>
         } else {
             const currentStyle = (weekId == this.props.currentWeek) ? "green" : "white";
-            var style = "cube "+ currentStyle;
+            var style = "cube " + currentStyle;
             return <div id={weekId} title={weekId} className={style}
                 {...(!this.state.showModal && { onClick: this.showModal })}
             >
-                <CalendarFieldModal show={this.state.showModal} close={this.closeModal} id={weekId}/>
+                <CalendarFieldModal show={this.state.showModal} close={this.closeModal} id={weekId} />
             </div>
         }
 
