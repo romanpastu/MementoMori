@@ -44,18 +44,21 @@ class CalendarFields extends React.Component {
     render() {
         var weekId = this.props.weekId;
         
+        
+
+
         //current week, round up
         //lived weeks, round down
         //total weeks, round up
-        if (weekId < this.props.livedWeeks) {
+        if (weekId < this.props.weeksToRegisterDate) {
             return <div id={weekId} className="cube-lived"></div>
         } else if (weekId == this.props.currentWeek) {
             return <div id={weekId} title={weekId} className="cube green" onClick={this.showModal}> 
-                  { this.state.showModal ? <CalendarFieldModal /> : null}
+                   <CalendarFieldModal show={this.state.showModal} /> 
             </div>
         } else {
             return <div id={weekId} title={weekId} className="cube white" onClick={this.showModal}>
-                { this.state.showModal ? <CalendarFieldModal /> : null}
+                 <CalendarFieldModal show={this.state.showModal}/> 
                  </div>
         }
             
