@@ -9,3 +9,11 @@
     background:purple
 }
   
+.modal-window{
+  position:fixed;
+  z-index: 1;
+  background-color:blue;
+  left:35vw;
+  top: 40vh;
+  
+}

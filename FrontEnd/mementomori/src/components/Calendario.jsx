@@ -70,6 +70,7 @@ class Calendario extends React.Component {
                 <p><b>Death date:</b> {this.state.death_date.toString()}</p>
                 <p><b>Lived weeks:</b> {this.getLivedWeeks()}</p> */}
                 <CalendarGrid weeksToRegisterDate={this.getWeeksToRegisterDate()} totalWeeks={this.getWeeksToLive()} currentWeek={this.getCurrentWeek()} />
+
             </div>
         )
     }
