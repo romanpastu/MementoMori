@@ -27,8 +27,8 @@ class CalendarFieldModal extends React.Component {
         }
 
         return <div className="modalBg">
-            <div className="flex-container">
-
+                <div className="flex-container">
+                
                 <div id="open-modal" className="modal-window ">
                     <div>
                         <p className="modal-close" onClick={this.props.close}>Close</p>

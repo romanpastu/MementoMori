@@ -71,23 +71,27 @@ class CalendarFields extends React.Component {
             return <div id={weekId} className="cube-lived"></div>
         } else {
             if(this.state.emotionRating == 0){
-                var currentStyle = (weekId == this.props.currentWeek) ? "green" : "white";
+                var currentStyle = (weekId == this.props.currentWeek) ? " white" /*replace this to green to return the green indicator*/: "white";
             }else if(this.state.emotionRating == 1){
-                var currentStyle = (weekId == this.props.currentWeek) ? "green" : "rating1";
+                var currentStyle = (weekId == this.props.currentWeek) ? "rating1" /*replace this to green to return the green indicator*/ : "rating1";
             }else if(this.state.emotionRating == 2){
-                var currentStyle = (weekId == this.props.currentWeek) ? "green" : "rating2";
+                var currentStyle = (weekId == this.props.currentWeek) ? " rating2" /*replace this to green to return the green indicator*/: "rating2";
             }else if(this.state.emotionRating == 3){
-                var currentStyle = (weekId == this.props.currentWeek) ? "green" : "rating3";
+                var currentStyle = (weekId == this.props.currentWeek) ? " rating3" /*replace this to green to return the green indicator*/: "rating3";
             }else if(this.state.emotionRating == 4){
-                var currentStyle = (weekId == this.props.currentWeek) ? "green" : "rating4";
+                var currentStyle = (weekId == this.props.currentWeek) ? " rating4" /*replace this to green to return the green indicator*/: "rating4";
             }else if(this.state.emotionRating == 5){
-                var currentStyle = (weekId == this.props.currentWeek) ? "green" : "rating5";
+                var currentStyle = (weekId == this.props.currentWeek) ? " rating5" /*replace this to green to return the green indicator*/: "rating5";
             }
             // const currentStyle = (weekId == this.props.currentWeek) ? "green" : "white";
             var style = "cube " + currentStyle;
+            
+
             return <div id={weekId} title={weekId} className={style}
                 {...(!this.state.showModal && { onClick: this.showModal })}
             >
+                
+                {weekId == this.props.currentWeek ? <div className="cross"></div> : <div className="cube-white"></div> } {/*Remove this to return the green indicator*/}
                 <CalendarFieldModal show={this.state.showModal} close={this.closeModal} id={weekId} emotionRating={this.state.emotionRating} handleChange={this.handleChange} />
             </div>
         }
