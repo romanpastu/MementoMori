@@ -3,12 +3,11 @@
 .modal-window{
   position:fixed;
   z-index: 1;
-  background-color:rgb(228, 228, 228);
+  background-color:white;
   border-radius: 30px;
   width:50vw;
   
 }
-
 
 
  .modalBg{
@@ -29,5 +28,26 @@
     align-items: center;
     justify-content: center;
 }
+.flex-in-container{
+  display:flex;
+  flex-direction: column;
+}
+.emotion-selector{
+  margin-bottom:1vw;
+  margin-left:1vw;
+  margin-right:1vw;
+}
+.textarea{
+  margin-left:1vw;
+  margin-right:1vw;
+}
+h2{
+  margin-left:1vw;
+  margin-right:1vw;
+}
 
+.modal-close{
+  text-align:right;
+  margin-right: 1vw;
+}
 
