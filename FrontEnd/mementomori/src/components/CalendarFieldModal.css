@@ -1,23 +1,17 @@
-.cube-to-spawn{
-    float: left;
-    width: 20px;
-    height: 20px;
-    border: 1px solid rgba(0, 0, 0, .2);
-    margin: 1px;
-    background:purple
-}
+
   
 .modal-window{
   position:fixed;
   z-index: 1;
   background-color:rgb(228, 228, 228);
-  left:35vw;
-  top: 35vh;
   border-radius: 30px;
+  width:50vw;
   
 }
 
-.modalBg{
+
+
+ .modalBg{
   height:100%;
   width: 100%;
   top: 0;
@@ -25,4 +19,15 @@
   background-color:rgba(169, 169, 169, 0.568);
   position: fixed;
   z-index: 1;
+} 
+
+.flex-container{
+  height: 100%;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
+
+

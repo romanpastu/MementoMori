@@ -64,7 +64,7 @@ class Calendario extends React.Component {
 
     render() {
         return (
-            <div className="container">
+            <div className="container-fluid calendar-container">
 
                 <CalendarGrid weeksToRegisterDate={this.getWeeksToRegisterDate()} totalWeeks={this.getWeeksToLive()} currentWeek={this.getCurrentWeek()} />
 
