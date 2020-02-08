@@ -4,12 +4,20 @@ class CalendarFieldModal extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            emotionRating: 0
+            emotionRating: this.props.emotionRating
         };
-        console.log("AAAAAAAAAAAA");
-        console.log(this.state.emotionRating)
+       
     }
 
+
+     componentDidUpdate() {
+        if(this.state.emotionRating != this.props.emotionRating) {
+            this.setState({
+                emotionRating: this.props.emotionRating
+            })
+            console.log("triggered update")
+        }
+    }
 
     render() {
 
@@ -23,17 +31,17 @@ class CalendarFieldModal extends React.Component {
 
                 <div id="open-modal" className="modal-window ">
                     <div>
-                        <p  className="modal-close" onClick={this.props.close}>Close</p>
+                        <p className="modal-close" onClick={this.props.close}>Close</p>
                         <div className="flex-in-container">
                             <h2>Input a comment about your week {this.props.id}</h2>
                             <textarea placeholder="This week I ..." className="textarea" ></textarea>
                             <h2 >Select a rating for your week</h2>
-                            <select className="emotion-selector">
-                                <option value="verygood">Very Good (5)</option>
-                                <option value="good">Good (4)</option>
-                                <option value="neutral">Neutral (3)</option>
-                                <option value="bad">Bad (2)</option>
-                                <option value="awful">Awful (1)</option>
+                            <select className="emotion-selector" value={this.state.value} selected={this.state.emotionRating} onChange={this.props.handleChange}>
+                                <option value="5" >Very Good (5)</option>
+                                <option value="4" >Good (4)</option>
+                                <option value="3" >Neutral (3)</option>
+                                <option value="2" >Bad (2)</option>
+                                <option value="1" >Awful (1)</option>
                             </select>
                         </div>
                     </div>

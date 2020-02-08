@@ -7,7 +7,6 @@ class CalendarFields extends React.Component {
         super(props);
         this.state = {
             fieldId: "",
-            rating: -1,
             description: "",
             showModal: false,
             emotionRating: 0
@@ -15,6 +14,7 @@ class CalendarFields extends React.Component {
         //console.log(props) //week number, beginning with 0
         this.showModal = this.showModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
 
     componentDidMount() {
@@ -37,9 +37,8 @@ class CalendarFields extends React.Component {
             // console.log(this.state.showModal)
         });
 
-
-
     }
+
 
     closeModal() {
         this.setState({
@@ -48,6 +47,16 @@ class CalendarFields extends React.Component {
             // console.log("clicked closeModal")
             // console.log(this.state.showModal)
         });
+    }
+
+    handleChange(event){
+        this.setState({ 
+            emotionRating: event.target.value 
+        }, () => {
+             console.log("emotion state after change")
+            console.log(this.state.emotionRating)
+        });
+       console.log("triggered")
     }
 
 
@@ -79,7 +88,7 @@ class CalendarFields extends React.Component {
             return <div id={weekId} title={weekId} className={style}
                 {...(!this.state.showModal && { onClick: this.showModal })}
             >
-                <CalendarFieldModal show={this.state.showModal} close={this.closeModal} id={weekId} />
+                <CalendarFieldModal show={this.state.showModal} close={this.closeModal} id={weekId} emotionRating={this.state.emotionRating} handleChange={this.handleChange} />
             </div>
         }
 
