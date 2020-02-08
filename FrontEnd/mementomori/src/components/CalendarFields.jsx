@@ -83,7 +83,7 @@ class CalendarFields extends React.Component {
             }else if(this.state.emotionRating == 5){
                 var currentStyle = (weekId == this.props.currentWeek) ? " rating5" /*replace this to green to return the green indicator*/: "rating5";
             }
-            // const currentStyle = (weekId == this.props.currentWeek) ? "green" : "white";
+            // const currentStyle = (weekId == this.props.currentWeek) ? "green" : "white"; {/*Uncomment this to return the green indicator*/}
             var style = "cube " + currentStyle;
             
 
