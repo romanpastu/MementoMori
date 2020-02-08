@@ -40,3 +40,20 @@
   .red{
     background: red
   }
+
+
+  .rating1{
+    background: #E2E6FF ;
+  }
+  .rating2{
+    background: #A6B3FF ;
+  }
+  .rating3{
+    background: #6279FF ;
+  }
+  .rating4{
+    background: #3653FF ;
+  }
+  .rating5{
+    background: #0025FF ;
+  }

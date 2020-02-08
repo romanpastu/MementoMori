@@ -9,7 +9,8 @@ class CalendarFields extends React.Component {
             fieldId: "",
             rating: -1,
             description: "",
-            showModal: false
+            showModal: false,
+            emotionRating: 0
         };
         //console.log(props) //week number, beginning with 0
         this.showModal = this.showModal.bind(this);
@@ -27,15 +28,13 @@ class CalendarFields extends React.Component {
 
 
     showModal() {
-        console.log("showmodal state before any click")
-        console.log(this.state.showModal)
-
-
+        // console.log("showmodal state before any click")
+        // console.log(this.state.showModal)
         this.setState({
             showModal: true
         }, () => {
-            console.log("clicked show modal")
-            console.log(this.state.showModal)
+            // console.log("clicked show modal")
+            // console.log(this.state.showModal)
         });
 
 
@@ -46,8 +45,8 @@ class CalendarFields extends React.Component {
         this.setState({
             showModal: false
         }, () => {
-            console.log("clicked closeModal")
-            console.log(this.state.showModal)
+            // console.log("clicked closeModal")
+            // console.log(this.state.showModal)
         });
     }
 
@@ -62,7 +61,20 @@ class CalendarFields extends React.Component {
         if (weekId < this.props.weeksToRegisterDate) {
             return <div id={weekId} className="cube-lived"></div>
         } else {
-            const currentStyle = (weekId == this.props.currentWeek) ? "green" : "white";
+            if(this.state.emotionRating == 0){
+                var currentStyle = (weekId == this.props.currentWeek) ? "green" : "white";
+            }else if(this.state.emotionRating == 1){
+                var currentStyle = (weekId == this.props.currentWeek) ? "green" : "rating1";
+            }else if(this.state.emotionRating == 2){
+                var currentStyle = (weekId == this.props.currentWeek) ? "green" : "rating2";
+            }else if(this.state.emotionRating == 3){
+                var currentStyle = (weekId == this.props.currentWeek) ? "green" : "rating3";
+            }else if(this.state.emotionRating == 4){
+                var currentStyle = (weekId == this.props.currentWeek) ? "green" : "rating4";
+            }else if(this.state.emotionRating == 5){
+                var currentStyle = (weekId == this.props.currentWeek) ? "green" : "rating5";
+            }
+            // const currentStyle = (weekId == this.props.currentWeek) ? "green" : "white";
             var style = "cube " + currentStyle;
             return <div id={weekId} title={weekId} className={style}
                 {...(!this.state.showModal && { onClick: this.showModal })}
