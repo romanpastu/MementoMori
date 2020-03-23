@@ -1,14 +1,12 @@
+
+let constants = require('./constants.js')
+//express use settings
 const express = require("express");
 const app = express();
-var mUserModel = require('./models/UserModel');
-var mongoose = require("mongoose");
 
-//mongo database connection
-mongoose.connect('mongodb+srv://romancc:oTfbJbMyibBtESye@mementomori-ebeiv.mongodb.net/test?retryWrites=true&w=majority', { useNewUrlParser: true })
-
-//express use settings
-
-
+//db settings
+const pgp = require("pg-promise")();
+const db = pgp(constants.dbUrl)
 
 //express calls
 app.get("/hello", (req, res) => {
@@ -16,15 +14,12 @@ app.get("/hello", (req, res) => {
   });
 
 app.post("/test", (req, res) =>{
-    
-    const userData = new mUserModel({
-        id: 1,
-        birth_date: "sttring",
-        years_to_live: 12,
-        death_date: "sttring"
-    });
-    userData.save().then(() => console.log('Saved'));
-    res.send("Saved");
+    db.query("SELECT * FROM test").then( data => {
+      console.log(data)
+      res.send(data);
+    }).catch( err => {
+      err.send("fail")
+    })
     
 })
 

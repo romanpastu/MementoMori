@@ -14,6 +14,7 @@
   "dependencies": {
     "express": "^4.17.1",
     "mongoose": "^5.8.6",
-    "nodemon": "^2.0.2"
+    "nodemon": "^2.0.2",
+    "pg-promise": "^10.4.4"
   }
 }
