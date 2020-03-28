@@ -23,8 +23,46 @@ const { isAuth } = require('./isAuth.js')
 const { refresh } = require('./refresh.js')
 const { isAuthRefreshed } = require('./isAuthRefreshed.js')
 
+//express protection middleware
+//this is yet to have implemented the refreshing route
+function requireLogin(req, res, next) {
+  console.log("hola")
+  try {
+
+    const userId = isAuth(req)
+    if (userId !== null) {
+      next();
+    }
+
+  } catch (err) {
+    if (err.message == "jwt expired") {
+
+      async function result() {
+        var data = await refresh(req)
+
+        const userId = isAuthRefreshed(data.accesstoken)
+        if (userId !== null) {
+          next();
+        }
+      }
+      result();
+    }
+    if (err.message != "jwt expired") {
+      res.status(400).send({
+        error: `${err.message}`
+      })
+    }
+
+  }
+}
+
 //express calls
+//default helloworld
 app.get("/hello", (req, res) => {
+  res.send("Hello world");
+});
+//protected helloworld
+app.get("/helloP", requireLogin, (req, res) => {
   res.send("Hello world");
 });
 
@@ -129,61 +167,61 @@ app.post('/refresh_token', (req, res) => {
   var token = ""
 
   db.query("SELECT * FROM user_permissions WHERE user_id='" + userId + "'").then(function (data) {
-      var permited = [];
-      console.log("permisos de usuario")
-      delete data[0].user_id
-      for (var key in data[0]) {
-          if (data[0].hasOwnProperty(key)) {
-              if (data[0][key] === true) {
-                  permited.push(key)
-              }
-              // console.log(key + " -> " + data[0][key]);
-          }
+    var permited = [];
+    console.log("permisos de usuario")
+    delete data[0].user_id
+    for (var key in data[0]) {
+      if (data[0].hasOwnProperty(key)) {
+        if (data[0][key] === true) {
+          permited.push(key)
+        }
+        // console.log(key + " -> " + data[0][key]);
       }
-      // console.log(permited)
+    }
+    // console.log(permited)
 
-      //now the we need to grab the refreshtoken of the user knowing its id
-      db.query("SELECT * FROM users WHERE id='" + userId + "'").then(function (data) {
-          var user = data;
-          token = user[0].refreshtoken;
-          var id = user[0].id;
-          if (!token) return res.send({ accesstoken: '' });
-          let payload = null;
+    //now the we need to grab the refreshtoken of the user knowing its id
+    db.query("SELECT * FROM users WHERE id='" + userId + "'").then(function (data) {
+      var user = data;
+      token = user[0].refreshtoken;
+      var id = user[0].id;
+      if (!token) return res.send({ accesstoken: '' });
+      let payload = null;
 
-          try {
-              payload = verify(token, process.env.REFRESH_TOKEN_SECRET);
-          } catch (err) {
-              return res.send({ accesstoken: '' });
-          }
+      try {
+        payload = verify(token, process.env.REFRESH_TOKEN_SECRET);
+      } catch (err) {
+        return res.send({ accesstoken: '' });
+      }
 
-          user = "";
-          db.query("SELECT * FROM users WHERE id='" + id + "'").then(function (data) {
-              user = data;
-              if (!user) return res.send({ accesstoken: '' });
-              //if user exists check if refreshtoken exist on user
+      user = "";
+      db.query("SELECT * FROM users WHERE id='" + id + "'").then(function (data) {
+        user = data;
+        if (!user) return res.send({ accesstoken: '' });
+        //if user exists check if refreshtoken exist on user
 
-              if (user[0].refreshtoken !== token) {
-                  return res.send({ accesstoken: '' })
-              }
+        if (user[0].refreshtoken !== token) {
+          return res.send({ accesstoken: '' })
+        }
 
-              //if token exist create a new Refresh and Accestoken
-              const accesstoken = createAccessToken(user[0].id, permited);
-              const refreshtoken = createRefreshToken(user[0].id);
+        //if token exist create a new Refresh and Accestoken
+        const accesstoken = createAccessToken(user[0].id, permited);
+        const refreshtoken = createRefreshToken(user[0].id);
 
-              db.query("UPDATE users SET refreshtoken = '" + refreshtoken + "' WHERE id = '" + user[0].id + "';").then(function (data) {
-                  // sendRefreshToken(res, refreshtoken); //unnecesary
-                  return res.send({ accesstoken });
+        db.query("UPDATE users SET refreshtoken = '" + refreshtoken + "' WHERE id = '" + user[0].id + "';").then(function (data) {
+          // sendRefreshToken(res, refreshtoken); //unnecesary
+          return res.send({ accesstoken });
 
-              }).catch(function (error) {
-                  console.log("ERROR: ", error)
-              })
+        }).catch(function (error) {
+          console.log("ERROR: ", error)
+        })
 
 
-          }).catch(function (error) {
-              console.log("ERROR: ", error)
-              res.send(error);
-          })
+      }).catch(function (error) {
+        console.log("ERROR: ", error)
+        res.send(error);
       })
+    })
 
   })
 
