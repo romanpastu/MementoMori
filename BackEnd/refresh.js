@@ -15,7 +15,7 @@ const refresh = async (req) => {
 
     var token = ""
 
-    return db.query("SELECT * FROM user_permisson WHERE user_id='" + userId + "'").then(function (data) {
+    return db.query("SELECT * FROM user_permissions WHERE user_id='" + userId + "'").then(function (data) {
         var permited = [];
         // console.log("permisos de usuario")
         delete data[0].user_id
