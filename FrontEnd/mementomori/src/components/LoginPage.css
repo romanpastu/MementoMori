@@ -107,6 +107,7 @@ p{
     margin:0 !important;
     padding:0 !important;
 }
+
 /*Inside the form*/
 
 label{
@@ -130,7 +131,81 @@ button:hover{
     margin-top:4vh ;
 }
   
+/*Media Queries*/
 
+@media (max-width: 970px) {
+    .formIn{
+        width:30vw;
+        height:35vh;
+    }
+    .form{
+        margin-left:-16vw;
+    }
+    .selectorRegister{
+        width:14.85vw;
+    }
+    .selectorLogin{
+        width:14.85vw;
+    }
+  }
+ 
+  @media (max-width: 670px) {
+    .formIn{
+        width:90vw;
+        height:35vh;
+    }
+    .form{
+        margin-left:-47vw;
+    }
+    .selectorRegister{
+        float:left;
+        width:100%;
+        
+    }
+    .selectorLogin{
+        float:none;
+        width:100%;
+        margin-bottom:1vh;
+    }
+    .buttonContainer{
+        margin-top:0vh ;
+        
+    }
+    .titleContainer{
+        margin-left:7vw;
+        
+    }
+    @media screen and (max-height: 100px) {
+        .formIn{
+            height:100vh;
+        }
+    }
+    @media screen and (max-height: 650px) and (min-height: 500px){
+        .formIn{
+            height:45vh;
+        }
+        .titleContainer{
+            top:-8vh; 
+        }
+    }
+    @media screen and (max-height: 800px) and (min-height: 650px) {
+        .formIn{
+            height:38.5vh;
+        }
+        .titleContainer{
+            top:-7vh; 
+        }
+    }
+     @media  screen and (max-height: 1050px)  and (min-height: 800px){
+        .formIn{
+            height:33vh;
+        }
+        .titleContainer{
+            top:-7vh; 
+        }
+        
+    } 
+  }  
 
 
 
