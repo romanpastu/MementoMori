@@ -1,4 +1,8 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto');
+@font-face {
+    font-family: 'Calligraffitti';
+    src: local('Calligraffitti'), url(./../assets/Calligraffitti-Regular.ttf) format('TrueType');
+  }
+
 
 main {
   padding: 0;
@@ -35,6 +39,7 @@ main {
     padding-top:4vh;
     padding-bottom:4vh;
     border: 1px solid rgba(255, 255, 255, 0.534);
+    
 }
 
 .formIn{
@@ -58,6 +63,7 @@ main {
     text-align:center;
     color:white;
     font-style: italic;
+    cursor: pointer;
 }
 .selectorRegister{
     float:right;
@@ -70,6 +76,8 @@ main {
     text-align:center;
     color:white;
     font-style: italic;
+    cursor: pointer;
+    
 }
 .selectorLogin:hover{
     background-color:rgba(255, 255, 255, 0.5);
@@ -80,10 +88,53 @@ main {
     font-weight:bolder;
 }
 
-p{
-    margin: 0 !important;
-    padding: 0 !important;
+.title{
+    position:relative;
+    text-align:center;
+    color: white;
+    font-family: Calligraffitti;
+    font-size:2em;
 }
+
+.titleContainer{
+    position:absolute;
+    top:-5vh; 
+    width:80%;
+    
+}
+
+p{
+    margin:0 !important;
+    padding:0 !important;
+}
+/*Inside the form*/
+
+label{
+    color:white;
+}
+
+input[type="email"], input[type="email"]:focus, input[type="password"],input[type="password"]:focus, textarea {
+    background-color : rgba(255, 255, 255, 0.5) ; 
+  }
+ 
+button{
+    background-color: rgba(255, 255, 255, 0) !important;
+    border-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+button:hover{
+    background-color:rgba(255, 255, 255, 0.5) !important;
+}
+
+.buttonContainer{
+    margin-top:4vh ;
+}
+  
+
+
+
+
+
 
 
 

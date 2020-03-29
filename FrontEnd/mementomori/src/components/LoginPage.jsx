@@ -15,13 +15,17 @@ class LoginPage extends React.Component {
             <div className="main">
                 <section className="background">
                 </section>
+
                 <div class="form">
-                    <form className="formIn">
-                    <div className="selector">
-                        <div className="selectorLogin"><p>Login</p></div>
-                        <div className="selectorRegister"><p>Register</p></div>
+                    <div className="titleContainer">
+                        <p class="title">MementoMori</p>
                     </div>
-                    <br></br>
+                    <form className="formIn">
+                        <div className="selector">
+                            <div className="selectorLogin"><p>Login</p></div>
+                            <div className="selectorRegister"><p>Register</p></div>
+                        </div>
+                        <br></br>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Email address</label>
                             <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" />
@@ -30,7 +34,10 @@ class LoginPage extends React.Component {
                             <label for="exampleInputPassword1">Password</label>
                             <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" />
                         </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <div className="text-center buttonContainer">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                        
                     </form>
                 </div>
             </div>
