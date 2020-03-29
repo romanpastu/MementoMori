@@ -117,11 +117,11 @@ app.post('/login', async (req, res) => {
         res.send("error");
         throw new Error("Password not corect");
       }
-      //selects the permissons
+      //selects the permissions
       db.query("SELECT * FROM user_permissions WHERE user_id='" + user[0].id + "'").then(function (data) {
         var permited = [];
         console.log("permisos de usuario")
-        delete data[0].user_id //TODO this crashes because there are no default permissions
+        delete data[0].user_id 
         for (var key in data[0]) {
           if (data[0].hasOwnProperty(key)) {
             if (data[0][key] === true) {

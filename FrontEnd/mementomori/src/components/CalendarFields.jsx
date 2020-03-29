@@ -9,7 +9,7 @@ class CalendarFields extends React.Component {
             fieldId: "",
             description: "",
             showModal: false,
-            emotionRating: 0
+            emotionRating: 0 
         };
         //console.log(props) //week number, beginning with 0
         this.showModal = this.showModal.bind(this);
@@ -91,7 +91,7 @@ class CalendarFields extends React.Component {
                 {...(!this.state.showModal && { onClick: this.showModal })}
             >
                 
-                {weekId == this.props.currentWeek ? <div className="cross"></div> : <div className="cube-white"></div> } {/*Remove this to return the green indicator*/}
+                {weekId == this.props.currentWeek ? <div className="cross " ></div> : <div className="cube-white"></div> } {/*Remove this to return the green indicator*/}
                 <CalendarFieldModal show={this.state.showModal} close={this.closeModal} id={weekId} emotionRating={this.state.emotionRating} handleChange={this.handleChange} />
             </div>
         }
