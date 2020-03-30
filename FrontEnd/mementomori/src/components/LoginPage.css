@@ -97,6 +97,42 @@ button{
 button:hover{
     background-color:rgba(255, 255, 255, 0.5) !important;
 }
+.form-group{
+    margin:0.5vw !important
+}
+/*4k*/
+@media screen and (max-width:2570px) and (min-width: 1500px){
+    .formContainer{
+        width:40%;
+       
+    }
+    .selectorContainer{
+        font-size:2em;
+    }
+    .title{
+        font-size:4em;
+    }
+    .btn-primary{
+        font-size:2em !important;
+    }
+    label{
+        font-size:2em ;
+    }
+    input{
+        height:3vh !important;
+    }
+    
+}
+
+@media screen and (max-width:1500px){
+    .formContainer{
+        width:30%
+    }
+    .selectorContainer{
+        font-size:1.2em;
+    }
+    
+}
 
 
 @media screen and (max-width:1200px){
@@ -106,6 +142,7 @@ button:hover{
     .selectorContainer{
         font-size:1.2em;
     }
+    
 }
 @media screen and (max-width:1024px){
     .formContainer{
@@ -149,10 +186,12 @@ button:hover{
     .formIn{
         padding:0;
     }
+    
 }
 @media screen and (max-width:320px){
     .formContainer{
-        width:90%
+        width:90%;
+        
     }
     .selectorContainer{
         font-size:1.2em;
@@ -160,5 +199,26 @@ button:hover{
     .formIn{
         padding:0;
     }
+    /*Because iphone 5/se wont fit*/
+    .form-group{
+        margin:0 !important
+    }
 }
-   
+
+@media screen and (orientation:landscape) and (max-width:600px){
+    /*Because orientation landscape never fits*/
+    .form-group{
+        margin:1vw !important
+    }
+    .blurredBg{
+        height: 205vh;
+    }
+
+    .formContainer{
+        top:100%;
+    }
+
+    .selectorContainer{
+        height:8vh;
+    }
+}
