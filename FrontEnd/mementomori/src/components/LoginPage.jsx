@@ -1,13 +1,28 @@
 import React from 'react'
 import './LoginPage.css'
+import LoginFrom from './LoginForm'
+import RegisterForm from './RegisterForm'
 class LoginPage extends React.Component {
     constructor(props) {
         super(props)
 
         this.state = {
-
+            displayLogin: true
         }
+        this.displayLogin = this.displayLogin.bind(this);
+        this.displayRegister = this.displayRegister.bind(this);
+    }
 
+    displayLogin(){
+        this.setState({
+            displayLogin:true
+        })
+    }
+
+    displayRegister(){
+        this.setState({
+            displayLogin:false
+        })
     }
 
     render() {
@@ -19,11 +34,11 @@ class LoginPage extends React.Component {
                     </div>
                     <form className="formIn">
                         <div className="selectorContainer">
-                            <div className="selectorLogin">Login</div>
-                            <div className="selectorRegister">Register</div>
+                            <div className="selectorLogin" onClick={this.displayLogin}>Login</div>
+                            <div className="selectorRegister" onClick={this.displayRegister}>Register</div>
                         </div>
                         <br></br>
-                        <div class="form-group">
+                        {/* <div class="form-group">
                             <label for="exampleInputEmail1">Email address</label>
                             <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" />
                         </div>
@@ -33,7 +48,8 @@ class LoginPage extends React.Component {
                         </div>
                         <div className="text-center buttonContainer">
                             <button type="submit" class="btn btn-primary">Submit</button>
-                        </div>
+                        </div> */}
+                        {this.state.displayLogin ? <LoginFrom /> : <RegisterForm/>}
                     </form>
                 </div>
                 </div>

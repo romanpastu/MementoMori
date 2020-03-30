@@ -14,7 +14,7 @@
 .blurredBg{
     height: 100vh;
     width:100vw;
-    background-image: url('../assets/snowMountains2.jpg');
+    background-image: url('../assets/snowMountains1.jpg');
     background-size: cover;
     filter: blur(2px);
     background-position: center;
@@ -81,7 +81,7 @@
 }
 
 /*Inputs*/
-input[type="email"], input[type="email"]:focus, input[type="password"],input[type="password"]:focus, textarea {
+input[type="email"],input[type="date"],input[type="date"]:focus,input[type="text"],input[type="text"]:focus, input[type="email"]:focus, input[type="password"],input[type="password"]:focus, textarea {
     background-color : rgba(255, 255, 255, 0.5) ; 
   }
 label{
