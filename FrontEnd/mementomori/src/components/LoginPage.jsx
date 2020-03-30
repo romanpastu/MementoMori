@@ -11,19 +11,16 @@ class LoginPage extends React.Component {
     }
 
     render() {
-        return (
-            <div className="main">
-                <section className="background">
-                </section>
-
-                <div class="form">
+        return (<div>
+            <div className="blurredBg"></div>
+                <div class="formContainer">
                     <div className="titleContainer">
                         <p class="title">MementoMori</p>
                     </div>
                     <form className="formIn">
-                        <div className="selector">
-                            <div className="selectorLogin"><p>Login</p></div>
-                            <div className="selectorRegister"><p>Register</p></div>
+                        <div className="selectorContainer">
+                            <div className="selectorLogin">Login</div>
+                            <div className="selectorRegister">Register</div>
                         </div>
                         <br></br>
                         <div class="form-group">
@@ -37,10 +34,9 @@ class LoginPage extends React.Component {
                         <div className="text-center buttonContainer">
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </div>
-                        
                     </form>
                 </div>
-            </div>
+                </div>
         )
     }
 }

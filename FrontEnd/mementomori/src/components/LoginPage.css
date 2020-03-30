@@ -1,218 +1,164 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+
+
 @font-face {
     font-family: 'Calligraffitti';
     src: local('Calligraffitti'), url(./../assets/Calligraffitti-Regular.ttf) format('TrueType');
   }
 
-
-main {
-  padding: 0;
-  margin: 0;
-  width:100%;
-  height:100%;
+.blurredBg{
+    height: 100vh;
+    width:100vw;
+    background-image: url('../assets/snowMountains2.jpg');
+    background-size: cover;
+    filter: blur(2px);
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
-.background {
-  width:100vw;
-  height:100vh;
-  background-image: url("../assets/snowMountains1.jpg");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-attachment: fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-  filter: blur(5px);
-}
-  
-
-.form{
-    top:50%;
-    position: absolute;
-    filter: blur(0px) !important;
-    left:50%;
-    margin-left:-11vw; /*- 50 % width of the element to center width+padding*/
-    margin-top: -18.3vh; /*- 50 % width of the element to center width+padding+paddingSelector(0.3)+ marginselector*/
-    background-color:rgba(255, 255, 255, 0.26);
-    padding-left: 2vw;
-    padding-right:2vw;
-    padding-top:4vh;
-    padding-bottom:4vh;
-    border: 1px solid rgba(255, 255, 255, 0.534);
-    
-}
-
-.formIn{
-    width:20vw;
-    height:30vh;
-    border: 1px solid rgba(255, 0, 0, 0);
-}
-.selector{
-    margin-bottom:4vh;
-    margin-top:-2vh;
-}
-.selectorLogin{
-    float:left;
-    
-    border: 1px solid whitesmoke;
-    /* padding-left:3.5vw;
-    padding-right:3.5vw; */
-    width:9.85vw;
-    padding-top:0.3vh;
-    padding-bottom:0.3vh;
-    text-align:center;
-    color:white;
-    font-style: italic;
-    cursor: pointer;
-}
-.selectorRegister{
-    float:right;
-    /* padding-right:3.5vw;
-    padding-left:3.5vw; */
-    width:9.85vw;
-    padding-top:0.3vh;
-    padding-bottom:0.3vh;
-    border: 1px solid whitesmoke;
-    text-align:center;
-    color:white;
-    font-style: italic;
-    cursor: pointer;
-    
-}
-.selectorLogin:hover{
-    background-color:rgba(255, 255, 255, 0.5);
-    font-weight:bolder;
-}
-.selectorRegister:hover{
-    background-color:rgba(255, 255, 255, 0.5);
-    font-weight:bolder;
+.formContainer{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20%;
 }
 
 .title{
-    position:relative;
     text-align:center;
-    color: white;
     font-family: Calligraffitti;
+    color:white;
+    font-weight: 900;
     font-size:2em;
 }
 
-.titleContainer{
-    position:absolute;
-    top:-5vh; 
-    width:80%;
+.selectorContainer{
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    color:white;
+    font-style: italic;
+    height:4.5vh;
+    font-weight:450;
     
 }
 
-p{
-    margin:0 !important;
-    padding:0 !important;
+.selectorLogin{
+    display: flex;
+    width:100%;
+    border: 1px solid rgba(255, 255, 255, 0.425);
+    justify-content: center;
+    align-items: center; 
+}
+.selectorLogin:hover{
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.555);
+    font-size: 1.1em;
 }
 
-/*Inside the form*/
+.selectorRegister{
+    display: flex;
+    width:100%;
+    border: 1px solid rgba(255, 255, 255, 0.425);
+    justify-content: center;
+    align-items: center;
+}
+.selectorRegister:hover{
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.555);
+    font-size: 1.1em;
+}
 
+.formIn{
+    background-color:rgba(255, 255, 255, 0.267);
+    border:1px solid rgba(255, 255, 255, 0.425);
+    padding:1vw;
+}
+
+/*Inputs*/
+input[type="email"], input[type="email"]:focus, input[type="password"],input[type="password"]:focus, textarea {
+    background-color : rgba(255, 255, 255, 0.5) ; 
+  }
 label{
     color:white;
 }
 
-input[type="email"], input[type="email"]:focus, input[type="password"],input[type="password"]:focus, textarea {
-    background-color : rgba(255, 255, 255, 0.5) ; 
-  }
- 
+/*Button (important values are to override bootstrap)*/
 button{
     background-color: rgba(255, 255, 255, 0) !important;
-    border-color: rgba(255, 255, 255, 0.5) !important;
+    border-color: rgb(255, 255, 255) !important;
 }
 
 button:hover{
     background-color:rgba(255, 255, 255, 0.5) !important;
 }
 
-.buttonContainer{
-    margin-top:4vh ;
+
+@media screen and (max-width:1200px){
+    .formContainer{
+        width:30%
+    }
+    .selectorContainer{
+        font-size:1.2em;
+    }
 }
-  
-/*Media Queries*/
-
-@media (max-width: 970px) {
+@media screen and (max-width:1024px){
+    .formContainer{
+        width:40%
+    }
+    .selectorContainer{
+        font-size:1.2em;
+    }
+}
+@media screen and (max-width:900px){
+    .formContainer{
+        width:50%
+    }
+    .selectorContainer{
+        font-size:1.2em;
+    }
+}
+@media screen and (max-width:768px){
+    .formContainer{
+        width:60%
+    }
+    .selectorContainer{
+        font-size:1.3em;
+    }
+}
+@media screen and (max-width:600px){
+    .formContainer{
+        width:70%
+    }
+    .selectorContainer{
+        font-size:1.4em;
+    }
+}
+@media screen and (max-width:480px){
+    .formContainer{
+        width:80%
+    }
+    .selectorContainer{
+        font-size:1.1em;
+    }
     .formIn{
-        width:30vw;
-        height:35vh;
+        padding:0;
     }
-    .form{
-        margin-left:-16vw;
+}
+@media screen and (max-width:320px){
+    .formContainer{
+        width:90%
     }
-    .selectorRegister{
-        width:14.85vw;
+    .selectorContainer{
+        font-size:1.2em;
     }
-    .selectorLogin{
-        width:14.85vw;
-    }
-  }
- 
-  @media (max-width: 670px) {
     .formIn{
-        width:90vw;
-        height:35vh;
+        padding:0;
     }
-    .form{
-        margin-left:-47vw;
-    }
-    .selectorRegister{
-        float:left;
-        width:100%;
-        
-    }
-    .selectorLogin{
-        float:none;
-        width:100%;
-        margin-bottom:1vh;
-    }
-    .buttonContainer{
-        margin-top:0vh ;
-        
-    }
-    .titleContainer{
-        margin-left:7vw;
-        
-    }
-    @media screen and (max-height: 100px) {
-        .formIn{
-            height:100vh;
-        }
-    }
-    @media screen and (max-height: 650px) and (min-height: 500px){
-        .formIn{
-            height:45vh;
-        }
-        .titleContainer{
-            top:-8vh; 
-        }
-    }
-    @media screen and (max-height: 800px) and (min-height: 650px) {
-        .formIn{
-            height:38.5vh;
-        }
-        .titleContainer{
-            top:-7vh; 
-        }
-    }
-     @media  screen and (max-height: 1050px)  and (min-height: 800px){
-        .formIn{
-            height:33vh;
-        }
-        .titleContainer{
-            top:-7vh; 
-        }
-        
-    } 
-  }  
-
-
-
-
-
-
-
-
-
+}
    
