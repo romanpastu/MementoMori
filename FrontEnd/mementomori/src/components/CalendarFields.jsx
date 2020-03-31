@@ -9,8 +9,8 @@ class CalendarFields extends React.Component {
             fieldId: "",
             description: "",
             showModal: false,
-             emotionRating:  0,
-            // emotionRating:  Math.floor(Math.random() * 5) + 1 
+              emotionRating:  0,
+            //   emotionRating:  Math.floor(Math.random() * 5) + 1 
         };
         //console.log(props) //week number, beginning with 0
         this.showModal = this.showModal.bind(this);

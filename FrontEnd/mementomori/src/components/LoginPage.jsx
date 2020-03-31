@@ -8,6 +8,7 @@ class LoginPage extends React.Component {
 
         this.state = {
             displayLogin: true
+            
         }
         this.displayLogin = this.displayLogin.bind(this);
         this.displayRegister = this.displayRegister.bind(this);
@@ -32,7 +33,7 @@ class LoginPage extends React.Component {
                     <div className="titleContainer">
                         <p class="title">MementoMori</p>
                     </div>
-                    <form className="formIn">
+                    <div className="formIn">
                         <div className="selectorContainer">
                             <div className="selectorLogin" onClick={this.displayLogin}>Login</div>
                             <div className="selectorRegister" onClick={this.displayRegister}>Register</div>
@@ -50,7 +51,7 @@ class LoginPage extends React.Component {
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </div> */}
                         {this.state.displayLogin ? <LoginFrom /> : <RegisterForm/>}
-                    </form>
+                    </div>
                 </div>
                 </div>
         )
