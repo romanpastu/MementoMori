@@ -16,7 +16,7 @@
     width:100vw;
     background-image: url('../assets/snowMountains1.jpg');
     background-size: cover;
-    filter: blur(2px);
+    filter: blur(4px);
     background-position: center;
     background-repeat: no-repeat;
 }

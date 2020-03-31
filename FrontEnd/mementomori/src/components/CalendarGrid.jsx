@@ -9,7 +9,7 @@ class CalendarGrid extends React.Component {
     for (let i = 0; i < this.props.totalWeeks; i++) {
       rows.push(<CalendarFields key={i} weekId={i} weeksToRegisterDate={this.props.weeksToRegisterDate} currentWeek={this.props.currentWeek} />)
     }
-    return <div >{rows}</div>
+    return <div className="fieldsContainer ">{rows}</div>
 
   }
 }

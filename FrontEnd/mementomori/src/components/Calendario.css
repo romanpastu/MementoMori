@@ -1,8 +1,9 @@
 
 .calendar-container{
-    background-color:black;
+    background-color:rgb(151,203,228);
     height:100%;
     overflow: hidden; 
-    
+    display:flex;
+    justify-content: center;
 }
 

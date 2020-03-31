@@ -10,7 +10,7 @@ function App() {
       <BrowserRouter>
       <Switch>
         <Route exact path="/dashboard" render={(props) => <Calendario />}/>
-        <Route exact path="/" render={(props) => <LoginPage />}/>
+        <Route exact path="/login" render={(props) => <LoginPage />}/>
       </Switch>
     </BrowserRouter>
     </div>
