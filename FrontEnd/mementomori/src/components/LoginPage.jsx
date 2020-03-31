@@ -50,7 +50,7 @@ class LoginPage extends React.Component {
                         <div className="text-center buttonContainer">
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </div> */}
-                        {this.state.displayLogin ? <LoginFrom /> : <RegisterForm/>}
+                        {this.state.displayLogin ? <LoginFrom login={this.props.login}/> : <RegisterForm/>}
                     </div>
                 </div>
                 </div>
