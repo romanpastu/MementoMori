@@ -4,11 +4,12 @@ let constants = require('./constants.js')
 //express use settings
 const express = require("express");
 const app = express();
-
+const cors = require('cors');
 
 //express settings
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cors());
 
 //db settings
 const pgp = require("pg-promise")();
