@@ -14,6 +14,12 @@ class LoginPage extends React.Component {
         this.displayRegister = this.displayRegister.bind(this);
     }
 
+    componentDidMount() {
+        if (this.props.authed == true) {
+            this.props.history.push('/dashboard');
+        }
+    }
+
     displayLogin(){
         this.setState({
             displayLogin:true
