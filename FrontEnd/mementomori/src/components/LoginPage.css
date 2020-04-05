@@ -89,12 +89,12 @@ label{
 }
 
 /*Button (important values are to override bootstrap)*/
-button{
+.buttonLogin{
     background-color: rgba(255, 255, 255, 0) !important;
     border-color: rgb(255, 255, 255) !important;
 }
 
-button:hover{
+.buttonLogin:hover{
     background-color:rgba(255, 255, 255, 0.5) !important;
 }
 .form-group{

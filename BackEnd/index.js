@@ -80,27 +80,27 @@ app.post("/test", (req, res) => {
 //User login/register/auth related queries
 
 app.post('/register', async (req, res) => {
-
-  const { email, password } = req.body;
-
+  console.log(req.body)
+  const { email, firstName, secondName, password2, birthDate } = req.body;
+  const password = password2;
   const hashedPassword = await hash(password, 10);
-  db.query("INSERT INTO USERS (email, password) VALUES ('" + email + "','" + hashedPassword + "')").then(function (data) {
-    db.query("SELECT id from users where email='" + email + "';").then(function (data) {
-      db.query("INSERT INTO user_permissions values ('" + data[0].id + "', 'true')").then(function (data) {
-        res.send("inserted");
+   db.query("INSERT INTO USERS (email, password, birth_date, first_name, second_name) VALUES ('" + email + "','" + hashedPassword + "','"+birthDate+"','"+firstName+"','"+secondName+"')").then(function (data) {
+     db.query("SELECT id from users where email='" + email + "';").then(function (data) {
+       db.query("INSERT INTO user_permissions values ('" + data[0].id + "', 'true')").then(function (data) {
+         res.send("inserted");
         console.log("inserted")
-      }).catch(function (error) {
-        console.log("ERROR: ", error)
-        res.send("error")
-      });
-    }).catch(function (error) {
-      console.log("ERROR: ", error)
-      res.send("error")
-    });
-  }).catch(function (error) {
-    console.log("ERROR: ", error)
-    res.send("error")
-  });
+       }).catch(function (error) {
+         console.log("ERROR: ", error)
+         res.send("error")
+       });
+     }).catch(function (error) {
+       console.log("ERROR: ", error)
+       res.send("error")
+     });
+   }).catch(function (error) {
+     console.log("ERROR: ", error)
+     res.send("error")
+   });
 })
 
 app.post('/login', async (req, res) => {
@@ -259,6 +259,17 @@ app.post('/protected', async (req, res) => {
       error: `${err.message}`
     })
   }
+})
+
+//life Expectancy
+app.post('/generateCalendar', async (req, res) => {
+  const userId = req.body.userId
+  const yearsToLive = req.body.yearsToLive
+  const registerDate = req.body.registerDate
+  console.log(req.body)
+  db.query("UPDATE users SET years_to_live =  '" + yearsToLive + "' , register_date = '"+registerDate +"'  WHERE id = '" + userId + "';")
+  
+  
 })
 
 //Express port

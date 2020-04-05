@@ -15,7 +15,7 @@ export default ({ component: Component, render: renderFn, authed, name, ...rest 
    }
 
     return ( //Second case is for iframe based renders
-      <Route {...rest} render={props => ((authed === true) && ( decoded.permited.includes(name) === true)) ? renderFn(props) : <Redirect to={{ pathname: '/dashboard', state: { from: props.location } }} />} />
+      <Route {...rest} render={props => ((authed === true) && ( decoded.permited.includes(name) === true)) ? renderFn(props) : <Redirect to={{ pathname: '/login', state: { from: props.location } }} />} />
     );
   
 }
