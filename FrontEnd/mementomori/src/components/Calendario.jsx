@@ -1,8 +1,8 @@
 import React from 'react'
 import CalendarGrid from './CalendarGrid'
-
+import API from '../services/axiosObject.js';
 import './Calendario.css'
-
+import { getUserId } from '../services/userInfo.js'
 var moment = require('moment');
 moment().format();
 
@@ -11,25 +11,58 @@ class Calendario extends React.Component {
         super(props);
 
         this.state = {
-            birth_date: moment("1997-12-08"),
-            years_to_live: 100,
+            birth_date: "",
+            years_to_live: "",
             death_date: "",
-            register_date: moment("2020-01-13") //should be pulled from the db
+            register_date: "", //should be pulled from the db
+            loaded: false
         };
 
         this.getWeeksToLive = this.getWeeksToLive.bind(this);
         this.getCurrentWeek = this.getCurrentWeek.bind(this);
+        this.filterDate = this.filterDate.bind(this);
     }
 
-    componentDidMount() {
 
-        //Sets the death date state given the birth date and the years to live
-        this.setState({
-            death_date: moment(this.state.birth_date).add(this.state.years_to_live, 'years')
-        }, () => {
-            console.log("fecha de muerte: " + new Date(this.state.death_date))
-        });
-        console.log("fecha de nacimiento: " + new Date(this.state.birth_date))
+    componentDidMount() {
+        const userId = getUserId();
+
+        API.get('/getUserGenerateCalendar/' + userId).then(response => {
+
+            this.setState({
+                birth_date: moment(this.filterDate(response.data.birthDate)),
+                years_to_live: response.data.years_to_live,
+                register_date: moment(this.filterDate(response.data.register_date))
+            }, () => {
+                this.setState({
+                    death_date: moment(this.state.birth_date).add(this.state.years_to_live, 'years')
+                }, () => {
+                    this.setState({
+                        loaded: true
+                    }, () => {
+                        console.log(this.state)
+                    })
+                    console.log("fecha de muerte: " + new Date(this.state.death_date))
+                })
+            })
+            console.log("fecha de nacimiento: " + new Date(this.state.birth_date))
+        })
+
+
+        //   //Sets the death date state given the birth date and the years to live
+        // this.setState({
+        //     death_date: moment(this.state.birth_date).add(this.state.years_to_live, 'years')
+        // }, () => {
+        //     console.log("fecha de muerte: " + new Date(this.state.death_date))
+        // });
+        // console.log("fecha de nacimiento: " + new Date(this.state.birth_date))
+    }
+
+    filterDate(date) {
+        console.log(date)
+        var stringDate = date.toString();
+        var result = stringDate.match(/(?:(?!T).)*/)
+        return result[0];
     }
 
     //this function returns the total amount of weeks to live betweek the birth date, and the death date
@@ -63,6 +96,7 @@ class Calendario extends React.Component {
 
 
     render() {
+        // if (!this.state.loaded) return null;
         return (
             <div className=" calendar-container">
 

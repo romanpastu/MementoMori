@@ -31,7 +31,7 @@ class App extends React.Component {
     });
   }
 
-  login = (email, password) => {
+  login = (email, password, direction) => {
     return new Promise((resolve, reject) => {
       axios({
         method: 'post',
@@ -45,32 +45,71 @@ class App extends React.Component {
         if (res.data.accesstoken != undefined) {
           Cookies.set('accesstoken', res.data.accesstoken)
         }
+        console.log(direction)
+        if (direction == "login") {
+          console.log("this is pushing to login")
+          isAuthenticated().then((result) => {
 
-        //we have to check the accesstoken manually before redirecting it to login, or else it will allow navigate since its not a <PrivateRoute> component
-        isAuthenticated().then((result) => {
-
-          if (result === true) {
-            this.setState({ isAuthenticated: true, authenticationChecked: true }, () => {
-              this.props.history.push('/dashboard');
-            })
-            resolve(true);
-          } else {
-            this.setState({ isAuthenticated: false, authenticationChecked: true })
-            if (res.data == "error") {
-              reject("error");
-            } else if (res.data.code == "ETIMEDOUT") {
-              reject("Network error");
+            if (result === true) {
+              this.setState({ isAuthenticated: true, authenticationChecked: true }, () => {
+                this.props.history.push('/dashboard');
+              })
+              resolve(true);
+            } else {
+              this.setState({ isAuthenticated: false, authenticationChecked: true })
+              if (res.data == "error") {
+                reject("error");
+              } else if (res.data.code == "ETIMEDOUT") {
+                reject("Network error");
+              }
             }
-          }
-        });
+          });
+        } else if (direction == "register") {
+          console.log("this is pushing to register")
+          this.props.history.push("/lifeExpectancy")
+        }
+        //we have to check the accesstoken manually before redirecting it to login, or else it will allow navigate since its not a <PrivateRoute> component
+        //  isAuthenticated().then((result) => {
+
+        //    if (result === true) {
+        //      this.setState({ isAuthenticated: true, authenticationChecked: true }, () => {
+        //        this.props.history.push('/dashboard');
+        //      })
+        //      resolve(true);
+        //    } else {
+        //      this.setState({ isAuthenticated: false, authenticationChecked: true })
+        //      if (res.data == "error") {
+        //        reject("error");
+        //      } else if (res.data.code == "ETIMEDOUT") {
+        //        reject("Network error");
+        //      }
+        //    }
+        //  });
+
       }).catch(err => {
 
         if (err == "Error: Network Error") {
           reject("Network error");
         }
       })
+
     })
 
+  }
+
+  setYearsRedirect = () => {
+    isAuthenticated().then((result) => {
+
+      if (result === true) {
+        this.setState({ isAuthenticated: true, authenticationChecked: true }, () => {
+          this.props.history.push('/dashboard');
+        })
+        
+      } else {
+        this.setState({ isAuthenticated: false, authenticationChecked: true })
+        
+      }
+    })
   }
 
   render() {
@@ -79,8 +118,8 @@ class App extends React.Component {
     return (
       <div>
         <Switch>
-          <PrivateRoute name={"dashboard"} authed={this.state.isAuthenticated} path="/dashboard" render={(props) => <Calendario {...props}/>} />
-          <Route name={"lifeExpectancy"} path="/lifeExpectancy" render={(props) => <LifeExpectancy {...props}/>} />
+          <PrivateRoute name={"dashboard"} authed={this.state.isAuthenticated} path="/dashboard" render={(props) => <Calendario {...props} />} />
+          <Route name={"lifeExpectancy"} path="/lifeExpectancy" render={(props) => <LifeExpectancy {...props} setYearsRedirect={this.setYearsRedirect} />} />
           <Route exact path="/login" render={(props) => <LoginPage login={this.login} authed={this.state.isAuthenticated} {...props} />} />
         </Switch>
       </div>

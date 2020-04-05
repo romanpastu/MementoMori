@@ -261,15 +261,39 @@ app.post('/protected', async (req, res) => {
   }
 })
 
-//life Expectancy
+//generate calendar
 app.post('/generateCalendar', async (req, res) => {
   const userId = req.body.userId
   const yearsToLive = req.body.yearsToLive
   const registerDate = req.body.registerDate
-  console.log(req.body)
-  db.query("UPDATE users SET years_to_live =  '" + yearsToLive + "' , register_date = '"+registerDate +"'  WHERE id = '" + userId + "';")
+
+  db.query("UPDATE users SET years_to_live =  '" + yearsToLive + "' , register_date = '"+registerDate +"'  WHERE id = '" + userId + "';").then(data => {
+    console.log(data)
+    res.send(data)
+  }).catch(err => {
+    console.log(err)
+    res.send(err)
+  })
   
-  
+})
+
+//get user
+app.get('/getUserGenerateCalendar/:id', async (req, res) => {
+  const userId = req.params.id
+  console.log(userId)
+  db.query("SELECT * FROM users where id = '" + userId + "';").then( data => {
+    console.log(data)
+    
+    var dataToSend = [{}]
+    dataToSend[0].birthDate = data[0].birth_date;
+    dataToSend[0].years_to_live = data[0].years_to_live;
+    dataToSend[0].register_date = data[0].register_date;
+    res.send(dataToSend[0])
+  }).catch(err => {
+    
+    console.log(err)
+    res.send(err)
+  })
 })
 
 //Express port

@@ -42,8 +42,18 @@ class RegisterForm extends React.Component {
               'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
             }
           }).then((res) => {
-            this.props.history.push('/lifeExpectancy');
-            console.log(res)
+              console.log(email)
+              console.log(password2)
+             this.props.login(email,password2, "register").
+             then((data) => {
+                 console.log("despues de hacer el login")
+                 
+                  console.log(data)
+             }).catch((err) => {
+                  console.log(err)
+             })
+            
+             console.log(res)
         })}
 
     render() {
