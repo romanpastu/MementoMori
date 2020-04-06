@@ -14,8 +14,7 @@ class Calendario extends React.Component {
             birth_date: "",
             years_to_live: "",
             death_date: "",
-            register_date: "", //should be pulled from the db
-            loaded: false
+            register_date: ""
         };
 
         this.getWeeksToLive = this.getWeeksToLive.bind(this);
@@ -37,11 +36,7 @@ class Calendario extends React.Component {
                 this.setState({
                     death_date: moment(this.state.birth_date).add(this.state.years_to_live, 'years')
                 }, () => {
-                    this.setState({
-                        loaded: true
-                    }, () => {
-                        console.log(this.state)
-                    })
+                    console.log(this.state)
                     console.log("fecha de muerte: " + new Date(this.state.death_date))
                 })
             })

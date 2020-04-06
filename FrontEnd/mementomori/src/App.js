@@ -68,23 +68,6 @@ class App extends React.Component {
           console.log("this is pushing to register")
           this.props.history.push("/lifeExpectancy")
         }
-        //we have to check the accesstoken manually before redirecting it to login, or else it will allow navigate since its not a <PrivateRoute> component
-        //  isAuthenticated().then((result) => {
-
-        //    if (result === true) {
-        //      this.setState({ isAuthenticated: true, authenticationChecked: true }, () => {
-        //        this.props.history.push('/dashboard');
-        //      })
-        //      resolve(true);
-        //    } else {
-        //      this.setState({ isAuthenticated: false, authenticationChecked: true })
-        //      if (res.data == "error") {
-        //        reject("error");
-        //      } else if (res.data.code == "ETIMEDOUT") {
-        //        reject("Network error");
-        //      }
-        //    }
-        //  });
 
       }).catch(err => {
 

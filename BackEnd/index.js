@@ -269,7 +269,10 @@ app.post('/generateCalendar', async (req, res) => {
 
   db.query("UPDATE users SET years_to_live =  '" + yearsToLive + "' , register_date = '"+registerDate +"'  WHERE id = '" + userId + "';").then(data => {
     console.log(data)
-    res.send(data)
+    db.query("INSERT INTO calendar (user_id) values ('" + userId + "');").then(data =>{
+      console.log(data)
+      res.send(data)
+    })
   }).catch(err => {
     console.log(err)
     res.send(err)
