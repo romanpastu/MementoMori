@@ -15,6 +15,10 @@ app.use(cors());
 const pgp = require("pg-promise")();
 const db = pgp(constants.dbUrl)
 
+//moment
+var moment = require('moment');
+moment().format();
+
 //requires for jwt management and auth
 const cookieParser = require('cookie-parser')
 const { verify } = require('jsonwebtoken')
@@ -84,23 +88,23 @@ app.post('/register', async (req, res) => {
   const { email, firstName, secondName, password2, birthDate } = req.body;
   const password = password2;
   const hashedPassword = await hash(password, 10);
-   db.query("INSERT INTO USERS (email, password, birth_date, first_name, second_name) VALUES ('" + email + "','" + hashedPassword + "','"+birthDate+"','"+firstName+"','"+secondName+"')").then(function (data) {
-     db.query("SELECT id from users where email='" + email + "';").then(function (data) {
-       db.query("INSERT INTO user_permissions values ('" + data[0].id + "', 'true')").then(function (data) {
-         res.send("inserted");
+  db.query("INSERT INTO USERS (email, password, birth_date, first_name, second_name) VALUES ('" + email + "','" + hashedPassword + "','" + birthDate + "','" + firstName + "','" + secondName + "')").then(function (data) {
+    db.query("SELECT id from users where email='" + email + "';").then(function (data) {
+      db.query("INSERT INTO user_permissions values ('" + data[0].id + "', 'true')").then(function (data) {
+        res.send("inserted");
         console.log("inserted")
-       }).catch(function (error) {
-         console.log("ERROR: ", error)
-         res.send("error")
-       });
-     }).catch(function (error) {
-       console.log("ERROR: ", error)
-       res.send("error")
-     });
-   }).catch(function (error) {
-     console.log("ERROR: ", error)
-     res.send("error")
-   });
+      }).catch(function (error) {
+        console.log("ERROR: ", error)
+        res.send("error")
+      });
+    }).catch(function (error) {
+      console.log("ERROR: ", error)
+      res.send("error")
+    });
+  }).catch(function (error) {
+    console.log("ERROR: ", error)
+    res.send("error")
+  });
 })
 
 app.post('/login', async (req, res) => {
@@ -122,7 +126,7 @@ app.post('/login', async (req, res) => {
       db.query("SELECT * FROM user_permissions WHERE user_id='" + user[0].id + "'").then(function (data) {
         var permited = [];
         console.log("permisos de usuario")
-        delete data[0].user_id 
+        delete data[0].user_id
         for (var key in data[0]) {
           if (data[0].hasOwnProperty(key)) {
             if (data[0][key] === true) {
@@ -263,13 +267,42 @@ app.post('/protected', async (req, res) => {
 
 //generate calendar
 app.post('/generateCalendar', async (req, res) => {
+
   const userId = req.body.userId
   const yearsToLive = req.body.yearsToLive
   const registerDate = req.body.registerDate
 
-  db.query("UPDATE users SET years_to_live =  '" + yearsToLive + "' , register_date = '"+registerDate +"'  WHERE id = '" + userId + "';").then(data => {
+  function filterDate(date) {
+    var stringDate = moment(date).format('YYYY-MM-DD').toString();
+    console.log("dentro del filter date")
+    var result = stringDate.match(/(?:(?!T).)*/)
+    return result[0];
+  }
+
+  function getWeeksToLive(death_date, birth_date) {
+    //returns the weeks to live between death and birth date, rounded to upper week
+    var weeks_to_live = moment(new Date(death_date)).diff(moment(new Date(birth_date)), 'days') / 7;
+    console.log("semanas a vivir: " + Math.ceil(weeks_to_live))
+    return Math.ceil(weeks_to_live);
+  }
+
+
+  //sets the deathDate and weeksToLive in the database
+  db.query("SELECT * from users where id =" + userId).then(data => {
+    var birth_date = data[0].birth_date
+    var deathDate = ""
+    //sets the death_date and the weeks to live
+    deathDate = moment(filterDate(birth_date)).add(yearsToLive, 'years')
+    db.query("UPDATE users SET death_date = '" + moment(deathDate).format('YYYY-MM-DD').toString() + "' , weeks_to_live = '" + getWeeksToLive(deathDate, birth_date) + "' WHERE id = '" + userId + "';").then(data => {
+      console.log(data)
+    }).catch(err => console.log(err))
+
+  })
+
+  //Sets the yearsToLive and registerDate in the database
+  db.query("UPDATE users SET years_to_live =  '" + yearsToLive + "' , register_date = '" + registerDate + "'  WHERE id = '" + userId + "';").then(data => {
     console.log(data)
-    db.query("INSERT INTO calendar (user_id) values ('" + userId + "');").then(data =>{
+    db.query("INSERT INTO calendar (user_id) values ('" + userId + "');").then(data => {
       console.log(data)
       res.send(data)
     })
@@ -277,23 +310,24 @@ app.post('/generateCalendar', async (req, res) => {
     console.log(err)
     res.send(err)
   })
-  
+
 })
 
 //get user
 app.get('/getUserGenerateCalendar/:id', async (req, res) => {
   const userId = req.params.id
   console.log(userId)
-  db.query("SELECT * FROM users where id = '" + userId + "';").then( data => {
+  db.query("SELECT * FROM users where id = '" + userId + "';").then(data => {
     console.log(data)
     
     var dataToSend = [{}]
     dataToSend[0].birthDate = data[0].birth_date;
     dataToSend[0].years_to_live = data[0].years_to_live;
     dataToSend[0].register_date = data[0].register_date;
+    dataToSend[0].death_date = data[0].death_date
     res.send(dataToSend[0])
   }).catch(err => {
-    
+
     console.log(err)
     res.send(err)
   })
