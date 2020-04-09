@@ -27,20 +27,16 @@ class Calendario extends React.Component {
         const userId = getUserId();
 
         API.get('/getUserGenerateCalendar/' + userId).then(response => {
-
+            console.log(response.data)
             this.setState({
                 birth_date: moment(this.filterDate(response.data.birthDate)),
                 years_to_live: response.data.years_to_live,
-                register_date: moment(this.filterDate(response.data.register_date))
+                register_date: moment(this.filterDate(response.data.register_date)),
+                death_date: moment(this.filterDate(response.data.death_date))
             }, () => {
-                this.setState({
-                    death_date: moment(this.state.birth_date).add(this.state.years_to_live, 'years')
-                }, () => {
-                    console.log(this.state)
-                    console.log("fecha de muerte: " + new Date(this.state.death_date))
-                })
+                console.log(this.state)
             })
-            console.log("fecha de nacimiento: " + new Date(this.state.birth_date))
+            
         })
 
 
