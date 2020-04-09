@@ -319,13 +319,38 @@ app.get('/getUserGenerateCalendar/:id', async (req, res) => {
   console.log(userId)
   db.query("SELECT * FROM users where id = '" + userId + "';").then(data => {
     console.log(data)
-    
+
+    //individuals selects are done to skip the formating of a multiselect where a string should be reparsed
     var dataToSend = [{}]
-    dataToSend[0].birthDate = data[0].birth_date;
-    dataToSend[0].years_to_live = data[0].years_to_live;
-    dataToSend[0].register_date = data[0].register_date;
-    dataToSend[0].death_date = data[0].death_date
-    res.send(dataToSend[0])
+    db.query("SELECT (birth_date::varchar) from users where id ='" + userId + "';").then(data => {
+      console.log(data[0].birth_date)
+      dataToSend[0].birthDate = data[0].birth_date;
+
+      db.query("SELECT (years_to_live::varchar) from users where id ='" + userId + "';").then(data => {
+        dataToSend[0].years_to_live = data[0].years_to_live;
+
+        db.query("SELECT (register_date::varchar) from users where id ='" + userId + "';").then(data => {
+          dataToSend[0].register_date = data[0].register_date;
+
+          db.query("SELECT (death_date::varchar) from users where id ='" + userId + "';").then(data => {
+            dataToSend[0].death_date = data[0].death_date;
+
+            console.log(dataToSend[0])
+            res.send(dataToSend[0])
+          })
+        })
+      })
+    })
+
+
+
+
+
+    // dataToSend[0].birthDate = data[0].birth_date;
+    // dataToSend[0].years_to_live = data[0].years_to_live;
+    // dataToSend[0].register_date = data[0].register_date;
+    // dataToSend[0].death_date = data[0].death_date
+
   }).catch(err => {
 
     console.log(err)

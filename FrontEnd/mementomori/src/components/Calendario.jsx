@@ -19,7 +19,7 @@ class Calendario extends React.Component {
 
         this.getWeeksToLive = this.getWeeksToLive.bind(this);
         this.getCurrentWeek = this.getCurrentWeek.bind(this);
-        this.filterDate = this.filterDate.bind(this);
+
     }
 
 
@@ -29,33 +29,19 @@ class Calendario extends React.Component {
         API.get('/getUserGenerateCalendar/' + userId).then(response => {
             console.log(response.data)
             this.setState({
-                birth_date: moment(this.filterDate(response.data.birthDate)),
+                birth_date: moment(response.data.birthDate),
                 years_to_live: response.data.years_to_live,
-                register_date: moment(this.filterDate(response.data.register_date)),
-                death_date: moment(this.filterDate(response.data.death_date))
+                register_date: moment(response.data.register_date),
+                death_date: moment(response.data.death_date)
             }, () => {
                 console.log(this.state)
             })
             
         })
 
-
-        //   //Sets the death date state given the birth date and the years to live
-        // this.setState({
-        //     death_date: moment(this.state.birth_date).add(this.state.years_to_live, 'years')
-        // }, () => {
-        //     console.log("fecha de muerte: " + new Date(this.state.death_date))
-        // });
-        // console.log("fecha de nacimiento: " + new Date(this.state.birth_date))
     }
 
-    filterDate(date) {
-        console.log(date)
-        var stringDate = date.toString();
-        var result = stringDate.match(/(?:(?!T).)*/)
-        return result[0];
-    }
-
+  
     //this function returns the total amount of weeks to live betweek the birth date, and the death date
     getWeeksToLive() {
         //returns the weeks to live between death and birth date, rounded to upper week
