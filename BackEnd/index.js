@@ -281,7 +281,13 @@ app.post('/generateCalendar', async (req, res) => {
 
   function getWeeksToLive(death_date, birth_date) {
     //returns the weeks to live between death and birth date, rounded to upper week
-    var weeks_to_live = moment(new Date(death_date)).diff(moment(new Date(birth_date)), 'days') / 7;
+    console.log("--------------")
+    console.log(death_date)
+    console.log(birth_date)
+      // console.log(moment(new Date(death_date)))
+      // console.log(moment(new Date(birth_date)))
+    console.log("--------------")
+    var weeks_to_live = moment(death_date).diff(moment(birth_date), 'days') / 7;
     console.log("semanas a vivir: " + Math.ceil(weeks_to_live))
     return Math.ceil(weeks_to_live);
   }
@@ -310,6 +316,9 @@ app.post('/generateCalendar', async (req, res) => {
     console.log(err)
     res.send(err)
   })
+
+  //Sets all the field for the calendar
+  
 
 })
 
