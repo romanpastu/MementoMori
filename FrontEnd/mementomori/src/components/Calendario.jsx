@@ -14,10 +14,10 @@ class Calendario extends React.Component {
             birth_date: "",
             years_to_live: "",
             death_date: "",
-            register_date: ""
+            register_date: "",
+            weeks_to_live: ""
         };
 
-        this.getWeeksToLive = this.getWeeksToLive.bind(this);
         this.getCurrentWeek = this.getCurrentWeek.bind(this);
 
     }
@@ -32,7 +32,8 @@ class Calendario extends React.Component {
                 birth_date: moment(response.data.birthDate),
                 years_to_live: response.data.years_to_live,
                 register_date: moment(response.data.register_date),
-                death_date: moment(response.data.death_date)
+                death_date: moment(response.data.death_date),
+                weeks_to_live: response.data.weeks_to_live
             }, () => {
                 console.log(this.state)
             })
@@ -41,15 +42,6 @@ class Calendario extends React.Component {
 
     }
 
-  
-    //this function returns the total amount of weeks to live betweek the birth date, and the death date
-    getWeeksToLive() {
-        //returns the weeks to live between death and birth date, rounded to upper week
-        var weeks_to_live = moment(new Date(this.state.death_date)).diff(this.state.birth_date, 'days') / 7;
-        console.log("semanas a vivir: " + Math.ceil(weeks_to_live))
-        return Math.ceil(weeks_to_live);
-
-    }
 
     //this function is used to get the weeks until registration date to mark it as grey area, unused
     getWeeksToRegisterDate() {
@@ -77,7 +69,7 @@ class Calendario extends React.Component {
         return (
             <div className=" calendar-container">
 
-                <CalendarGrid weeksToRegisterDate={this.getWeeksToRegisterDate()} totalWeeks={this.getWeeksToLive()} currentWeek={this.getCurrentWeek()} />
+                <CalendarGrid weeksToRegisterDate={this.getWeeksToRegisterDate()} totalWeeks={this.state.weeks_to_live} currentWeek={this.getCurrentWeek()} />
 
             </div>
         )

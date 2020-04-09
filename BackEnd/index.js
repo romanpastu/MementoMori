@@ -335,14 +335,19 @@ app.get('/getUserGenerateCalendar/:id', async (req, res) => {
           db.query("SELECT (death_date::varchar) from users where id ='" + userId + "';").then(data => {
             dataToSend[0].death_date = data[0].death_date;
 
-            console.log(dataToSend[0])
-            res.send(dataToSend[0])
+            db.query("SELECT (weeks_to_live) from users where id ='" + userId + "';").then (data => {
+              dataToSend[0].weeks_to_live = data[0].weeks_to_live;
+              console.log(dataToSend[0])
+              res.send(dataToSend[0])
+            })
+
+            
           })
         })
       })
     })
 
-
+    
 
 
 
