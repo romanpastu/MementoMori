@@ -281,12 +281,7 @@ app.post('/generateCalendar', async (req, res) => {
 
   function getWeeksToLive(death_date, birth_date) {
     //returns the weeks to live between death and birth date, rounded to upper week
-    console.log("--------------")
-    console.log(death_date)
-    console.log(birth_date)
-      // console.log(moment(new Date(death_date)))
-      // console.log(moment(new Date(birth_date)))
-    console.log("--------------")
+
     var weeks_to_live = moment(death_date).diff(moment(birth_date), 'days') / 7;
     console.log("semanas a vivir: " + Math.ceil(weeks_to_live))
     return Math.ceil(weeks_to_live);
@@ -318,7 +313,11 @@ app.post('/generateCalendar', async (req, res) => {
   })
 
   //Sets all the field for the calendar
-  
+
+   db.query("INSERT INTO calendar_field (text, rating, calendar_id, week_number) select '', 0, c.id, g.wn from calendar c join users u on u.id = c.user_id cross join generate_series(0, u.weeks_to_live) as g(wn);").then(data => {
+     console.log(data);
+   }).catch(err => console.log(err))
+
 
 })
 
@@ -344,19 +343,19 @@ app.get('/getUserGenerateCalendar/:id', async (req, res) => {
           db.query("SELECT (death_date::varchar) from users where id ='" + userId + "';").then(data => {
             dataToSend[0].death_date = data[0].death_date;
 
-            db.query("SELECT (weeks_to_live) from users where id ='" + userId + "';").then (data => {
+            db.query("SELECT (weeks_to_live) from users where id ='" + userId + "';").then(data => {
               dataToSend[0].weeks_to_live = data[0].weeks_to_live;
               console.log(dataToSend[0])
               res.send(dataToSend[0])
             })
 
-            
+
           })
         })
       })
     })
 
-    
+
 
 
 
