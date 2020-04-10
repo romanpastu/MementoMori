@@ -314,7 +314,7 @@ app.post('/generateCalendar', async (req, res) => {
 
   //Sets all the field for the calendar
 
-   db.query("INSERT INTO calendar_field (text, rating, calendar_id, week_number) select '', 0, c.id, g.wn from calendar c join users u on u.id = c.user_id cross join generate_series(0, u.weeks_to_live) as g(wn);").then(data => {
+   db.query("INSERT INTO calendar_field (text, rating, calendar_id, week_number) select '', 0, c.id, g.wn from calendar c join users u on u.id = c.user_id cross join generate_series(1, u.weeks_to_live) as g(wn);").then(data => {
      console.log(data);
    }).catch(err => console.log(err))
 
