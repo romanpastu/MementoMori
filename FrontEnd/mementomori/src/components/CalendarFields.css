@@ -2,8 +2,8 @@
 
 .cube {
     float: left;
-    width: 20px;
-    height: 20px;
+    width: 19px;
+    height: 19px;
     border: 1px solid rgba(0, 0, 0, .2);
     margin: 1px;
   }
@@ -14,8 +14,8 @@
 
   .cube-lived{
     float: left;
-    width: 20px;
-    height: 20px;
+    width: 19px;
+    height: 19px;
     border: 1px solid rgba(0, 0, 0, .2);
     margin: 1px;
     background-color: rgba(6,30,57);
