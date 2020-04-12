@@ -1,4 +1,7 @@
 .fieldsContainer{
-   
    width:90%;   
+   display: grid;
+   grid-template-columns: repeat(auto-fit, minmax(20px, 1fr));
+   grid-auto-rows: 20px;  
 }
+
