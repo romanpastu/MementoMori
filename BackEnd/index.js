@@ -9,7 +9,11 @@ const cors = require('cors');
 //express settings
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cors());
+// app.use(cors());
+// app.options('*', cors());
+ app.use(cors({ 
+   origin: 'http://localhost:3000'
+ }));
 
 //db settings
 const pgp = require("pg-promise")();
@@ -312,7 +316,7 @@ app.post('/generateCalendar', async (req, res) => {
             //the lifeExpectanceSet restriction is removed and access to dashboard is granted
             db.query("UPDATE user_permissions SET life_expectancy =  'false' , dashboard = 'true'  WHERE user_id = '" + userId + "';").then(data => {
               console.log("everything generated")
-              res.send("100")
+              res.sendStatus(100)
               console.log(data)
             }).catch(err => console.log(err))
           }).catch(err => console.log(err))
