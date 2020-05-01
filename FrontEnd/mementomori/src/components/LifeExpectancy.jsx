@@ -35,7 +35,7 @@ class LifeExpectancy extends React.Component {
         API.post(constants.urlBackend + "/generateCalendar", { yearsToLive, userId, registerDate }).then(response => {
             console.log("resposne of the api")
             console.log(response)
-            if (response.status == 200) {
+            if (response.data == "100") {
                 refreshTheToken().then(response => {
                     console.log("resposne in the refreshing")
                     console.log(response)
