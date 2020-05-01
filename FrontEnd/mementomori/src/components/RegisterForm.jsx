@@ -2,6 +2,15 @@ import React from 'react'
 import axios from 'axios'
 import constants from '../constants.js'
 import qs from 'qs'
+import { connect } from "react-redux";
+import { lifeExpectancySet } from "../redux/actions/reduxActions.js"
+
+function mapDispatchToProps(dispatch) {
+    return {
+        lifeExpectancySet: element => dispatch(lifeExpectancySet(element))
+    }
+}
+
 class RegisterForm extends React.Component {
     constructor(props) {
         super(props)
@@ -44,6 +53,7 @@ class RegisterForm extends React.Component {
           }).then((res) => {
               console.log(email)
               console.log(password2)
+              this.props.lifeExpectancySet(true)
              this.props.login(email,password2, "register").
              then((data) => {
                  console.log("despues de hacer el login")
@@ -94,4 +104,4 @@ class RegisterForm extends React.Component {
 }
 
 
-export default RegisterForm;
+export default connect(null, mapDispatchToProps)(RegisterForm);

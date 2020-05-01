@@ -1,4 +1,5 @@
 import React from 'react';
+import compose from 'recompose/compose'
 import './App.css';
 import Calendario from "./components/Calendario"
 import LoginPage from "./components/LoginPage"
@@ -8,9 +9,18 @@ import axios from 'axios'
 import Cookies from 'js-cookie';
 import constants from './constants.js'
 import isAuthenticated from './services/authService';
+import checkLifeExpectancySet from './services/checkLifeExpectancySet'
 import PrivateRoute from './components/PrivateRoute'
-import LifeExpectancyRoute from './components/LifeExpectancyRoute' 
+import LifeExpectancyRoute from './components/LifeExpectancyRoute'
 import LifeExpectancy from './components/LifeExpectancy'
+import { connect } from "react-redux";
+import { lifeExpectancySet } from "./redux/actions/reduxActions.js"
+
+function mapDispatchToProps(dispatch) {
+  return {
+    lifeExpectancySet: element => dispatch(lifeExpectancySet(element))
+  }
+}
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -25,7 +35,20 @@ class App extends React.Component {
     //calls the auth service to decide the auth state value
     isAuthenticated().then((result) => {
       if (result === true) {
-        this.setState({ isAuthenticated: true, authenticationChecked: true })
+        this.setState(
+          {
+            isAuthenticated: true,
+            authenticationChecked: true
+          }, () => {
+            if(checkLifeExpectancySet()){
+              //the lifeExpectancy is yet to set
+              this.props.lifeExpectancySet(true)
+            }else{
+              //the lifeExpectancy is set
+              this.props.lifeExpectancySet(false)
+            }
+          }
+        )
       } else {
         this.setState({ isAuthenticated: false, authenticationChecked: true })
       }
@@ -88,10 +111,10 @@ class App extends React.Component {
         this.setState({ isAuthenticated: true, authenticationChecked: true }, () => {
           this.props.history.push('/dashboard');
         })
-        
+
       } else {
         this.setState({ isAuthenticated: false, authenticationChecked: true })
-        
+
       }
     })
   }
@@ -111,4 +134,8 @@ class App extends React.Component {
   }
 }
 
-export default withRouter(App);
+export default compose(
+  withRouter,
+  connect(null, mapDispatchToProps)
+)(App);
+// export default withRouter(App);

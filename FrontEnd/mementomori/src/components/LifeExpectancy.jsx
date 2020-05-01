@@ -3,6 +3,7 @@ import './LifeExpectancy.css'
 import { getUserId } from '../services/userInfo.js'
 import API from '../services/axiosObject.js';
 import constants from '../constants.js'
+import refreshTheToken from '../services/refreshTheToken.js'
 var moment = require('moment');
 class LifeExpectancy extends React.Component {
     constructor(props) {
@@ -34,7 +35,10 @@ class LifeExpectancy extends React.Component {
         API.post(constants.urlBackend + "/generateCalendar", { yearsToLive, userId, registerDate }).then(response => {
             console.log(response)
             console.log("empujamos a dashboard")
-            this.props.setYearsRedirect();
+            refreshTheToken().then( response => {
+                this.props.setYearsRedirect();
+            })
+           
         })
     }
 

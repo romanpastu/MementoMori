@@ -15,18 +15,25 @@ class LoginPage extends React.Component {
         super(props)
 
         this.state = {
-            displayLogin: true
+            displayLogin: false,
+            lifeExpectancySet: true
         }
         this.displayLogin = this.displayLogin.bind(this);
         this.displayRegister = this.displayRegister.bind(this);
     }
 
     componentDidMount() {
-        if (this.props.authed == true && this.props.lifeExpectancySet == false) {
-            this.props.history.push('/dashboard');
-        }else{
+        console.log("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
+        console.log("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
+        console.log(this.props.lifeExpectancySet)
+        if (this.props.authed == true && this.props.lifeExpectancySet == true) {
+            this.props.history.push('/lifeExpectancy');
+        }else if(this.props.lifeExpectancySet == false && this.props.authed == false){
+            this.props.history.push('/lifeExpectancy')
+        }else if(this.props.authed == true && this.props.lifeExpectancySet == false){
             this.props.history.push('/lifeExpectancy')
         }
+
     }
 
     displayLogin(){
