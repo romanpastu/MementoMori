@@ -8,6 +8,7 @@
 
   .cube:hover{
     background:blue;
+    cursor: pointer;
   }
 
   .cube-lived{

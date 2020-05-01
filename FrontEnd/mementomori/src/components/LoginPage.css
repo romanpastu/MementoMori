@@ -14,9 +14,10 @@
 .blurredBg{
     height: 100vh;
     width:100vw;
-    background-image: url('../assets/snowMountains1.jpg');
+    background-color: rgb(108, 195, 224);
+    /* background-image: url('../assets/snowMountains1.jpg'); */
     background-size: cover;
-    filter: blur(4px);
+    /* filter: blur(4px); */
     background-position: center;
     background-repeat: no-repeat;
 }
