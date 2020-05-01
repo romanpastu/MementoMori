@@ -2,21 +2,30 @@ import React from 'react'
 import './LoginPage.css'
 import LoginFrom from './LoginForm'
 import RegisterForm from './RegisterForm'
+import { connect} from "react-redux"
+
+const mapStateToProps = state => {
+    return{
+        lifeExpectancySet: state.lifeExpectancySet
+    }
+}
+
 class LoginPage extends React.Component {
     constructor(props) {
         super(props)
 
         this.state = {
             displayLogin: true
-            
         }
         this.displayLogin = this.displayLogin.bind(this);
         this.displayRegister = this.displayRegister.bind(this);
     }
 
     componentDidMount() {
-        if (this.props.authed == true) {
+        if (this.props.authed == true && this.props.lifeExpectancySet == false) {
             this.props.history.push('/dashboard');
+        }else{
+            this.props.history.push('/lifeExpectancy')
         }
     }
 
@@ -64,4 +73,4 @@ class LoginPage extends React.Component {
     }
 }
 
-export default LoginPage;
+export default connect(mapStateToProps)(LoginPage)

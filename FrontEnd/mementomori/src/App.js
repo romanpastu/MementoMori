@@ -9,6 +9,7 @@ import Cookies from 'js-cookie';
 import constants from './constants.js'
 import isAuthenticated from './services/authService';
 import PrivateRoute from './components/PrivateRoute'
+import LifeExpectancyRoute from './components/LifeExpectancyRoute' 
 import LifeExpectancy from './components/LifeExpectancy'
 class App extends React.Component {
   constructor(props) {
@@ -102,7 +103,7 @@ class App extends React.Component {
       <div>
         <Switch>
           <PrivateRoute name={"dashboard"} authed={this.state.isAuthenticated} path="/dashboard" render={(props) => <Calendario {...props} />} />
-          <Route name={"lifeExpectancy"} path="/lifeExpectancy" render={(props) => <LifeExpectancy {...props} setYearsRedirect={this.setYearsRedirect} />} />
+          <LifeExpectancyRoute name={"life_expectancy"} path="/lifeExpectancy" render={(props) => <LifeExpectancy {...props} setYearsRedirect={this.setYearsRedirect} />} />
           <Route exact path="/login" render={(props) => <LoginPage login={this.login} authed={this.state.isAuthenticated} {...props} />} />
         </Switch>
       </div>

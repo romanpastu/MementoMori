@@ -90,7 +90,7 @@ app.post('/register', async (req, res) => {
   const hashedPassword = await hash(password, 10);
   db.query("INSERT INTO USERS (email, password, birth_date, first_name, second_name) VALUES ('" + email + "','" + hashedPassword + "','" + birthDate + "','" + firstName + "','" + secondName + "')").then(function (data) {
     db.query("SELECT id from users where email='" + email + "';").then(function (data) {
-      db.query("INSERT INTO user_permissions values ('" + data[0].id + "', 'true')").then(function (data) {
+      db.query("INSERT INTO user_permissions values ('" + data[0].id + "', 'false', 'true')").then(function (data) {
         res.send("inserted");
         console.log("inserted")
       }).catch(function (error) {
