@@ -33,12 +33,17 @@ class LifeExpectancy extends React.Component {
         const userId = getUserId();
         const registerDate = moment().format("YYYY-MM-DD");
         API.post(constants.urlBackend + "/generateCalendar", { yearsToLive, userId, registerDate }).then(response => {
+            console.log("resposne of the api")
             console.log(response)
-            console.log("empujamos a dashboard")
-            refreshTheToken().then( response => {
-                this.props.setYearsRedirect();
-            })
-           
+            if (response.status == 200) {
+                refreshTheToken().then(response => {
+                    console.log("resposne in the refreshing")
+                    console.log(response)
+                    this.props.setYearsRedirect();
+                })
+            }
+
+
         })
     }
 

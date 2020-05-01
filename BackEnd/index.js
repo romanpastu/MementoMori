@@ -296,31 +296,42 @@ app.post('/generateCalendar', async (req, res) => {
     deathDate = moment(filterDate(birth_date)).add(yearsToLive, 'years')
     db.query("UPDATE users SET death_date = '" + moment(deathDate).format('YYYY-MM-DD').toString() + "' , weeks_to_live = '" + getWeeksToLive(deathDate, birth_date) + "' WHERE id = '" + userId + "';").then(data => {
       console.log(data)
+      /*******/
+      //Sets the yearsToLive and registerDate in the database
+      db.query("UPDATE users SET years_to_live =  '" + yearsToLive + "' , register_date = '" + registerDate + "'  WHERE id = '" + userId + "';").then(data => {
+        console.log(data)
+        db.query("INSERT INTO calendar (user_id) values ('" + userId + "');").then(data => {
+          console.log(data)
+          // res.send(data)
+          /*******/
+          //Sets all the field for the calendar
+          db.query("INSERT INTO calendar_field (text, rating, calendar_id, week_number) select '', 0, c.id, g.wn from calendar c join users u on u.id = c.user_id cross join generate_series(1, u.weeks_to_live) as g(wn);").then(data => {
+            console.log(data);
+            console.log("series generated")
+            /******/
+            //the lifeExpectanceSet restriction is removed and access to dashboard is granted
+            db.query("UPDATE user_permissions SET life_expectancy =  'false' , dashboard = 'true'  WHERE user_id = '" + userId + "';").then(data => {
+              console.log("everything generated")
+              res.send("100")
+              console.log(data)
+            }).catch(err => console.log(err))
+          }).catch(err => console.log(err))
+        })
+      }).catch(err => {
+        console.log(err)
+        res.send(err)
+      })
     }).catch(err => console.log(err))
 
   })
 
-  //Sets the yearsToLive and registerDate in the database
-  db.query("UPDATE users SET years_to_live =  '" + yearsToLive + "' , register_date = '" + registerDate + "'  WHERE id = '" + userId + "';").then(data => {
-    console.log(data)
-    db.query("INSERT INTO calendar (user_id) values ('" + userId + "');").then(data => {
-      console.log(data)
-      res.send(data)
-    })
-  }).catch(err => {
-    console.log(err)
-    res.send(err)
-  })
 
-  //Sets all the field for the calendar
 
-   db.query("INSERT INTO calendar_field (text, rating, calendar_id, week_number) select '', 0, c.id, g.wn from calendar c join users u on u.id = c.user_id cross join generate_series(1, u.weeks_to_live) as g(wn);").then(data => {
-     console.log(data);
-   }).catch(err => console.log(err))
+
+
 
 
 })
-
 //get user
 app.get('/getUserGenerateCalendar/:id', async (req, res) => {
   const userId = req.params.id
@@ -354,11 +365,6 @@ app.get('/getUserGenerateCalendar/:id', async (req, res) => {
         })
       })
     })
-
-
-
-
-
     // dataToSend[0].birthDate = data[0].birth_date;
     // dataToSend[0].years_to_live = data[0].years_to_live;
     // dataToSend[0].register_date = data[0].register_date;
@@ -370,6 +376,13 @@ app.get('/getUserGenerateCalendar/:id', async (req, res) => {
     res.send(err)
   })
 })
+
+//get user field info
+app.get('/getUserFieldsInfo/:id', async (req, res) => {
+  const userId = req.params.id
+  console.log(userId)
+})
+
 
 //Express port
 app.listen(1234, () => {

@@ -105,8 +105,9 @@ class App extends React.Component {
   }
 
   setYearsRedirect = () => {
+    console.log("llega a caso?")
     isAuthenticated().then((result) => {
-
+      console.log("en el redirect el status es: "+result)
       if (result === true) {
         this.setState({ isAuthenticated: true, authenticationChecked: true }, () => {
           this.props.history.push('/dashboard');
