@@ -11,7 +11,8 @@ class CalendarGrid extends React.Component {
     super()
 
     this.state = {
-      fieldsInfo: []
+      fieldsInfo: [],
+      loaded: false
     }
   }
 
@@ -20,7 +21,8 @@ class CalendarGrid extends React.Component {
 
     API.get(constants.urlBackend +'/getUserFieldsInfo/' + userId).then(response => {
       this.setState({
-         fieldsInfo: response.data
+         fieldsInfo: response.data,
+         loaded: true
       }, () => {
           console.log(this.state.fieldsInfo)
       })
@@ -32,7 +34,6 @@ class CalendarGrid extends React.Component {
      var newArray = this.state.fieldsInfo.filter(function (el) {
        return el.week_number == id
      })
-     
      return newArray[0].text;
    }
 
@@ -46,10 +47,16 @@ class CalendarGrid extends React.Component {
 
   render() {
     let rows = []
-    for (let i = 1; i <= this.props.totalWeeks; i++) {
-      rows.push(<CalendarFields key={i} weekId={i} weeksToRegisterDate={this.props.weeksToRegisterDate} currentWeek={this.props.currentWeek} description={this.getDescription(i)} rating={this.getRating(i)}/>)
+    
+    if(this.state.loaded){
+      for (let i = 1; i <= this.props.totalWeeks; i++) {
+        rows.push(<CalendarFields key={i} weekId={i} weeksToRegisterDate={this.props.weeksToRegisterDate} currentWeek={this.props.currentWeek} description={this.getDescription(i)} rating={this.getRating(i)}/>)
+      }
+      return <div className="fieldsContainer ">{rows}</div>
+    }else{
+      return <p>loading</p>
     }
-    return <div className="fieldsContainer ">{rows}</div>
+    
 
   }
 }
