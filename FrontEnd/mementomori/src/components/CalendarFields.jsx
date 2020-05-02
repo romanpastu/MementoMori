@@ -7,9 +7,9 @@ class CalendarFields extends React.Component {
         super(props);
         this.state = {
             fieldId: "",
-            description: "",
+            description: this.props.description,
             showModal: false,
-              emotionRating:  0,
+            emotionRating:  this.props.rating,
             //   emotionRating:  Math.floor(Math.random() * 5) + 1 
         };
         //console.log(props) //week number, beginning with 0
@@ -19,8 +19,9 @@ class CalendarFields extends React.Component {
     }
 
     componentDidMount() {
+        
         this.setState({
-            fieldId: this.props.weekId,
+            fieldId: this.props.weekId
         }, () => {
             // console.log("initial show modal state")
             // console.log(this.state.showModal)
@@ -93,7 +94,7 @@ class CalendarFields extends React.Component {
             >
                 
                 {weekId == this.props.currentWeek ? <div className="cross " ></div> : <div className="cube-white"></div> } {/*Remove this to return the green indicator*/}
-                <CalendarFieldModal show={this.state.showModal} close={this.closeModal} id={weekId} emotionRating={this.state.emotionRating} handleChange={this.handleChange} />
+                <CalendarFieldModal show={this.state.showModal} close={this.closeModal} id={weekId} emotionRating={this.state.emotionRating} description={this.state.description} handleChange={this.handleChange} />
             </div>
         }
 

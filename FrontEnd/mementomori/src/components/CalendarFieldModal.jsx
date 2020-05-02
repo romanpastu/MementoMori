@@ -4,9 +4,14 @@ class CalendarFieldModal extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            emotionRating: this.props.emotionRating
+            emotionRating: this.props.emotionRating,
+            description: this.props.description
         };
 
+    }
+
+    componentDidMount(){
+        
     }
 
 
@@ -17,6 +22,13 @@ class CalendarFieldModal extends React.Component {
             })
             console.log("triggered update")
         }
+         if(this.state.description != this.props.description){
+             this.setState({
+                description: this.props.description
+             }, () =>{
+                 console.log("updated but "+this.state.description)
+             })
+         }
     }
 
     render() {
@@ -34,7 +46,7 @@ class CalendarFieldModal extends React.Component {
                         <p className="modal-close" onClick={this.props.close}>Close</p>
                         <div className="flex-in-container">
                             <h2>Input a comment about your week {this.props.id}</h2>
-                            <textarea placeholder="This week I ..." className="textarea" ></textarea>
+                            <textarea placeholder="This week I ..." className="textarea" value={this.state.description}></textarea>
                             <h2 >Select a rating for your week</h2>
                             <select className="emotion-selector" value={this.state.emotionRating == 0 ? 0 : this.state.emotionRating} onChange={this.props.handleChange}>
                                 <option value="0" disabled hidden>Select a rating</option>

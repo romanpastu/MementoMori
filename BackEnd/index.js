@@ -385,6 +385,13 @@ app.get('/getUserGenerateCalendar/:id', async (req, res) => {
 app.get('/getUserFieldsInfo/:id', async (req, res) => {
   const userId = req.params.id
   console.log(userId)
+  db.query("SELECT CF.text, CF.rating, CF.week_number from calendar C join calendar_field CF on C.id = CF.calendar_id where C.user_id = '"+userId+"';").then(data =>
+    res.send(data)
+  ).catch(err =>{
+    console.log(err)
+    res.send(err)
+  })
+  
 })
 
 

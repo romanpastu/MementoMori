@@ -2,10 +2,10 @@ import React from 'react'
 import './LoginPage.css'
 import LoginFrom from './LoginForm'
 import RegisterForm from './RegisterForm'
-import { connect} from "react-redux"
+import { connect } from "react-redux"
 
 const mapStateToProps = state => {
-    return{
+    return {
         lifeExpectancySet: state.lifeExpectancySet
     }
 }
@@ -28,40 +28,40 @@ class LoginPage extends React.Component {
         console.log(this.props.lifeExpectancySet)
         if (this.props.authed == true && this.props.lifeExpectancySet == true) {
             this.props.history.push('/lifeExpectancy');
-        }else if(this.props.lifeExpectancySet == false && this.props.authed == false){
+        } else if (this.props.lifeExpectancySet == false && this.props.authed == false) {
             this.props.history.push('/lifeExpectancy')
-        }else if(this.props.authed == true && this.props.lifeExpectancySet == false){
+        } else if (this.props.authed == true && this.props.lifeExpectancySet == false) {
             this.props.history.push('/lifeExpectancy')
         }
 
     }
 
-    displayLogin(){
+    displayLogin() {
         this.setState({
-            displayLogin:true
+            displayLogin: true
         })
     }
 
-    displayRegister(){
+    displayRegister() {
         this.setState({
-            displayLogin:false
+            displayLogin: false
         })
     }
 
     render() {
         return (<div>
             <div className="blurredBg"></div>
-                <div class="formContainer">
-                    <div className="titleContainer">
-                        <p class="title">MementoMori</p>
+            <div class="formContainer">
+                <div className="titleContainer">
+                    <p class="title">MementoMori</p>
+                </div>
+                <div className="formIn">
+                    <div className="selectorContainer">
+                        <div className="selectorLogin" onClick={this.displayLogin}>Login</div>
+                        <div className="selectorRegister" onClick={this.displayRegister}>Register</div>
                     </div>
-                    <div className="formIn">
-                        <div className="selectorContainer">
-                            <div className="selectorLogin" onClick={this.displayLogin}>Login</div>
-                            <div className="selectorRegister" onClick={this.displayRegister}>Register</div>
-                        </div>
-                        <br></br>
-                        {/* <div class="form-group">
+                    <br></br>
+                    {/* <div class="form-group">
                             <label for="exampleInputEmail1">Email address</label>
                             <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" />
                         </div>
@@ -72,10 +72,10 @@ class LoginPage extends React.Component {
                         <div className="text-center buttonContainer">
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </div> */}
-                        {this.state.displayLogin ? <LoginFrom login={this.props.login}/> : <RegisterForm login={this.props.login} {...this.props} />}
-                    </div>
+                    {this.state.displayLogin ? <LoginFrom login={this.props.login} /> : <RegisterForm login={this.props.login} {...this.props} />}
                 </div>
-                </div>
+            </div>
+        </div>
         )
     }
 }
