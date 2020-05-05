@@ -7,13 +7,41 @@ class CalendarFieldModal extends React.Component {
         super(props);
         this.state = {
             emotionRating: this.props.emotionRating,
-            description: this.props.description
+            description: this.props.description,
+            originalDescription : ""
         };
-
+        this.resetText = this.resetText.bind(this)
+        this.onClick = this.onClick.bind(this)
     }
 
+    
+
     componentDidMount(){
-        
+        this.setState({
+            originalDescription: this.props.description
+        })
+    }
+
+    handleChange = (evt) => {
+        const target = evt.target;
+        const value = target.value;
+        const name = target.name;
+    
+        this.setState({
+            [name]: value
+        });
+    }
+
+    resetText(){
+        this.setState({
+            description : this.state.originalDescription
+        })
+    }
+
+    onClick(event){
+        this.props.close();
+        this.resetText();
+
     }
 
 
@@ -24,13 +52,13 @@ class CalendarFieldModal extends React.Component {
             })
             console.log("triggered update")
         }
-         if(this.state.description != this.props.description){
-             this.setState({
-                description: this.props.description
-             }, () =>{
-                 console.log("updated but "+this.state.description)
-             })
-         }
+        //  if(this.state.description != this.props.description){
+        //      this.setState({
+        //         description: this.props.description
+        //      }, () =>{
+        //          console.log("updated but "+this.state.description)
+        //      })
+        //  }
     }
 
     render() {
@@ -45,11 +73,11 @@ class CalendarFieldModal extends React.Component {
                 
                 <div id="open-modal" className="modal-window ">
                     <div>
-                        <p className="modal-close" onClick={this.props.close} ><FontAwesomeIcon icon={faWindowClose} className="buttonCloseModal"/></p>
+                        <p className="modal-close" onClick={this.onClick} ><FontAwesomeIcon icon={faWindowClose} className="buttonCloseModal"/></p>
                         <div className="flex-in-container">
                             <p className="modalText">Input a comment about your week {this.props.id}</p>
                             <div className="centeredEls">
-                            <textarea placeholder="This week I ..." className="textarea form-control" value={this.state.description} rows={"5"}></textarea>
+                            <textarea name="description" placeholder="This week I ..." className="textarea form-control" value={this.state.description} rows={"5"} onChange={this.handleChange}></textarea>
                             </div>
                             <p className="modalText ratingText">Select a rating for your week</p>
                             <div className="centeredEls">
