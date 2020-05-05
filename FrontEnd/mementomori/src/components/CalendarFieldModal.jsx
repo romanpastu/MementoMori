@@ -8,17 +8,22 @@ class CalendarFieldModal extends React.Component {
         this.state = {
             emotionRating: this.props.emotionRating,
             description: this.props.description,
-            originalDescription : ""
+            originalDescription : "",
+            originalEmotionRating: ""
         };
         this.resetText = this.resetText.bind(this)
         this.onClick = this.onClick.bind(this)
+        
     }
 
     
 
     componentDidMount(){
         this.setState({
-            originalDescription: this.props.description
+            originalDescription: this.props.description,
+            originalEmotionRating: this.props.emotionRating
+        }, () => {
+            
         })
     }
 
@@ -39,7 +44,7 @@ class CalendarFieldModal extends React.Component {
     }
 
     onClick(event){
-        this.props.close();
+        this.props.close(this.state.originalEmotionRating);
         this.resetText();
 
     }

@@ -42,9 +42,12 @@ class CalendarFields extends React.Component {
     }
 
 
-    closeModal() {
+    closeModal(el) {
+        console.log("el")
+        console.log(el)
         this.setState({
-            showModal: false
+            showModal: false,
+            emotionRating: el
         }, () => {
             // console.log("clicked closeModal")
             // console.log(this.state.showModal)
