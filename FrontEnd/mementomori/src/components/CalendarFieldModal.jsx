@@ -1,5 +1,7 @@
 import React from 'react'
 import './CalendarFieldModal.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faWindowClose } from '@fortawesome/free-solid-svg-icons'
 class CalendarFieldModal extends React.Component {
     constructor(props) {
         super(props);
@@ -43,11 +45,11 @@ class CalendarFieldModal extends React.Component {
                 
                 <div id="open-modal" className="modal-window ">
                     <div>
-                        <p className="modal-close" onClick={this.props.close}>Close</p>
+                        <p className="modal-close" onClick={this.props.close} ><FontAwesomeIcon icon={faWindowClose} /></p>
                         <div className="flex-in-container">
-                            <h2>Input a comment about your week {this.props.id}</h2>
+                            <p className="modalText">Input a comment about your week {this.props.id}</p>
                             <textarea placeholder="This week I ..." className="textarea" value={this.state.description}></textarea>
-                            <h2 >Select a rating for your week</h2>
+                            <p className="modalText ratingText">Select a rating for your week</p>
                             <select className="emotion-selector" value={this.state.emotionRating == 0 ? 0 : this.state.emotionRating} onChange={this.props.handleChange}>
                                 <option value="0" disabled hidden>Select a rating</option>
                                 <option value="5" >Very Good (5)</option>
@@ -56,6 +58,9 @@ class CalendarFieldModal extends React.Component {
                                 <option value="2" >Bad (2)</option>
                                 <option value="1" >Awful (1)</option>
                             </select>
+                            <div className="text-center buttonContainer modalButtonContainer">
+                            <button type="submit" class="btn btn-primary modalButton">Submit</button>
+                            </div>
                         </div>
                     </div>
                 </div>

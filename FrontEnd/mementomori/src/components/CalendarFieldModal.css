@@ -1,14 +1,16 @@
 
-  
+ @font-face {
+  font-family: 'OpenSans-Light';
+  src: local('OpenSans-Light'), url(./../assets/OpenSans-Light.ttf) format('TrueType');
+}
+
 .modal-window{
   position:fixed;
   z-index: 1;
   background-color:white;
-  border-radius: 30px;
-  width:50vw;
-  
+  box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+  border: 3px solid lightblue;
 }
-
 
  .modalBg{
   height:100%;
@@ -46,9 +48,39 @@ h2{
   margin-right:1vw;
 }
 
-.modal-close{
-  text-align:right;
-  margin-right: 1vw;
+.modalText{
+  margin-left:1vw;
+  margin-right:1vw;
+  margin-bottom:0.5vw;
+  font-size:1.3em;
+  font-family: OpenSans-Light;
+}
+.ratingText{
+  margin-top: 0.5vw;
 }
 
+.modal-close{
+  margin-bottom:0;
+  margin-top: -5px;
+  text-align:right;
+  color:red;
+  cursor: pointer;
+}
+.modal-close:hover{
+  color:rgb(126, 33, 33)
+}
+
+.modalButton{
+  width:30%;
+  background-color:rgb(119, 192, 216) !important;
+  border-color:rgb(119, 192, 216) !important
+}
+
+.modalButton:hover{
+  background-color:rgb(67, 190, 231) !important;
+  border-color:rgb(67, 190, 231) !important
+}
+.modalButtonContainer{
+  margin-bottom:1vw;
+}
 

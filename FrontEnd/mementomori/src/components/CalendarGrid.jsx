@@ -7,7 +7,7 @@ import './CalendarGrid.css'
 
 class CalendarGrid extends React.Component {
 
-  constructor(){
+  constructor() {
     super()
 
     this.state = {
@@ -16,28 +16,28 @@ class CalendarGrid extends React.Component {
     }
   }
 
-  componentDidMount(){
+  componentDidMount() {
     const userId = getUserId();
 
-    API.get(constants.urlBackend +'/getUserFieldsInfo/' + userId).then(response => {
+    API.get(constants.urlBackend + '/getUserFieldsInfo/' + userId).then(response => {
       this.setState({
-         fieldsInfo: response.data,
-         loaded: true
+        fieldsInfo: response.data,
+        loaded: true
       }, () => {
-          console.log(this.state.fieldsInfo)
+        console.log(this.state.fieldsInfo)
       })
-      
-  })
+
+    })
   }
 
-  getDescription(id){
-     var newArray = this.state.fieldsInfo.filter(function (el) {
-       return el.week_number == id
-     })
-     return newArray[0].text;
-   }
+  getDescription(id) {
+    var newArray = this.state.fieldsInfo.filter(function (el) {
+      return el.week_number == id
+    })
+    return newArray[0].text;
+  }
 
-  getRating(id){
+  getRating(id) {
     var newArray = this.state.fieldsInfo.filter(function (el) {
       return el.week_number == id
     })
@@ -47,16 +47,16 @@ class CalendarGrid extends React.Component {
 
   render() {
     let rows = []
-    
-    if(this.state.loaded){
+
+    if (this.state.loaded) {
       for (let i = 1; i <= this.props.totalWeeks; i++) {
-        rows.push(<CalendarFields key={i} weekId={i} weeksToRegisterDate={this.props.weeksToRegisterDate} currentWeek={this.props.currentWeek} description={this.getDescription(i)} rating={this.getRating(i)}/>)
+        rows.push(<CalendarFields key={i} weekId={i} weeksToRegisterDate={this.props.weeksToRegisterDate} currentWeek={this.props.currentWeek} description={this.getDescription(i)} rating={this.getRating(i)} />)
       }
       return <div className="fieldsContainer ">{rows}</div>
-    }else{
-      return <p>loading</p>
+    } else {
+      return <p>fetching data...</p>
     }
-    
+
 
   }
 }
