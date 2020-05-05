@@ -13,7 +13,8 @@ class CalendarFieldModal extends React.Component {
             emotionRating: this.props.emotionRating,
             description: this.props.description,
             originalDescription : "",
-            originalEmotionRating: ""
+            originalEmotionRating: "",
+            timesUpdated: 0
         };
         this.resetText = this.resetText.bind(this)
         this.onClick = this.onClick.bind(this)
@@ -25,7 +26,8 @@ class CalendarFieldModal extends React.Component {
     componentDidMount(){
         this.setState({
             originalDescription: this.props.description,
-            originalEmotionRating: this.props.emotionRating
+            originalEmotionRating: this.props.emotionRating,
+            timesUpdated: 0
         }, () => {
             
         })
@@ -48,8 +50,11 @@ class CalendarFieldModal extends React.Component {
     }
 
     onClick(event){
-        this.props.close(this.state.originalEmotionRating);
-        this.resetText();
+        this.props.close(this.state.originalEmotionRating, this.state.timesUpdated);
+        if(this.state.timesUpdated == 0){
+            this.resetText();
+        }
+        
 
     }
 
@@ -59,7 +64,12 @@ class CalendarFieldModal extends React.Component {
         const emotionRating = this.state.emotionRating;
         const description = this.state.description;
         API.post(constants.urlBackend+"/update/field", { week_number, userId, emotionRating, description }).then(response=>{
-            console.log(response)
+            if(response.status == 200){
+                console.log("guardado")
+                this.setState({
+                    timesUpdated: this.state.timesUpdated +1
+                })
+            }
         })
         console.log("ole")
     }

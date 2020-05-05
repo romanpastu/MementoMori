@@ -346,6 +346,7 @@ app.post('/update/field',async (req,res) =>{
     console.log(data[0].id)
      db.query("UPDATE calendar_field SET text = '"+description+"' , rating = '"+emotionrating+"' where id= '"+data[0].id+"';").then(data =>{
        console.log(data)
+       res.send(200)
      }).catch(err =>{
        console.log(err)
      });

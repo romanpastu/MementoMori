@@ -42,16 +42,20 @@ class CalendarFields extends React.Component {
     }
 
 
-    closeModal(el) {
+    closeModal(el, timesUpdated) {
         console.log("el")
         console.log(el)
         this.setState({
-            showModal: false,
-            emotionRating: el
+            showModal: false
         }, () => {
             // console.log("clicked closeModal")
             // console.log(this.state.showModal)
         });
+        if(timesUpdated == 0){
+            this.setState( {
+                emotionRating: el
+            })
+        }
     }
 
     handleChange(event){
