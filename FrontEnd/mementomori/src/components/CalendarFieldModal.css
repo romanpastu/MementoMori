@@ -20,6 +20,7 @@
   background-color:rgba(169, 169, 169, 0.568);
   position: fixed;
   z-index: 1;
+  cursor: default
 } 
 
 .flex-container{
