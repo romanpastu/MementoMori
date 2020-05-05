@@ -2,6 +2,10 @@ import React from 'react'
 import './CalendarFieldModal.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faWindowClose } from '@fortawesome/free-solid-svg-icons'
+import { getUserId } from '../services/userInfo.js'
+import API from '../services/axiosObject.js';
+import constants from '../constants.js'
+
 class CalendarFieldModal extends React.Component {
     constructor(props) {
         super(props);
@@ -13,7 +17,7 @@ class CalendarFieldModal extends React.Component {
         };
         this.resetText = this.resetText.bind(this)
         this.onClick = this.onClick.bind(this)
-        
+        this.handleSubmit = this.handleSubmit.bind(this)
     }
 
     
@@ -47,6 +51,17 @@ class CalendarFieldModal extends React.Component {
         this.props.close(this.state.originalEmotionRating);
         this.resetText();
 
+    }
+
+    handleSubmit(){
+        const userId = getUserId();
+        const week_number = this.props.id;
+        const emotionRating = this.state.emotionRating;
+        const description = this.state.description;
+        API.post(constants.urlBackend+"/update/field", { week_number, userId, emotionRating, description }).then(response=>{
+            console.log(response)
+        })
+        console.log("ole")
     }
 
 
@@ -96,7 +111,7 @@ class CalendarFieldModal extends React.Component {
                             </select>
                             </div>
                             <div className="text-center buttonContainer modalButtonContainer">
-                            <button type="submit" class="btn btn-primary modalButton">Submit</button>
+                            <button type="submit" class="btn btn-primary modalButton" onClick={this.handleSubmit}>Submit</button>
                             </div>
                         </div>
                     </div>

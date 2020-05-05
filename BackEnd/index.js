@@ -328,20 +328,43 @@ app.post('/generateCalendar', async (req, res) => {
     }).catch(err => console.log(err))
 
   })
+})
 
 
+//update field
+app.post('/update/field',async (req,res) =>{
+  const userId = req.body.userId
+  const week_number = req.body.week_number
+  const emotionrating = req.body.emotionRating
+  const description = req.body.description
+  console.log(userId)
+  console.log(week_number)
+  console.log(emotionrating)
+  console.log(description)
 
+  db.query("SELECT cf.id from calendar_field cf join calendar c on (c.user_id = cf.calendar_id) where week_number='"+week_number+"';").then(data =>{
+    console.log(data[0].id)
+     db.query("UPDATE calendar_field SET text = '"+description+"' , rating = '"+emotionrating+"' where id= '"+data[0].id+"';").then(data =>{
+       console.log(data)
+     }).catch(err =>{
+       console.log(err)
+     });
+  }).catch(err =>{
+    console.log(err)
+  })
 
-
-
+  
 
 })
+
+
+
 //get user
 app.get('/getUserGenerateCalendar/:id', async (req, res) => {
   const userId = req.params.id
-  console.log(userId)
+  
   db.query("SELECT * FROM users where id = '" + userId + "';").then(data => {
-    console.log(data)
+    
 
     //individuals selects are done to skip the formating of a multiselect where a string should be reparsed
     var dataToSend = [{}]
