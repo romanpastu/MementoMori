@@ -5,3 +5,9 @@
   grid-auto-rows: 20px;
 }
 
+.gridLoadingContainer{
+  display:flex;
+  justify-content: center;
+  align-items: center; 
+}
+

@@ -3,6 +3,7 @@ import CalendarFields from './CalendarFields'
 import { getUserId } from '../services/userInfo.js'
 import API from '../services/axiosObject.js';
 import constants from '../constants.js'
+import { CircularProgress } from '@material-ui/core';
 import './CalendarGrid.css'
 
 class CalendarGrid extends React.Component {
@@ -14,9 +15,13 @@ class CalendarGrid extends React.Component {
       fieldsInfo: [],
       loaded: false
     }
+    
   }
 
+  
+
   componentDidMount() {
+
     const userId = getUserId();
 
     API.get(constants.urlBackend + '/getUserFieldsInfo/' + userId).then(response => {
@@ -29,6 +34,9 @@ class CalendarGrid extends React.Component {
 
     })
   }
+  
+
+  
 
   getDescription(id) {
     var newArray = this.state.fieldsInfo.filter(function (el) {
@@ -46,6 +54,7 @@ class CalendarGrid extends React.Component {
 
 
   render() {
+
     let rows = []
 
     if (this.state.loaded) {
@@ -54,7 +63,7 @@ class CalendarGrid extends React.Component {
       }
       return <div className="fieldsContainer ">{rows}</div>
     } else {
-      return <p>fetching data...</p>
+      return <div className="gridLoadingContainer"><CircularProgress color="primary" iconStyle={"width: 150, height:150"}/></div>
     }
 
 
