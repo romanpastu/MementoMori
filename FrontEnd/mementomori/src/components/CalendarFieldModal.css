@@ -36,12 +36,16 @@
 }
 .emotion-selector{
   margin-bottom:1vw;
-  margin-left:1vw;
-  margin-right:1vw;
+  width:90% !important;
+  
 }
+
 .textarea{
-  margin-left:1vw;
-  margin-right:1vw;
+  width: 90% !important;
+}
+.centeredEls{
+  display:flex;
+  justify-content: center;
 }
 h2{
   margin-left:1vw;
@@ -66,8 +70,10 @@ h2{
   color:red;
   cursor: pointer;
 }
-.modal-close:hover{
-  color:rgb(126, 33, 33)
+
+
+.buttonCloseModal:hover{
+    color:rgb(126, 33, 33)
 }
 
 .modalButton{

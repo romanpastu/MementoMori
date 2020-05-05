@@ -45,12 +45,15 @@ class CalendarFieldModal extends React.Component {
                 
                 <div id="open-modal" className="modal-window ">
                     <div>
-                        <p className="modal-close" onClick={this.props.close} ><FontAwesomeIcon icon={faWindowClose} /></p>
+                        <p className="modal-close" onClick={this.props.close} ><FontAwesomeIcon icon={faWindowClose} className="buttonCloseModal"/></p>
                         <div className="flex-in-container">
                             <p className="modalText">Input a comment about your week {this.props.id}</p>
-                            <textarea placeholder="This week I ..." className="textarea" value={this.state.description}></textarea>
+                            <div className="centeredEls">
+                            <textarea placeholder="This week I ..." className="textarea form-control" value={this.state.description} rows={"5"}></textarea>
+                            </div>
                             <p className="modalText ratingText">Select a rating for your week</p>
-                            <select className="emotion-selector" value={this.state.emotionRating == 0 ? 0 : this.state.emotionRating} onChange={this.props.handleChange}>
+                            <div className="centeredEls">
+                            <select className="emotion-selector custom-select" value={this.state.emotionRating == 0 ? 0 : this.state.emotionRating} onChange={this.props.handleChange}>
                                 <option value="0" disabled hidden>Select a rating</option>
                                 <option value="5" >Very Good (5)</option>
                                 <option value="4" >Good (4)</option>
@@ -58,6 +61,7 @@ class CalendarFieldModal extends React.Component {
                                 <option value="2" >Bad (2)</option>
                                 <option value="1" >Awful (1)</option>
                             </select>
+                            </div>
                             <div className="text-center buttonContainer modalButtonContainer">
                             <button type="submit" class="btn btn-primary modalButton">Submit</button>
                             </div>
