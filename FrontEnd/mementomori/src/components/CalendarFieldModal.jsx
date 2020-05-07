@@ -34,6 +34,7 @@ class CalendarFieldModal extends React.Component {
     }
 
     handleChange = (evt) => {
+
         const target = evt.target;
         const value = target.value;
         const name = target.name;
@@ -52,6 +53,7 @@ class CalendarFieldModal extends React.Component {
     onClick(event){
         this.props.close(this.state.originalEmotionRating, this.state.timesUpdated);
         if(this.state.timesUpdated == 0){
+            console.log("text reseted")
             this.resetText();
 
         }
@@ -83,13 +85,6 @@ class CalendarFieldModal extends React.Component {
             })
             console.log("triggered update")
         }
-        //  if(this.state.description != this.props.description){
-        //      this.setState({
-        //         description: this.props.description
-        //      }, () =>{
-        //          console.log("updated but "+this.state.description)
-        //      })
-        //  }
     }
 
 

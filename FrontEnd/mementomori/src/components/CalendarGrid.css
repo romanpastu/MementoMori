@@ -11,3 +11,10 @@
   align-items: center; 
 }
 
+.loadingText{
+  margin:0;
+  margin-left:1vw;
+  padding:0;
+  color:white;
+  
+}

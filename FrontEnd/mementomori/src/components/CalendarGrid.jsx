@@ -63,7 +63,8 @@ class CalendarGrid extends React.Component {
       }
       return <div className="fieldsContainer ">{rows}</div>
     } else {
-      return <div className="gridLoadingContainer"><CircularProgress color="primary" iconStyle={"width: 150, height:150"}/></div>
+      return <div className="gridLoadingContainer"><CircularProgress color="secondary" iconStyle={"width: 1000, height:1000"}/>
+      <p className="loadingText">Loading...</p></div>
     }
 
 
