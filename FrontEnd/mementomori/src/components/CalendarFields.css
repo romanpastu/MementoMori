@@ -58,11 +58,23 @@
   /*cross marks*/
   /*cross mark*/
 .cross{
-  background-size:cover;
-  background-image: url(../assets/cross.svg);
-  width:100%;
-  height:100%;
+  /* background-size:cover;
+  background-image: url(../assets/cross.svg); */
+   width:100%;
+  height:100%; 
+  animation: currentWeekMarker 1s infinite;
   
+}
+@keyframes currentWeekMarker {
+  0%{
+    border: 2px solid rgba(0, 0, 0, .2);
+  }
+  50%{
+    border: 2px solid yellow;
+  }
+  100%{
+    border: 2px solid rgba(0, 0, 0, .2);
+  }
 }
 
 .selectedBordered{
