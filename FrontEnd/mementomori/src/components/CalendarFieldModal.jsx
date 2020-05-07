@@ -53,6 +53,7 @@ class CalendarFieldModal extends React.Component {
         this.props.close(this.state.originalEmotionRating, this.state.timesUpdated);
         if(this.state.timesUpdated == 0){
             this.resetText();
+
         }
         
 
@@ -90,6 +91,7 @@ class CalendarFieldModal extends React.Component {
         //      })
         //  }
     }
+
 
     render() {
 
