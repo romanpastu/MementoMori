@@ -308,19 +308,26 @@ app.post('/generateCalendar', async (req, res) => {
           console.log(data)
           // res.send(data)
           /*******/
-          //Sets all the field for the calendar
-          db.query("INSERT INTO calendar_field (text, rating, calendar_id, week_number) select '', 0, c.id, g.wn from calendar c join users u on u.id = c.user_id cross join generate_series(1, u.weeks_to_live) as g(wn);").then(data => {
-            console.log(data);
-            console.log("series generated")
-            /******/
-            //the lifeExpectanceSet restriction is removed and access to dashboard is granted
-            db.query("UPDATE user_permissions SET life_expectancy =  'false' , dashboard = 'true'  WHERE user_id = '" + userId + "';").then(data => {
-              console.log("everything generated")
-              res.send("100")
-              console.log(data)
+          /*gets the calendar id related to the current user*/
+          db.query("SELECT id from calendar where user_id='" + userId + "';").then(data => {
+            console.log(data[0].id)
+            /*******/
+            //Sets all the field for the calendar
+            db.query("INSERT INTO calendar_field (text, rating, calendar_id, week_number) select '', 0, c.id, g.wn from calendar c join users u on u.id = c.user_id cross join generate_series(1, u.weeks_to_live) as g(wn) where c.id='"+data[0].id+"';").then(data => {
+              console.log(data);
+              console.log("series generated")
+              /******/
+              //the lifeExpectanceSet restriction is removed and access to dashboard is granted
+              db.query("UPDATE user_permissions SET life_expectancy =  'false' , dashboard = 'true'  WHERE user_id = '" + userId + "';").then(data => {
+                console.log("everything generated")
+                res.send("100")
+                console.log(data)
+              }).catch(err => console.log(err))
             }).catch(err => console.log(err))
-          }).catch(err => console.log(err))
+          })
         })
+
+
       }).catch(err => {
         console.log(err)
         res.send(err)
@@ -332,7 +339,7 @@ app.post('/generateCalendar', async (req, res) => {
 
 
 //update field
-app.post('/update/field',async (req,res) =>{
+app.post('/update/field', async (req, res) => {
   const userId = req.body.userId
   const week_number = req.body.week_number
   const emotionrating = req.body.emotionRating
@@ -342,19 +349,21 @@ app.post('/update/field',async (req,res) =>{
   console.log(emotionrating)
   console.log(description)
 
-  db.query("SELECT cf.id from calendar_field cf join calendar c on (c.user_id = cf.calendar_id) where week_number='"+week_number+"';").then(data =>{
+  db.query("SELECT cf.id from calendar_field cf join calendar c on (c.user_id = cf.calendar_id) where week_number='" + week_number + "' and user_id='"+userId+"';").then(data => {
     console.log(data[0].id)
-     db.query("UPDATE calendar_field SET text = '"+description+"' , rating = '"+emotionrating+"' where id= '"+data[0].id+"';").then(data =>{
-       console.log(data)
-       res.send(200)
-     }).catch(err =>{
-       console.log(err)
-     });
-  }).catch(err =>{
+    db.query("UPDATE calendar_field SET text = '" + description + "' , rating = '" + emotionrating + "' where id= '" + data[0].id + "';").then(data => {
+      console.log("bnm----")
+      console.log(data)
+      console.log("bnm----")
+      res.send(200)
+    }).catch(err => {
+      console.log(err)
+    });
+  }).catch(err => {
     console.log(err)
   })
 
-  
+
 
 })
 
@@ -363,9 +372,9 @@ app.post('/update/field',async (req,res) =>{
 //get user
 app.get('/getUserGenerateCalendar/:id', async (req, res) => {
   const userId = req.params.id
-  
+
   db.query("SELECT * FROM users where id = '" + userId + "';").then(data => {
-    
+
 
     //individuals selects are done to skip the formating of a multiselect where a string should be reparsed
     var dataToSend = [{}]
@@ -409,13 +418,13 @@ app.get('/getUserGenerateCalendar/:id', async (req, res) => {
 app.get('/getUserFieldsInfo/:id', async (req, res) => {
   const userId = req.params.id
   console.log(userId)
-  db.query("SELECT CF.text, CF.rating, CF.week_number from calendar C join calendar_field CF on C.id = CF.calendar_id where C.user_id = '"+userId+"';").then(data =>
+  db.query("SELECT CF.text, CF.rating, CF.week_number from calendar C join calendar_field CF on C.id = CF.calendar_id where C.user_id = '" + userId + "';").then(data =>
     res.send(data)
-  ).catch(err =>{
+  ).catch(err => {
     console.log(err)
     res.send(err)
   })
-  
+
 })
 
 
