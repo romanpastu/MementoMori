@@ -15,10 +15,9 @@ export default class Navbar extends Component {
     }
 
     logout() {
-        Cookies.remove('accesstoken')
+        
         this.props.logout();
-        // this.props.history.push("/login")
-        // this.setState({ redirect: true });
+
         
         
     }

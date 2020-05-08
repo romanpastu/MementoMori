@@ -56,6 +56,7 @@ class App extends React.Component {
   }
   
   logout = () => {
+    Cookies.remove('accesstoken')
     this.setState({
       isAuthenticated : false,
       authenticationChecked: true
