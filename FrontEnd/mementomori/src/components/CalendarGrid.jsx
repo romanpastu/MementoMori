@@ -65,7 +65,7 @@ class CalendarGrid extends React.Component {
       }
       return (
         <div className="container2">
-          <Navbar {...this.props}/>
+          <Navbar {...this.props} logout={this.props.logout}/>
           <div className="fieldsContainerCenter">
             <div className="fieldsContainer ">{rows}</div>
           </div>
