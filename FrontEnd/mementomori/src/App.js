@@ -32,6 +32,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    console.log("estados ",this.state.isAuthenticated, this.state.authenticationChecked)
     //calls the auth service to decide the auth state value
     isAuthenticated().then((result) => {
       if (result === true) {
@@ -61,6 +62,7 @@ class App extends React.Component {
       isAuthenticated : false,
       authenticationChecked: true
     }, () =>{
+      this.props.lifeExpectancySet(true)
       this.props.history.push("/login")
     })
     

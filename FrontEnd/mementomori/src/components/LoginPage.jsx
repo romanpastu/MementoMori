@@ -13,7 +13,6 @@ const mapStateToProps = state => {
 class LoginPage extends React.Component {
     constructor(props) {
         super(props)
-        console.log("test ?")
         this.state = {
             displayLogin: false,
             lifeExpectancySet: true
