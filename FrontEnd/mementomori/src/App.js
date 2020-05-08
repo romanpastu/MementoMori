@@ -54,6 +54,17 @@ class App extends React.Component {
       }
     });
   }
+  
+  logout = () => {
+    Cookies.remove('accesstoken')
+    this.setState({
+      isAuthenticated : false,
+      authenticationChecked: true
+    }, () =>{
+      this.props.history.push("/login")
+    })
+    
+  }
 
   login = (email, password, direction) => {
     return new Promise((resolve, reject) => {
@@ -126,9 +137,9 @@ class App extends React.Component {
     return (
       <div>
         <Switch>
-          <PrivateRoute name={"dashboard"} authed={this.state.isAuthenticated} path="/dashboard" render={(props) => <Calendario {...props} />} />
+          <PrivateRoute name={"dashboard"} authed={this.state.isAuthenticated} path="/dashboard" render={(props) => <Calendario {...props} logout={this.logout} />} />
           <LifeExpectancyRoute name={"life_expectancy"} path="/lifeExpectancy" render={(props) => <LifeExpectancy {...props} setYearsRedirect={this.setYearsRedirect} />} />
-          <Route exact path="/login" render={(props) => <LoginPage login={this.login} authed={this.state.isAuthenticated} {...props} />} />
+          <Route path="/login" render={(props) => <LoginPage login={this.login} authed={this.state.isAuthenticated} {...props} />} />
         </Switch>
       </div>
     )
@@ -139,4 +150,3 @@ export default compose(
   withRouter,
   connect(null, mapDispatchToProps)
 )(App);
-// export default withRouter(App);

@@ -1,8 +1,17 @@
 .fieldsContainer{
-   width:95%;   
+  width:95%;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(21px, 1fr));
   grid-auto-rows: 20px;
+}
+.fieldsContainerCenter{
+  display:flex;
+  justify-content: center;
+  width:100%;
+}
+
+.container2{
+  width:100%;
 }
 
 .gridLoadingContainer{
@@ -18,3 +27,4 @@
   color:white;
   
 }
+

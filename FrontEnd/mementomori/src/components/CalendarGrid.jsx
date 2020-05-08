@@ -1,10 +1,12 @@
 import React from 'react'
 import CalendarFields from './CalendarFields'
+import Navbar from './Navbar'
 import { getUserId } from '../services/userInfo.js'
 import API from '../services/axiosObject.js';
 import constants from '../constants.js'
 import { CircularProgress } from '@material-ui/core';
 import './CalendarGrid.css'
+
 
 class CalendarGrid extends React.Component {
 
@@ -15,10 +17,10 @@ class CalendarGrid extends React.Component {
       fieldsInfo: [],
       loaded: false
     }
-    
+
   }
 
-  
+
 
   componentDidMount() {
 
@@ -34,9 +36,9 @@ class CalendarGrid extends React.Component {
 
     })
   }
-  
 
-  
+
+
 
   getDescription(id) {
     var newArray = this.state.fieldsInfo.filter(function (el) {
@@ -61,10 +63,18 @@ class CalendarGrid extends React.Component {
       for (let i = 1; i <= this.props.totalWeeks; i++) {
         rows.push(<CalendarFields key={i} weekId={i} weeksToRegisterDate={this.props.weeksToRegisterDate} currentWeek={this.props.currentWeek} description={this.getDescription(i)} rating={this.getRating(i)} />)
       }
-      return <div className="fieldsContainer ">{rows}</div>
+      return (
+        <div className="container2">
+          <Navbar {...this.props} logout={this.props.logout}/>
+          <div className="fieldsContainerCenter">
+            <div className="fieldsContainer ">{rows}</div>
+          </div>
+        </div>
+      )
+
     } else {
-      return <div className="gridLoadingContainer"><CircularProgress color="secondary" iconStyle={"width: 1000, height:1000"}/>
-      <p className="loadingText">Loading...</p></div>
+      return <div className="gridLoadingContainer"><CircularProgress color="secondary" iconStyle={"width: 1000, height:1000"} />
+        <p className="loadingText">Loading...</p></div>
     }
 
 

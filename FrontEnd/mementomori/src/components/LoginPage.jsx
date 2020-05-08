@@ -13,7 +13,7 @@ const mapStateToProps = state => {
 class LoginPage extends React.Component {
     constructor(props) {
         super(props)
-
+        console.log("test ?")
         this.state = {
             displayLogin: false,
             lifeExpectancySet: true
@@ -23,9 +23,7 @@ class LoginPage extends React.Component {
     }
 
     componentDidMount() {
-        console.log("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
-        console.log("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
-        console.log(this.props.lifeExpectancySet)
+        console.log("authed? ",this.props.authed)
         if (this.props.authed == true && this.props.lifeExpectancySet == true) {
             this.props.history.push('/lifeExpectancy');
         } else if (this.props.lifeExpectancySet == false && this.props.authed == false) {
