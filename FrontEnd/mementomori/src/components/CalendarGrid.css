@@ -1,13 +1,17 @@
 .fieldsContainer{
-  width:95%;   
+  width:95%;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(21px, 1fr));
   grid-auto-rows: 20px;
 }
 .fieldsContainerCenter{
-  width:100vw;
   display:flex;
   justify-content: center;
+  width:100%;
+}
+
+.container2{
+  width:100%;
 }
 
 .gridLoadingContainer{
@@ -24,13 +28,14 @@
   
 }
 
+
 .appNavbar{
   position:sticky;
   top:0;
   left:0;
   padding:0;
   margin:0;
-  width:100vw;
+  width:100%;
   background-color:rgb(34, 155, 196);
   height:50px;
   margin-bottom:1vh;
