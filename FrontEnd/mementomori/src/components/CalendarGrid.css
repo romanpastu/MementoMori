@@ -28,36 +28,3 @@
   
 }
 
-
-.appNavbar{
-  display:flex;
-  flex-direction:row;
-  align-items: center;
-  justify-content: flex-end;
-  position:sticky;
-  top:0;
-  left:0;
-  padding:0;
-  margin:0;
-  width:100%;
-  background-color:rgb(34, 155, 196);
-  height:50px;
-  margin-bottom:1vh;
-}
-
-.navEl{
-  margin-left:2vw;
-}
-
-.nav3{
-  margin-right:3vw;
-}
-
-.navIcon{
-  cursor: pointer;
-  color:white;
-}
-
-.navIcon:hover{
-  color: darkblue
-}

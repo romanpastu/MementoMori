@@ -1,12 +1,12 @@
 import React from 'react'
 import CalendarFields from './CalendarFields'
+import Navbar from './Navbar'
 import { getUserId } from '../services/userInfo.js'
 import API from '../services/axiosObject.js';
 import constants from '../constants.js'
 import { CircularProgress } from '@material-ui/core';
 import './CalendarGrid.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPowerOff, faUser, faColumns } from '@fortawesome/free-solid-svg-icons'
+
 
 class CalendarGrid extends React.Component {
 
@@ -65,11 +65,7 @@ class CalendarGrid extends React.Component {
       }
       return (
         <div className="container2">
-          <div className="appNavbar">
-            <div className="navEl nav1"><FontAwesomeIcon icon={faColumns} className="navIcon"/></div>
-            <div className="navEl nav2"><FontAwesomeIcon icon={faUser} className="navIcon"/></div>
-            <div className="navEl nav3"><FontAwesomeIcon icon={faPowerOff} className="navIcon"/></div>
-          </div>
+          <Navbar {...this.props}/>
           <div className="fieldsContainerCenter">
             <div className="fieldsContainer ">{rows}</div>
           </div>
