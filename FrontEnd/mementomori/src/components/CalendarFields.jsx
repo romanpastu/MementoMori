@@ -51,7 +51,7 @@ class CalendarFields extends React.Component {
             // console.log("clicked closeModal")
             // console.log(this.state.showModal)
         });
-        if(timesUpdated == 0){
+        if(timesUpdated >= 0){
             this.setState( {
                 emotionRating: el
             })

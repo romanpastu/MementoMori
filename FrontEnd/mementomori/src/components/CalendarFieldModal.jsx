@@ -24,6 +24,7 @@ class CalendarFieldModal extends React.Component {
     
 
     componentDidMount(){
+        //during the loadup of the modal, we save the initial texts and status
         this.setState({
             originalDescription: this.props.description,
             originalEmotionRating: this.props.emotionRating,
@@ -52,7 +53,8 @@ class CalendarFieldModal extends React.Component {
 
     onClick(event){
         this.props.close(this.state.originalEmotionRating, this.state.timesUpdated);
-        if(this.state.timesUpdated == 0){
+        //This is triggered when closing the modal, if the update button wasnt clicked, then its reseted to the original state
+        if(this.state.timesUpdated >= 0){
             console.log("text reseted")
             this.resetText();
 
@@ -68,13 +70,17 @@ class CalendarFieldModal extends React.Component {
         const description = this.state.description;
         API.post(constants.urlBackend+"/update/field", { week_number, userId, emotionRating, description }).then(response=>{
             if(response.status == 200){
-                console.log("guardado")
+                console.log("saved")
+                //If we have saved the element properly, we update the timesSaved so its not 0 anymore
                 this.setState({
-                    timesUpdated: this.state.timesUpdated +1
+                    timesUpdated: this.state.timesUpdated +1,
+                    originalDescription: this.state.description,
+                    originalEmotionRating: this.state.emotionRating
                 })
+                
+                
             }
         })
-        console.log("ole")
     }
 
 
