@@ -30,6 +30,10 @@
 
 
 .appNavbar{
+  display:flex;
+  flex-direction:row;
+  align-items: center;
+  justify-content: flex-end;
   position:sticky;
   top:0;
   left:0;
@@ -41,3 +45,19 @@
   margin-bottom:1vh;
 }
 
+.navEl{
+  margin-left:2vw;
+}
+
+.nav3{
+  margin-right:3vw;
+}
+
+.navIcon{
+  cursor: pointer;
+  color:white;
+}
+
+.navIcon:hover{
+  color: darkblue
+}

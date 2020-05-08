@@ -5,6 +5,8 @@ import API from '../services/axiosObject.js';
 import constants from '../constants.js'
 import { CircularProgress } from '@material-ui/core';
 import './CalendarGrid.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPowerOff, faUser, faColumns } from '@fortawesome/free-solid-svg-icons'
 
 class CalendarGrid extends React.Component {
 
@@ -62,14 +64,18 @@ class CalendarGrid extends React.Component {
         rows.push(<CalendarFields key={i} weekId={i} weeksToRegisterDate={this.props.weeksToRegisterDate} currentWeek={this.props.currentWeek} description={this.getDescription(i)} rating={this.getRating(i)} />)
       }
       return (
-      <div className="container2">
-      <div className="appNavbar"></div>
-      <div className="fieldsContainerCenter">
-      <div className="fieldsContainer ">{rows}</div>
-      </div>
-      </div>
+        <div className="container2">
+          <div className="appNavbar">
+            <div className="navEl nav1"><FontAwesomeIcon icon={faColumns} className="navIcon"/></div>
+            <div className="navEl nav2"><FontAwesomeIcon icon={faUser} className="navIcon"/></div>
+            <div className="navEl nav3"><FontAwesomeIcon icon={faPowerOff} className="navIcon"/></div>
+          </div>
+          <div className="fieldsContainerCenter">
+            <div className="fieldsContainer ">{rows}</div>
+          </div>
+        </div>
       )
-        
+
     } else {
       return <div className="gridLoadingContainer"><CircularProgress color="secondary" iconStyle={"width: 1000, height:1000"} />
         <p className="loadingText">Loading...</p></div>
