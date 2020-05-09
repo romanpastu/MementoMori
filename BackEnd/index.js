@@ -318,7 +318,7 @@ app.post('/generateCalendar', async (req, res) => {
               console.log("series generated")
               /******/
               //the lifeExpectanceSet restriction is removed and access to dashboard is granted
-              db.query("UPDATE user_permissions SET life_expectancy =  'false' , dashboard = 'true'  WHERE user_id = '" + userId + "';").then(data => {
+              db.query("UPDATE user_permissions SET life_expectancy =  'false' , dashboard = 'true' , stats = 'true'  WHERE user_id = '" + userId + "';").then(data => {
                 console.log("everything generated")
                 res.send("100")
                 console.log(data)
