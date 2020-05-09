@@ -360,8 +360,25 @@ app.get('/chart/lineal/emotion/:id', async (req, res) => {
     console.log(currentWeek)
     console.log(registerDate)
     db.query("SELECT cf.rating, cf.week_number from calendar_field cf join calendar c on (c.user_id = cf.calendar_id) where week_number >='" + registerDate + "' and week_number <= '"+currentWeek+"' and user_id='" + userId + "';").then(response => {
-      console.log(response)
-      res.send(response)
+      var data = response;
+      var dataComposed = []
+      var obj = {}
+      for(let i in data){
+        console.log(data[i])
+        obj["x"] = data[i]["week_number"]
+        obj["y"] = data[i]["rating"]
+        dataComposed.push(obj)
+        obj = {}
+      }
+      console.log("composed data-------------")
+      console.log(dataComposed)
+      var fullChart = [{
+        "id": "emotion",
+        "color": "hsl(139,70%,50%)",
+        "data" : dataComposed
+      }]
+      //compose teh data
+      res.send(fullChart)
     }).catch(err =>{
       console.log(err)
     })
