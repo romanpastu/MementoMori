@@ -1,7 +1,6 @@
 .nivoChart{
-    height: 120vh;
-    position:relative;
-    z-index:3;
+    height: 30vh;
+    
 }
 .welcomecolor{
     color:purple;

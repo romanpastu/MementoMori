@@ -292,8 +292,8 @@ class StatsPage extends React.Component {
             <div>
                 <Navbar {...this.props} logout={this.props.logout} />
                 <div className="nivoChart">
-                    <p className="welcomecolor">welcome</p>
-                    <MyResponsiveLine id="exmple" data={this.state.data} /> 
+                    {/* <p className="welcomecolor">welcome</p> */}
+                    <MyResponsiveLine data={this.state.data} /> 
                 </div>
             </div>
 
