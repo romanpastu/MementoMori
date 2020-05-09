@@ -1,7 +1,9 @@
 import React from 'react'
 import Navbar from './Navbar'
 import MyResponsiveLine from './charts/MyResponsiveLine'
-
+import store from "../redux/store/reduxStore.js"
+import API from '../services/axiosObject.js';
+import { getUserId } from '../services/userInfo.js'
 import './StatsPage.css'
 
 class StatsPage extends React.Component {
@@ -283,6 +285,15 @@ class StatsPage extends React.Component {
         }
     }
 
+    componentDidMount(){
+        console.log("api")
+        API.get('/chart/lineal/emotion/'+getUserId()).then( response =>{
+            console.log(response)
+        })
+        // console.log("did mount del stats")
+        // console.log(store.getState().currentWeek)
+    }
+
 
 
     render() {
@@ -293,7 +304,7 @@ class StatsPage extends React.Component {
                 <Navbar {...this.props} logout={this.props.logout} />
                 <div className="nivoChart">
                     {/* <p className="welcomecolor">welcome</p> */}
-                    <MyResponsiveLine data={this.state.data} /> 
+                    <MyResponsiveLine id="lineal-emotion-chart" data={this.state.data} /> 
                 </div>
             </div>
 

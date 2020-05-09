@@ -313,7 +313,7 @@ app.post('/generateCalendar', async (req, res) => {
             console.log(data[0].id)
             /*******/
             //Sets all the field for the calendar
-            db.query("INSERT INTO calendar_field (text, rating, calendar_id, week_number) select '', 0, c.id, g.wn from calendar c join users u on u.id = c.user_id cross join generate_series(1, u.weeks_to_live) as g(wn) where c.id='"+data[0].id+"';").then(data => {
+            db.query("INSERT INTO calendar_field (text, rating, calendar_id, week_number) select '', 0, c.id, g.wn from calendar c join users u on u.id = c.user_id cross join generate_series(1, u.weeks_to_live) as g(wn) where c.id='" + data[0].id + "';").then(data => {
               console.log(data);
               console.log("series generated")
               /******/
@@ -337,6 +337,39 @@ app.post('/generateCalendar', async (req, res) => {
   })
 })
 
+//get lineal emotion chart data
+app.get('/chart/lineal/emotion/:id', async (req, res) => {
+  const userId = req.params.id
+
+  function getCurrentWeek(birth_date) {
+    var current_date = moment();
+    var weeks_to_date = moment(new Date(current_date)).diff(birth_date, 'days') / 7;
+    return Math.floor(weeks_to_date);
+  }
+
+  function getWeeksToRegisterDate(register_date, birth_date) {
+    var weeks_to_date = moment(new Date(register_date)).diff(birth_date, 'days') / 7;
+    return Math.floor(weeks_to_date);
+}
+  
+  db.query("SELECT birth_date::varchar, register_date::varchar from users where id = '"+userId+"';").then( data =>{
+    console.log(data[0].birth_date)
+    var currentWeek = getCurrentWeek(data[0].birth_date)
+    currentWeek = 1255 //dummy to select an incremented current week, delete
+    var registerDate = getWeeksToRegisterDate(data[0].register_date, data[0].birth_date)
+    console.log(currentWeek)
+    console.log(registerDate)
+    db.query("SELECT cf.rating, cf.week_number from calendar_field cf join calendar c on (c.user_id = cf.calendar_id) where week_number >='" + registerDate + "' and week_number <= '"+currentWeek+"' and user_id='" + userId + "';").then(response => {
+      console.log(response)
+      res.send(response)
+    }).catch(err =>{
+      console.log(err)
+    })
+  }).catch(err => {
+    console.log(err)
+  })
+})
+
 
 //update field
 app.post('/update/field', async (req, res) => {
@@ -349,7 +382,7 @@ app.post('/update/field', async (req, res) => {
   console.log(emotionrating)
   console.log(description)
 
-  db.query("SELECT cf.id from calendar_field cf join calendar c on (c.user_id = cf.calendar_id) where week_number='" + week_number + "' and user_id='"+userId+"';").then(data => {
+  db.query("SELECT cf.id from calendar_field cf join calendar c on (c.user_id = cf.calendar_id) where week_number='" + week_number + "' and user_id='" + userId + "';").then(data => {
     console.log(data[0].id)
     db.query("UPDATE calendar_field SET text = '" + description + "' , rating = '" + emotionrating + "' where id= '" + data[0].id + "';").then(data => {
       console.log("bnm----")

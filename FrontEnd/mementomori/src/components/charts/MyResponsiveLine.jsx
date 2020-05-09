@@ -18,7 +18,7 @@ const MyResponsiveLine = ({ data /* see data tab */ }) => (
             tickSize: 5,
             tickPadding: 5,
             tickRotation: 0,
-            legend: 'Cumulative emotion',
+            legend: 'Lineal emotion',
             legendOffset: 36,
             legendPosition: 'middle'
         }}
