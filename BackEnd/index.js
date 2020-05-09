@@ -355,7 +355,7 @@ app.get('/chart/lineal/emotion/:id', async (req, res) => {
   db.query("SELECT birth_date::varchar, register_date::varchar from users where id = '"+userId+"';").then( data =>{
     console.log(data[0].birth_date)
     var currentWeek = getCurrentWeek(data[0].birth_date)
-    currentWeek = 1255 //dummy to select an incremented current week, delete
+    currentWeek = 1172 //dummy to select an incremented current week, delete
     var registerDate = getWeeksToRegisterDate(data[0].register_date, data[0].birth_date)
     console.log(currentWeek)
     console.log(registerDate)
@@ -372,9 +372,21 @@ app.get('/chart/lineal/emotion/:id', async (req, res) => {
       }
       console.log("composed data-------------")
       console.log(dataComposed)
+      //sort the dataComposed array based on week number from less to more week number
+      function compare_weekN(a,b){
+        if(a.x < b.x){
+          return -1
+        }else if(a.x > b.x){
+          return 1;
+        }else{
+          return 0;
+        }
+      }
+      dataComposed.sort(compare_weekN)
+      console.log(dataComposed)
       var fullChart = [{
         "id": "emotion",
-        "color": "hsl(139,70%,50%)",
+        "color": "blue",
         "data" : dataComposed
       }]
       //compose teh data
