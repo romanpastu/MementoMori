@@ -9,29 +9,22 @@ export default class Navbar extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            redirect: false
         }
         this.logout = this.logout.bind(this)
     }
 
     logout() {
-        
         this.props.logout();
-
-        
-        
     }
 
+
     render() {
-        const { redirect } = this.state;
-        if (redirect) {
-            return <Redirect to='/login' />;
-        }
+        
 
 
         return (
             <div className="appNavbar">
-                <div className="navEl nav1"><FontAwesomeIcon icon={faColumns} className="navIcon" /></div>
+                <div className="navEl nav1"><FontAwesomeIcon icon={faColumns} className="navIcon" onClick={() => this.props.history.push("/stats")}/></div>
                 <div className="navEl nav2"><FontAwesomeIcon icon={faUser} className="navIcon" /></div>
                 <div className="navEl nav3"><FontAwesomeIcon icon={faPowerOff} className="navIcon" onClick={this.logout}/></div>
             </div>

@@ -1,4 +1,5 @@
 import React from 'react'
+import Navbar from './Navbar'
 
 class StatsPage extends React.Component{
     constructor(props){
@@ -6,7 +7,10 @@ class StatsPage extends React.Component{
     }
 
     render(){
-        return(<p>Hello world</p>)
+        return(<div>
+            <Navbar {...this.props} logout={this.props.logout}/>
+            <p>welcome</p>
+        </div>)
     }
 }
 
