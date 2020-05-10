@@ -355,7 +355,7 @@ app.get('/chart/lineal/emotion/:id', async (req, res) => {
   db.query("SELECT birth_date::varchar, register_date::varchar from users where id = '" + userId + "';").then(data => {
     // console.log(data[0].birth_date)
     var currentWeek = getCurrentWeek(data[0].birth_date)
-     currentWeek = 1187 //dummy to select an incremented current week, delete
+    currentWeek = 1187 //dummy to select an incremented current week, delete
     var registerDate = getWeeksToRegisterDate(data[0].register_date, data[0].birth_date)
     // console.log(currentWeek)
     // console.log(registerDate)
@@ -457,7 +457,7 @@ app.get('/chart/cumulative/emotion/:id', async (req, res) => {
         initY = item.y
         return item
       })
-      
+
       var fullChart = [{
         "id": "cumulative emotion",
         "color": "blue",
@@ -533,15 +533,15 @@ app.get('/chart/cumulative-maxpotential/emotion/:id', async (req, res) => {
       })
       //
       console.log("maxpotential")
-   
-      for(let i = 0; i< maxpotential.length;i++){
+
+      for (let i = 0; i < maxpotential.length; i++) {
         console.log(maxpotential[i])
-        if(i == 0){
-           maxpotential[i]["y"] = 0
-          }else{
-            maxpotential[i]["y"] = maxpotential[i-1]["y"] +5
-          }
-       
+        if (i == 0) {
+          maxpotential[i]["y"] = 0
+        } else {
+          maxpotential[i]["y"] = maxpotential[i - 1]["y"] + 5
+        }
+
       }
       console.log("composed maxpotential")
 
@@ -552,9 +552,9 @@ app.get('/chart/cumulative-maxpotential/emotion/:id', async (req, res) => {
         "color": "blue",
         "data": dataComposed
       }, {
-        "id" : "max potential accumulated emotion",
+        "id": "max potential accumulated emotion",
         "color": "green",
-        "data" : maxpotential
+        "data": maxpotential
       }]
       //compose teh data
       res.send(fullChart)
@@ -566,6 +566,101 @@ app.get('/chart/cumulative-maxpotential/emotion/:id', async (req, res) => {
   })
 })
 
+//Get pie chart
+app.get('/chart/pie/emotion/:id', async (req, res) => {
+  const userId = req.params.id
+
+  function getCurrentWeek(birth_date) {
+    var current_date = moment();
+    var weeks_to_date = moment(new Date(current_date)).diff(birth_date, 'days') / 7;
+    return Math.floor(weeks_to_date);
+  }
+
+  function getWeeksToRegisterDate(register_date, birth_date) {
+    var weeks_to_date = moment(new Date(register_date)).diff(birth_date, 'days') / 7;
+    return Math.floor(weeks_to_date);
+  }
+
+  db.query("SELECT birth_date::varchar, register_date::varchar from users where id = '" + userId + "';").then(data => {
+    console.log(data[0].birth_date)
+    var currentWeek = getCurrentWeek(data[0].birth_date)
+    currentWeek = 1187 //dummy to select an incremented current week, delete
+    var registerDate = getWeeksToRegisterDate(data[0].register_date, data[0].birth_date)
+    console.log(currentWeek)
+    console.log(registerDate)
+    db.query("SELECT cf.rating, cf.week_number from calendar_field cf join calendar c on (c.user_id = cf.calendar_id) where week_number >='" + registerDate + "' and week_number <= '" + currentWeek + "' and user_id='" + userId + "';").then(response => {
+      var data = response;
+      var data = data.map(function (obj) {
+        return Object.keys(obj).sort().map(function (key) {
+          return obj[key];
+        });
+      });
+      var counter = [["1", 0], ["2", 0], ["3", 0], ["4", 0], ["5", 0]]
+      console.log("DATAAAAAAAAAAAAAAAAAA")
+      console.log(counter[0][1])
+      for (let i in data) {
+        console.log(data[i][0])
+        switch (data[i][0]) {
+          case 1:
+            counter[0][1]++
+            break;
+          case 2:
+            counter[1][1]++
+            break;
+          case 3:
+            counter[2][1]++
+            break;
+          case 4:
+            counter[3][1]++
+            break;
+          case 5:
+            counter[4][1]++
+            break;
+        }
+      }
+      console.log("!!!!!!!!!!!!!!!!!!!!!!!")
+      console.log(data)
+      console.log("!!!!!!!!!!!!!!!!!!!!!!!")
+      console.log("!!!!!!!!!!!!!!!!!!!!!!!")
+      console.log(counter)
+      console.log("!!!!!!!!!!!!!!!!!!!!!!!")
+
+      var parsedData = [
+        {
+          "id": "rate 1",
+          "label": "rate 1",
+          "value": counter[0][1],
+          "color": "hsl(11, 70%, 50%)"
+        },
+        {
+          "id": "rate 2",
+          "label": "rate 2",
+          "value": counter[1][1],
+          "color": "hsl(197, 70%, 50%)"
+        },
+        {
+          "id": "rate 3",
+          "label": "rate 3",
+          "value": counter[2][1],
+          "color": "hsl(277, 70%, 50%)"
+        },
+        {
+          "id": "rate 4",
+          "label": "rate 4",
+          "value": counter[3][1],
+          "color": "hsl(335, 70%, 50%)"
+        },
+        {
+          "id": "rate 5",
+          "label": "rate 5",
+          "value": counter[4][1],
+          "color": "hsl(260, 70%, 50%)"
+        }
+      ]
+      res.send(parsedData)
+    })
+  })
+})
 
 //update field
 app.post('/update/field', async (req, res) => {

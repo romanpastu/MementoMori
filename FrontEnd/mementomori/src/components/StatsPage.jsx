@@ -1,6 +1,7 @@
 import React from 'react'
 import Navbar from './Navbar'
 import MyResponsiveLine from './charts/MyResponsiveLine'
+import MyResponsivePie from './charts/MyResponsivePie'
 import store from "../redux/store/reduxStore.js"
 import API from '../services/axiosObject.js';
 import { getUserId } from '../services/userInfo.js'
@@ -16,6 +17,8 @@ class StatsPage extends React.Component {
             loadedDataCumulativeEmotion: false,
             dataCumulativeMaxPotentialEmotion: [],
             loadedDataCumulativeMaxPotentialEmotion: false,
+            dataPie: [],
+            loadedDataPie: false
         }
     }
 
@@ -48,15 +51,27 @@ class StatsPage extends React.Component {
             this.setState({
                 dataCumulativeMaxPotentialEmotion: response.data
             }, () => {
-                console.log(this.state.dataCumulativeMaxPotentialEmotion)
+                // console.log(this.state.dataCumulativeMaxPotentialEmotion)
                 this.setState({
                     loadedDataCumulativeMaxPotentialEmotion: true
                 })
             }
             )
         })
-        // console.log("did mount del stats")
-        // console.log(store.getState().currentWeek)
+        API.get('/chart/pie/emotion/'+getUserId()).then(response =>{
+            // console.log("datapieresponse")
+            // console.log(response)
+            this.setState({
+                dataPie: response.data
+            }, () => {
+                console.log("datapieresponse")
+                console.log(this.state.dataPie)
+                this.setState({
+                    loadedDataPie: true
+                })
+            }
+            )
+        })
     }
 
 
@@ -87,7 +102,7 @@ class StatsPage extends React.Component {
                         legendOffset: 36,
                         legendPosition: 'middle'
                     }} /> : null}
-                    {this.state.loadedDataCumulativeMaxPotentialEmotion ? <MyResponsiveLine id="cumulative-emotion-chart" data={this.state.dataCumulativeMaxPotentialEmotion} axisBottom={{
+                    {this.state.loadedDataCumulativeMaxPotentialEmotion ? <MyResponsiveLine id="cumulative-emotion-max-portential-chart" data={this.state.dataCumulativeMaxPotentialEmotion} axisBottom={{
                         orient: 'bottom',
                         tickSize: 5,
                         tickPadding: 5,
@@ -96,6 +111,7 @@ class StatsPage extends React.Component {
                         legendOffset: 36,
                         legendPosition: 'middle'
                     }} /> : null}
+                    {this.state.loadedDataPie ?<MyResponsivePie data={this.state.dataPie}/> : null}
                 </div>
             </div>
 
