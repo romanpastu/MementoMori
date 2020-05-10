@@ -350,48 +350,215 @@ app.get('/chart/lineal/emotion/:id', async (req, res) => {
   function getWeeksToRegisterDate(register_date, birth_date) {
     var weeks_to_date = moment(new Date(register_date)).diff(birth_date, 'days') / 7;
     return Math.floor(weeks_to_date);
-}
-  
-  db.query("SELECT birth_date::varchar, register_date::varchar from users where id = '"+userId+"';").then( data =>{
-    console.log(data[0].birth_date)
+  }
+
+  db.query("SELECT birth_date::varchar, register_date::varchar from users where id = '" + userId + "';").then(data => {
+    // console.log(data[0].birth_date)
     var currentWeek = getCurrentWeek(data[0].birth_date)
-    currentWeek = 1172 //dummy to select an incremented current week, delete
+     currentWeek = 1187 //dummy to select an incremented current week, delete
     var registerDate = getWeeksToRegisterDate(data[0].register_date, data[0].birth_date)
-    console.log(currentWeek)
-    console.log(registerDate)
-    db.query("SELECT cf.rating, cf.week_number from calendar_field cf join calendar c on (c.user_id = cf.calendar_id) where week_number >='" + registerDate + "' and week_number <= '"+currentWeek+"' and user_id='" + userId + "';").then(response => {
+    // console.log(currentWeek)
+    // console.log(registerDate)
+    db.query("SELECT cf.rating, cf.week_number from calendar_field cf join calendar c on (c.user_id = cf.calendar_id) where week_number >='" + registerDate + "' and week_number <= '" + currentWeek + "' and user_id='" + userId + "';").then(response => {
       var data = response;
       var dataComposed = []
       var obj = {}
-      for(let i in data){
+      for (let i in data) {
         console.log(data[i])
         obj["x"] = data[i]["week_number"]
         obj["y"] = data[i]["rating"]
         dataComposed.push(obj)
         obj = {}
       }
-      console.log("composed data-------------")
-      console.log(dataComposed)
+      // console.log("composed data-------------")
+      // console.log(dataComposed)
       //sort the dataComposed array based on week number from less to more week number
-      function compare_weekN(a,b){
-        if(a.x < b.x){
+      function compare_weekN(a, b) {
+        if (a.x < b.x) {
           return -1
-        }else if(a.x > b.x){
+        } else if (a.x > b.x) {
           return 1;
-        }else{
+        } else {
           return 0;
         }
       }
       dataComposed.sort(compare_weekN)
-      console.log(dataComposed)
+      // console.log(dataComposed)
       var fullChart = [{
         "id": "emotion",
         "color": "blue",
-        "data" : dataComposed
+        "data": dataComposed
       }]
       //compose teh data
       res.send(fullChart)
-    }).catch(err =>{
+    }).catch(err => {
+      console.log(err)
+    })
+  }).catch(err => {
+    console.log(err)
+  })
+})
+
+
+//get cumulative emotion chart data
+app.get('/chart/cumulative/emotion/:id', async (req, res) => {
+  const userId = req.params.id
+
+  function getCurrentWeek(birth_date) {
+    var current_date = moment();
+    var weeks_to_date = moment(new Date(current_date)).diff(birth_date, 'days') / 7;
+    return Math.floor(weeks_to_date);
+  }
+
+  function getWeeksToRegisterDate(register_date, birth_date) {
+    var weeks_to_date = moment(new Date(register_date)).diff(birth_date, 'days') / 7;
+    return Math.floor(weeks_to_date);
+  }
+
+  db.query("SELECT birth_date::varchar, register_date::varchar from users where id = '" + userId + "';").then(data => {
+    console.log(data[0].birth_date)
+    var currentWeek = getCurrentWeek(data[0].birth_date)
+    currentWeek = 1187 //dummy to select an incremented current week, delete
+    var registerDate = getWeeksToRegisterDate(data[0].register_date, data[0].birth_date)
+    console.log(currentWeek)
+    console.log(registerDate)
+    db.query("SELECT cf.rating, cf.week_number from calendar_field cf join calendar c on (c.user_id = cf.calendar_id) where week_number >='" + registerDate + "' and week_number <= '" + currentWeek + "' and user_id='" + userId + "';").then(response => {
+      var data = response;
+      var dataComposed = []
+      var obj = {}
+      for (let i in data) {
+        console.log(data[i])
+        obj["x"] = data[i]["week_number"]
+        obj["y"] = data[i]["rating"]
+        dataComposed.push(obj)
+        obj = {}
+      }
+      // console.log("composed data-------------")
+      // console.log(dataComposed)
+      //sort the dataComposed array based on week number from less to more week number
+      function compare_weekN(a, b) {
+        if (a.x < b.x) {
+          return -1
+        } else if (a.x > b.x) {
+          return 1;
+        } else {
+          return 0;
+        }
+      }
+      dataComposed.sort(compare_weekN)
+      // console.log("sorted data")
+      // console.log(dataComposed)
+      console.log("precloning")
+      console.log(dataComposed)
+      //accumulates the data
+      let initY = 0;
+      dataComposed.map(item => {
+        item.y += initY
+        initY = item.y
+        return item
+      })
+      
+      var fullChart = [{
+        "id": "cumulative emotion",
+        "color": "blue",
+        "data": dataComposed
+      }]
+      //compose teh data
+      res.send(fullChart)
+    }).catch(err => {
+      console.log(err)
+    })
+  }).catch(err => {
+    console.log(err)
+  })
+})
+
+//get cumulative emotion vs max potential emotion chart data
+app.get('/chart/cumulative-maxpotential/emotion/:id', async (req, res) => {
+  const userId = req.params.id
+
+  function getCurrentWeek(birth_date) {
+    var current_date = moment();
+    var weeks_to_date = moment(new Date(current_date)).diff(birth_date, 'days') / 7;
+    return Math.floor(weeks_to_date);
+  }
+
+  function getWeeksToRegisterDate(register_date, birth_date) {
+    var weeks_to_date = moment(new Date(register_date)).diff(birth_date, 'days') / 7;
+    return Math.floor(weeks_to_date);
+  }
+
+  db.query("SELECT birth_date::varchar, register_date::varchar from users where id = '" + userId + "';").then(data => {
+    console.log(data[0].birth_date)
+    var currentWeek = getCurrentWeek(data[0].birth_date)
+    currentWeek = 1187 //dummy to select an incremented current week, delete
+    var registerDate = getWeeksToRegisterDate(data[0].register_date, data[0].birth_date)
+    console.log(currentWeek)
+    console.log(registerDate)
+    db.query("SELECT cf.rating, cf.week_number from calendar_field cf join calendar c on (c.user_id = cf.calendar_id) where week_number >='" + registerDate + "' and week_number <= '" + currentWeek + "' and user_id='" + userId + "';").then(response => {
+      var data = response;
+      var dataComposed = []
+      var obj = {}
+      for (let i in data) {
+        console.log(data[i])
+        obj["x"] = data[i]["week_number"]
+        obj["y"] = data[i]["rating"]
+        dataComposed.push(obj)
+        obj = {}
+      }
+      // console.log("composed data-------------")
+      // console.log(dataComposed)
+      //sort the dataComposed array based on week number from less to more week number
+      function compare_weekN(a, b) {
+        if (a.x < b.x) {
+          return -1
+        } else if (a.x > b.x) {
+          return 1;
+        } else {
+          return 0;
+        }
+      }
+      dataComposed.sort(compare_weekN)
+      // console.log("sorted data")
+      // console.log(dataComposed)
+      console.log("precloning")
+      console.log(dataComposed)
+      var maxpotential = JSON.parse(JSON.stringify(dataComposed));
+      //accumulates the data
+      let initY = 0;
+      dataComposed.map(item => {
+        item.y += initY
+        initY = item.y
+        return item
+      })
+      //
+      console.log("maxpotential")
+   
+      for(let i = 0; i< maxpotential.length;i++){
+        console.log(maxpotential[i])
+        if(i == 0){
+           maxpotential[i]["y"] = 0
+          }else{
+            maxpotential[i]["y"] = maxpotential[i-1]["y"] +5
+          }
+       
+      }
+      console.log("composed maxpotential")
+
+      console.log("acumulated data")
+      console.log(dataComposed)
+      var fullChart = [{
+        "id": "cumulative emotion",
+        "color": "blue",
+        "data": dataComposed
+      }, {
+        "id" : "max potential accumulated emotion",
+        "color": "green",
+        "data" : maxpotential
+      }]
+      //compose teh data
+      res.send(fullChart)
+    }).catch(err => {
       console.log(err)
     })
   }).catch(err => {

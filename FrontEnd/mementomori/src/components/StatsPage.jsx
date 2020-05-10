@@ -10,23 +10,50 @@ class StatsPage extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            data: [],
-            loaded: false
+            dataLinealEmotion: [],
+            loadedDataLinealEmotion: false,
+            dataCumulativeEmotion : [],
+            loadedDataCumulativeEmotion: false,
+            dataCumulativeMaxPotentialEmotion: [],
+            loadedDataCumulativeMaxPotentialEmotion: false,
         }
     }
 
-    componentDidMount(){
+    componentDidMount() {
         console.log("api")
-        API.get('/chart/lineal/emotion/'+getUserId()).then( response =>{
-            console.log(response.data[0])
+        API.get('/chart/lineal/emotion/' + getUserId()).then(response => {
+            // console.log(response.data[0])
             this.setState({
-                data: response.data
+                dataLinealEmotion: response.data
             }, () => {
                 this.setState({
-                    loaded:true
+                    loadedDataLinealEmotion: true
                 })
             }
-                )
+            )
+        })
+        API.get('/chart/cumulative/emotion/' + getUserId()).then(response => {
+            // console.log(response.data[0])
+            this.setState({
+                dataCumulativeEmotion: response.data
+            }, () => {
+                this.setState({
+                    loadedDataCumulativeEmotion: true
+                })
+            }
+            )
+        })
+        API.get('/chart/cumulative-maxpotential/emotion/' + getUserId()).then(response => {
+            // console.log(response.data[0])
+            this.setState({
+                dataCumulativeMaxPotentialEmotion: response.data
+            }, () => {
+                console.log(this.state.dataCumulativeMaxPotentialEmotion)
+                this.setState({
+                    loadedDataCumulativeMaxPotentialEmotion: true
+                })
+            }
+            )
         })
         // console.log("did mount del stats")
         // console.log(store.getState().currentWeek)
@@ -42,8 +69,33 @@ class StatsPage extends React.Component {
                 <Navbar {...this.props} logout={this.props.logout} />
                 <div className="nivoChart">
                     {/* <p className="welcomecolor">welcome</p> */}
-                    {this.state.loaded ?<MyResponsiveLine id="lineal-emotion-chart" data={this.state.data} /> :null}
-                     
+                    {this.state.loadedDataLinealEmotion ? <MyResponsiveLine id="lineal-emotion-chart" data={this.state.dataLinealEmotion} axisBottom={{
+                        orient: 'bottom',
+                        tickSize: 5,
+                        tickPadding: 5,
+                        tickRotation: 0,
+                        legend: 'Lineal emotion',
+                        legendOffset: 36,
+                        legendPosition: 'middle'
+                    }} /> : null}
+                    {this.state.loadedDataCumulativeEmotion ? <MyResponsiveLine id="cumulative-emotion-chart" data={this.state.dataCumulativeEmotion} axisBottom={{
+                        orient: 'bottom',
+                        tickSize: 5,
+                        tickPadding: 5,
+                        tickRotation: 0,
+                        legend: 'Cumulative emotion',
+                        legendOffset: 36,
+                        legendPosition: 'middle'
+                    }} /> : null}
+                    {this.state.loadedDataCumulativeMaxPotentialEmotion ? <MyResponsiveLine id="cumulative-emotion-chart" data={this.state.dataCumulativeMaxPotentialEmotion} axisBottom={{
+                        orient: 'bottom',
+                        tickSize: 5,
+                        tickPadding: 5,
+                        tickRotation: 0,
+                        legend: 'Cumulative emotion vs max potential cumulative emotion',
+                        legendOffset: 36,
+                        legendPosition: 'middle'
+                    }} /> : null}
                 </div>
             </div>
 
