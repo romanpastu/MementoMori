@@ -83,6 +83,7 @@ class StatsPage extends React.Component {
             <div>
                 <Navbar {...this.props} logout={this.props.logout} />
                 <div className="nivoChart">
+                    
                     {/* <p className="welcomecolor">welcome</p> */}
                     {this.state.loadedDataLinealEmotion ? <MyResponsiveLine id="lineal-emotion-chart" data={this.state.dataLinealEmotion} axisBottom={{
                         orient: 'bottom',
@@ -112,6 +113,7 @@ class StatsPage extends React.Component {
                         legendPosition: 'middle'
                     }} /> : null}
                     {this.state.loadedDataPie ?<MyResponsivePie data={this.state.dataPie}/> : null}
+                    
                 </div>
             </div>
 

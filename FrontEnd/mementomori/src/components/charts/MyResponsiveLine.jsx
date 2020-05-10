@@ -13,7 +13,8 @@ const MyResponsiveLine = ({ data, axisBottom /* see data tab */ }) => (
         yScale={{ type: 'linear', min: 'auto', max: 'auto', stacked: false, reverse: false }}
         axisTop={null}
         axisRight={null}
-        axisBottom={axisBottom}
+        // axisBottom={axisBottom}
+        axisBottom={null}
         axisLeft={{
             orient: 'left',
             tickSize: 5,
@@ -24,6 +25,7 @@ const MyResponsiveLine = ({ data, axisBottom /* see data tab */ }) => (
             legendPosition: 'middle'
         }}
         colors={{ scheme: 'nivo' }}
+        enablePoints={false}
         pointSize={10}
         pointColor={{ theme: 'background' }}
         pointBorderWidth={2}
