@@ -14,7 +14,7 @@ class LoginPage extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            displayLogin: false,
+            displayLogin: true,
             lifeExpectancySet: true
         }
         this.displayLogin = this.displayLogin.bind(this);
@@ -46,6 +46,16 @@ class LoginPage extends React.Component {
     }
 
     render() {
+        var selectedRegister = ""
+        var selectedLogin = ""
+        if(this.state.displayLogin){
+            selectedLogin = "selectorLogin selectorLoginSelected"
+            selectedRegister= "selectorRegister"
+        }else{
+            selectedLogin = "selectorLogin"
+            selectedRegister= "selectorRegister selectorRegisterSelected"
+        }
+        
         return (<div>
             <div className="blurredBg"></div>
             <div class="formContainer">
@@ -54,8 +64,8 @@ class LoginPage extends React.Component {
                 </div>
                 <div className="formIn">
                     <div className="selectorContainer">
-                        <div className="selectorLogin" onClick={this.displayLogin}>Login</div>
-                        <div className="selectorRegister" onClick={this.displayRegister}>Register</div>
+                        <div className={selectedLogin} onClick={this.displayLogin}>Login</div>
+                        <div className={selectedRegister} onClick={this.displayRegister}>Register</div>
                     </div>
                     <br></br>
                     {/* <div class="form-group">

@@ -355,7 +355,7 @@ app.get('/chart/lineal/emotion/:id', async (req, res) => {
   db.query("SELECT birth_date::varchar, register_date::varchar from users where id = '" + userId + "';").then(data => {
     // console.log(data[0].birth_date)
     var currentWeek = getCurrentWeek(data[0].birth_date)
-    currentWeek = 1189 //dummy to select an incremented current week, delete
+    // currentWeek = 1189 //dummy to select an incremented current week, delete
     var registerDate = getWeeksToRegisterDate(data[0].register_date, data[0].birth_date)
     // console.log(currentWeek)
     // console.log(registerDate)
@@ -418,7 +418,7 @@ app.get('/chart/cumulative/emotion/:id', async (req, res) => {
   db.query("SELECT birth_date::varchar, register_date::varchar from users where id = '" + userId + "';").then(data => {
     console.log(data[0].birth_date)
     var currentWeek = getCurrentWeek(data[0].birth_date)
-    currentWeek = 1189 //dummy to select an incremented current week, delete
+    // currentWeek = 1189 //dummy to select an incremented current week, delete
     var registerDate = getWeeksToRegisterDate(data[0].register_date, data[0].birth_date)
     console.log(currentWeek)
     console.log(registerDate)
@@ -460,7 +460,7 @@ app.get('/chart/cumulative/emotion/:id', async (req, res) => {
 
       var fullChart = [{
         "id": "cumulative emotion",
-        "color": "blue",
+        "color": "hsl(196, 97%, 50%)",
         "data": dataComposed
       }]
       //compose teh data
@@ -491,7 +491,7 @@ app.get('/chart/cumulative-maxpotential/emotion/:id', async (req, res) => {
   db.query("SELECT birth_date::varchar, register_date::varchar from users where id = '" + userId + "';").then(data => {
     console.log(data[0].birth_date)
     var currentWeek = getCurrentWeek(data[0].birth_date)
-    currentWeek = 1189 //dummy to select an incremented current week, delete
+    // currentWeek = 1189 //dummy to select an incremented current week, delete
     var registerDate = getWeeksToRegisterDate(data[0].register_date, data[0].birth_date)
     console.log(currentWeek)
     console.log(registerDate)
@@ -584,7 +584,7 @@ app.get('/chart/pie/emotion/:id', async (req, res) => {
   db.query("SELECT birth_date::varchar, register_date::varchar from users where id = '" + userId + "';").then(data => {
     console.log(data[0].birth_date)
     var currentWeek = getCurrentWeek(data[0].birth_date)
-    currentWeek = 1400 //dummy to select an incremented current week, delete
+    // currentWeek = 1400 //dummy to select an incremented current week, delete
     var registerDate = getWeeksToRegisterDate(data[0].register_date, data[0].birth_date)
     console.log(currentWeek)
     console.log(registerDate)
