@@ -3,8 +3,17 @@ import CalendarGrid from './CalendarGrid'
 import API from '../services/axiosObject.js';
 import './Calendario.css'
 import { getUserId } from '../services/userInfo.js'
+import { connect } from "react-redux"
+import { setCurrentWeek } from "../redux/actions/reduxActions.js"
+import store from "../redux/store/reduxStore.js"
 var moment = require('moment');
 moment().format();
+
+function mapDispatchToProps(dispatch) {
+    return {
+        setCurrentWeek: element => dispatch(setCurrentWeek(element))
+    }
+  }
 
 class Calendario extends React.Component {
     constructor(props) {
@@ -25,7 +34,7 @@ class Calendario extends React.Component {
 
     componentDidMount() {
         const userId = getUserId();
-
+        
         API.get('/getUserGenerateCalendar/' + userId).then(response => {
             console.log(response.data)
             this.setState({
@@ -36,6 +45,9 @@ class Calendario extends React.Component {
                 weeks_to_live: response.data.weeks_to_live
             }, () => {
                 console.log(this.state)
+                this.props.setCurrentWeek(this.getCurrentWeek())
+                console.log("esto es el almacenamiento")
+                console.log(store.getState().currentWeek)
             })
             
         })
@@ -75,5 +87,4 @@ class Calendario extends React.Component {
         )
     }
 }
-
-export default Calendario;
+export default connect(null, mapDispatchToProps)(Calendario)

@@ -12,6 +12,7 @@
     background-color:rgb(34, 155, 196);
     height:50px;
     margin-bottom:1vh;
+    z-index:4;
   }
   
   .navEl{
