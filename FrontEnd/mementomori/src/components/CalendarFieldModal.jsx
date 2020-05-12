@@ -115,7 +115,7 @@ class CalendarFieldModal extends React.Component {
                             <p className="modalText ratingText">Select a rating for your week</p>
                             <div className="centeredEls">
                             <select className="emotion-selector custom-select" value={this.state.emotionRating == 0 ? 0 : this.state.emotionRating} onChange={this.props.handleChange}>
-                                <option value="0" disabled hidden>Select a rating</option>
+                                <option value="0" >Reset</option>
                                 <option value="5" >Very Good (5)</option>
                                 <option value="4" >Good (4)</option>
                                 <option value="3" >Neutral (3)</option>

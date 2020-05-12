@@ -302,7 +302,7 @@ app.post('/protected', async (req, res) => {
 app.post('/generateCalendar', async (req, res) => {
 
   const userId = req.body.userId
-  const yearsToLive = req.body.yearsToLive
+  const yearsToLive = Math.trunc(req.body.yearsToLive)
   const registerDate = req.body.registerDate
 
   function filterDate(date) {
@@ -319,6 +319,7 @@ app.post('/generateCalendar', async (req, res) => {
     console.log("semanas a vivir: " + Math.ceil(weeks_to_live))
     return Math.ceil(weeks_to_live);
   }
+  
 
   if(yearsToLive > 100 || yearsToLive < 1){
     res.status(400).send(new Error('Invalid years'));
@@ -707,6 +708,7 @@ app.post('/update/field', async (req, res) => {
   console.log(description)
 
   db.query("SELECT cf.id from calendar_field cf join calendar c on (c.user_id = cf.calendar_id) where week_number='" + week_number + "' and user_id='" + userId + "';").then(data => {
+    console.log("esto",data)
     console.log(data[0].id)
     db.query("UPDATE calendar_field SET text = '" + description + "' , rating = '" + emotionrating + "' where id= '" + data[0].id + "';").then(data => {
       console.log("bnm----")
