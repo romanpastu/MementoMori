@@ -89,7 +89,34 @@ app.post("/test", (req, res) => {
 
 app.post('/register', async (req, res) => {
   console.log(req.body)
-  const { email, firstName, secondName, password2, birthDate } = req.body;
+  const { email, firstName, secondName,password1, password2, birthDate } = req.body;
+  console.log(email,firstName,secondName, password1, password2, birthDate)
+  var current_date = moment().format('YYYY-MM-DD');
+// if moment(birthDate).isAfter(m)
+  if(password1 != password2){
+    res.status(400).send(new Error('Passwords must be equal'));
+  }
+  if(password2 == ''){
+    res.status(405).send(new Error('Theres no passport'));
+  }
+  if(!email.match(/@/g)){
+    res.status(401).send(new Error('wrong email'))
+  }
+  if(firstName == ''){
+    res.status(402).send(new Error('You must specify a first name')) 
+  }
+  
+  if(moment(birthDate).isAfter(current_date, 'day')){
+    console.log("date")
+    res.status(403).send(new Error('You cant be born in the future')) 
+  }
+
+  if(birthDate == ''){
+    res.status(404).send(new Error('No date')) 
+  }
+
+  var test = true;
+  if(test){
   const password = password2;
   const hashedPassword = await hash(password, 10);
   db.query("INSERT INTO USERS (email, password, birth_date, first_name, second_name) VALUES ('" + email + "','" + hashedPassword + "','" + birthDate + "','" + firstName + "','" + secondName + "')").then(function (data) {
@@ -109,6 +136,7 @@ app.post('/register', async (req, res) => {
     console.log("ERROR: ", error)
     res.send("error")
   });
+}
 })
 
 app.post('/login', async (req, res) => {
