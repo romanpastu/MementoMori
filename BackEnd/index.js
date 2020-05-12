@@ -115,8 +115,7 @@ app.post('/register', async (req, res) => {
     res.status(404).send(new Error('No date')) 
   }
 
-  var test = true;
-  if(test){
+  
   const password = password2;
   const hashedPassword = await hash(password, 10);
   db.query("INSERT INTO USERS (email, password, birth_date, first_name, second_name) VALUES ('" + email + "','" + hashedPassword + "','" + birthDate + "','" + firstName + "','" + secondName + "')").then(function (data) {
@@ -136,7 +135,7 @@ app.post('/register', async (req, res) => {
     console.log("ERROR: ", error)
     res.send("error")
   });
-}
+
 })
 
 app.post('/login', async (req, res) => {
@@ -302,9 +301,9 @@ app.post('/protected', async (req, res) => {
 app.post('/generateCalendar', async (req, res) => {
 
   const userId = req.body.userId
-  const yearsToLive = Math.trunc(req.body.yearsToLive)
+  const yearsToLive = Math.trunc(req.body.yearsToLive).toString()
   const registerDate = req.body.registerDate
-
+  
   function filterDate(date) {
     var stringDate = moment(date).format('YYYY-MM-DD').toString();
     console.log("dentro del filter date")
