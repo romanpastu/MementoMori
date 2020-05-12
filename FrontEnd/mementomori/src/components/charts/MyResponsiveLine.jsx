@@ -13,8 +13,8 @@ const MyResponsiveLine = ({ data, axisBottom /* see data tab */ }) => (
         yScale={{ type: 'linear', min: 'auto', max: 'auto', stacked: false, reverse: false }}
         axisTop={null}
         axisRight={null}
-        // axisBottom={axisBottom}
-        axisBottom={null}
+        axisBottom={axisBottom}
+        // axisBottom={null}
         axisLeft={{
             orient: 'left',
             tickSize: 5,
