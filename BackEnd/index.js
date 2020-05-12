@@ -113,6 +113,7 @@ app.post('/register', async (req, res) => {
 
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
+  console.log(email,password)
   try {
     var user = "";
     db.query("SELECT * FROM users WHERE email='" + email + "'").then(async function (data) {
