@@ -97,7 +97,7 @@ app.post('/register', async (req, res) => {
     res.status(400).send(new Error('Passwords must be equal'));
   }
   if(password2 == ''){
-    res.status(405).send(new Error('Theres no passport'));
+    res.status(405).send(new Error('Theres no password'));
   }
   if(!email.match(/@/g)){
     res.status(401).send(new Error('wrong email'))
@@ -318,6 +318,10 @@ app.post('/generateCalendar', async (req, res) => {
     var weeks_to_live = moment(death_date).diff(moment(birth_date), 'days') / 7;
     console.log("semanas a vivir: " + Math.ceil(weeks_to_live))
     return Math.ceil(weeks_to_live);
+  }
+
+  if(yearsToLive > 100 || yearsToLive < 1){
+    res.status(400).send(new Error('Invalid years'));
   }
 
 

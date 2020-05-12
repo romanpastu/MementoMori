@@ -4,14 +4,17 @@ import { getUserId } from '../services/userInfo.js'
 import API from '../services/axiosObject.js';
 import constants from '../constants.js'
 import refreshTheToken from '../services/refreshTheToken.js'
+import { Alert } from 'react-bootstrap'
 var moment = require('moment');
 class LifeExpectancy extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            yearsToLive: ""
+            yearsToLive: "",
+            invalidYears: false
         }
         this.handleSubmit = this.handleSubmit.bind(this)
+        this.handleDismiss = this.handleDismiss.bind(this)
     }
 
     componentDidMount() {
@@ -29,6 +32,9 @@ class LifeExpectancy extends React.Component {
     }
 
     handleSubmit() {
+        this.setState({
+            invalidYears: false
+        })
         const yearsToLive = this.state.yearsToLive;
         const userId = getUserId();
         const registerDate = moment().format("YYYY-MM-DD");
@@ -44,6 +50,19 @@ class LifeExpectancy extends React.Component {
             }
 
 
+        }).catch(err => {
+            if(err.response.status == 400){
+                this.setState({
+                    invalidYears: true
+                })
+            }
+            console.log(err.response.status)
+        })
+    }
+
+    handleDismiss(){
+        this.setState({
+            invalidYears: false
         })
     }
 
@@ -51,6 +70,7 @@ class LifeExpectancy extends React.Component {
         return (
             <div className="lifeExpectancyContainer">
                 <div className="lifeExpectancyForm">
+                {this.state.invalidYears ? <Alert variant="danger" dismissible onClose={this.handleDismiss}> Years must be between 1 and 100 </Alert> : null}
                     <p className="p-life-expectancy">Input the number of years that you expect to live</p>
                     <input type="number" name="yearsToLive" className="input-life-expetancy" onChange={this.handleChange} />
                     <button type="submit" class="btn btn-primary btn-life-expectancy" onClick={this.handleSubmit}>Submit</button>
