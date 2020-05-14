@@ -1,0 +1,48 @@
+:root{
+    --button: blue;
+    --button-hover: blue;
+}
+
+.row .tbn{
+    color: white;
+    background: var(--button);
+    border-color: var(--buton);
+}
+
+.row .btn:hover{
+    color: white;
+    background: var(--button-hover);
+    border-color: var(--button-hover);
+}
+
+table{
+    table-layout:fixed;
+    width:50%;
+}
+
+.table input{
+    width:100%;
+}
+
+table tr td:last-child{
+    white-space: nowrap;
+    width: 10px;
+    padding-right:2vw;
+}
+
+table tr td:last-child{
+    text-align:right;
+}
+
+table tr th:last-child{
+    text-align: right;
+}
+
+table a{
+    margin-left:3px;
+
+}
+
+.editIcon:hover{
+    color:darkgrey;
+}

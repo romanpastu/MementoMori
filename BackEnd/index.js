@@ -298,7 +298,7 @@ app.post('/protected', async (req, res) => {
 })
 
 //generate calendar
-app.post('/generateCalendar', async (req, res) => {
+app.post('/generateCalendar', requireLogin,async (req, res) => {
 
   const userId = req.body.userId
   const yearsToLive = Math.trunc(req.body.yearsToLive).toString()
@@ -371,7 +371,7 @@ app.post('/generateCalendar', async (req, res) => {
 })
 
 //get lineal emotion chart data
-app.get('/chart/lineal/emotion/:id', async (req, res) => {
+app.get('/chart/lineal/emotion/:id',requireLogin, async (req, res) => {
   const userId = req.params.id
 
   function getCurrentWeek(birth_date) {
@@ -434,7 +434,7 @@ app.get('/chart/lineal/emotion/:id', async (req, res) => {
 
 
 //get cumulative emotion chart data
-app.get('/chart/cumulative/emotion/:id', async (req, res) => {
+app.get('/chart/cumulative/emotion/:id',requireLogin, async (req, res) => {
   const userId = req.params.id
 
   function getCurrentWeek(birth_date) {
@@ -502,7 +502,7 @@ app.get('/chart/cumulative/emotion/:id', async (req, res) => {
 })
 
 //get cumulative emotion vs max potential emotion chart data
-app.get('/chart/cumulative-maxpotential/emotion/:id', async (req, res) => {
+app.get('/chart/cumulative-maxpotential/emotion/:id',requireLogin, async (req, res) => {
   const userId = req.params.id
 
   function getCurrentWeek(birth_date) {
@@ -588,7 +588,7 @@ app.get('/chart/cumulative-maxpotential/emotion/:id', async (req, res) => {
 })
 
 //Get pie chart
-app.get('/chart/pie/emotion/:id', async (req, res) => {
+app.get('/chart/pie/emotion/:id',requireLogin, async (req, res) => {
   const userId = req.params.id
 
   function getCurrentWeek(birth_date) {
@@ -677,7 +677,7 @@ app.get('/chart/pie/emotion/:id', async (req, res) => {
 })
 
 //update field
-app.post('/update/field', async (req, res) => {
+app.post('/update/field', requireLogin,async (req, res) => {
   const userId = req.body.userId
   const week_number = req.body.week_number
   const emotionrating = req.body.emotionRating
@@ -703,7 +703,7 @@ app.post('/update/field', async (req, res) => {
 
 
 //get user
-app.get('/getUserGenerateCalendar/:id', async (req, res) => {
+app.get('/getUserGenerateCalendar/:id',requireLogin, async (req, res) => {
   const userId = req.params.id
 
   db.query("SELECT * FROM users where id = '" + userId + "';").then(data => {
@@ -748,7 +748,7 @@ app.get('/getUserGenerateCalendar/:id', async (req, res) => {
 })
 
 //get user field info
-app.get('/getUserFieldsInfo/:id', async (req, res) => {
+app.get('/getUserFieldsInfo/:id',requireLogin, async (req, res) => {
   const userId = req.params.id
   console.log(userId)
   db.query("SELECT CF.text, CF.rating, CF.week_number from calendar C join calendar_field CF on C.id = CF.calendar_id where C.user_id = '" + userId + "';").then(data =>
@@ -758,6 +758,15 @@ app.get('/getUserFieldsInfo/:id', async (req, res) => {
     res.send(err)
   })
 
+})
+
+//User Crud Related Routes
+
+app.get("/userlist", function (req, res){
+  db.query("SELECT * FROM users").then(data =>{
+    console.log(data)
+    res.send(data)
+  })
 })
 
 
