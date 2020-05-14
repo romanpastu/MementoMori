@@ -25,7 +25,7 @@ class StatsPage extends React.Component {
     componentDidMount() {
         console.log("api")
         API.get('/chart/lineal/emotion/' + getUserId()).then(response => {
-            // console.log(response.data[0])
+             console.log(response.data[0])
             this.setState({
                 dataLinealEmotion: response.data
             }, () => {
@@ -64,8 +64,8 @@ class StatsPage extends React.Component {
             this.setState({
                 dataPie: response.data
             }, () => {
-                console.log("datapieresponse")
-                console.log(this.state.dataPie)
+                // console.log("datapieresponse")
+                // console.log(this.state.dataPie)
                 this.setState({
                     loadedDataPie: true
                 })
