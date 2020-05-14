@@ -4,6 +4,7 @@ import './App.css';
 import Calendario from "./components/Calendario"
 import LoginPage from "./components/LoginPage"
 import StatsPage from "./components/StatsPage"
+import Admin from "./components/Admin"
 import { Route, Switch, withRouter } from 'react-router-dom'
 import qs from 'qs'
 import axios from 'axios'
@@ -143,6 +144,7 @@ class App extends React.Component {
           <PrivateRoute name={"dashboard"} authed={this.state.isAuthenticated} path="/dashboard" render={(props) => <Calendario {...props} logout={this.logout} />} />
           <LifeExpectancyRoute name={"life_expectancy"} path="/lifeExpectancy" render={(props) => <LifeExpectancy {...props} setYearsRedirect={this.setYearsRedirect} />} />
           <Route path="/login" render={(props) => <LoginPage login={this.login} authed={this.state.isAuthenticated} {...props} />} />
+          <Route path="/admin" render={(props) => <Admin authed={this.state.isAuthenticated} {...props} />} />
           <PrivateRoute path="/stats" name={"stats"} authed={this.state.isAuthenticated} render={(props) => <StatsPage  {...props} logout={this.logout} />} />
         </Switch>
       </div>
