@@ -769,6 +769,13 @@ app.get("/userlist", function (req, res){
   })
 })
 
+app.post("/user/delete/:id",requireLogin, function(req,res){
+  console.log(req.params.id)
+  db.query("DELETE FROM users where id=" + req.params.id).then(data => {
+    res.status(200).send("deleted");
+  }).catch(err => res.send(err))
+})
+
 
 //Express port
 app.listen(1234, () => {

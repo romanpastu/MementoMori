@@ -1,0 +1,56 @@
+.modal-window-1{
+  
+    position:fixed;
+    z-index: 1;
+    background-color:white;
+     border-radius: 14px; 
+    width:30vw;
+    top: 15vh;
+    left: 50%;
+    margin-left: -15vw;
+    padding-top:1vw;
+    padding-bottom:1vw;
+    
+    
+    
+  }
+  
+   .modalBg{
+    height:100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background-color:rgba(169, 169, 169, 0.568);
+    position: fixed;
+    z-index: 1;
+  } 
+  
+  .flex-container{
+    height: 100%;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+  }
+  h6{
+    margin:0;
+    padding-top:1vw;
+    font-size:1.3em;
+    margin-left:1vw;
+    margin-right:1vw;
+    
+}
+.btnDel{
+    margin:1vw;
+    padding:0.5vw;
+
+}
+
+.headerRegister{
+  margin-left:0.025%
+}
+
+.userDeleted{
+  margin-top:1vw;
+}
