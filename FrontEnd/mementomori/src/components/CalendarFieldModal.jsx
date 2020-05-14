@@ -5,7 +5,7 @@ import { faWindowClose } from '@fortawesome/free-solid-svg-icons'
 import { getUserId } from '../services/userInfo.js'
 import API from '../services/axiosObject.js';
 import constants from '../constants.js'
-
+import { Alert } from 'react-bootstrap'
 class CalendarFieldModal extends React.Component {
     constructor(props) {
         super(props);
@@ -14,11 +14,14 @@ class CalendarFieldModal extends React.Component {
             description: this.props.description,
             originalDescription : "",
             originalEmotionRating: "",
-            timesUpdated: 0
+            timesUpdated: 0,
+            networkError: false,
+            success: false
         };
         this.resetText = this.resetText.bind(this)
         this.onClick = this.onClick.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
+        this.handleDismiss = this.handleDismiss.bind(this)
     }
 
     
@@ -28,9 +31,18 @@ class CalendarFieldModal extends React.Component {
         this.setState({
             originalDescription: this.props.description,
             originalEmotionRating: this.props.emotionRating,
-            timesUpdated: 0
+            timesUpdated: 0,
+            networkError: false,
+            success: false
         }, () => {
             
+        })
+    }
+
+    handleDismiss(){
+        this.setState({
+            networkError: false,
+            success: false
         })
     }
 
@@ -64,6 +76,10 @@ class CalendarFieldModal extends React.Component {
     }
 
     handleSubmit(){
+        this.setState({
+            networkError: false,
+            success: false
+        })
         const userId = getUserId();
         const week_number = this.props.id;
         const emotionRating = this.state.emotionRating;
@@ -75,10 +91,17 @@ class CalendarFieldModal extends React.Component {
                 this.setState({
                     timesUpdated: this.state.timesUpdated +1,
                     originalDescription: this.state.description,
-                    originalEmotionRating: this.state.emotionRating
+                    originalEmotionRating: this.state.emotionRating,
+                    success : true
                 })
                 
                 
+            }
+        }).catch( err => {
+            if(!err.response){
+                this.setState({
+                    networkError: true
+                })
             }
         })
     }
@@ -108,6 +131,8 @@ class CalendarFieldModal extends React.Component {
                     <div>
                         <p className="modal-close" onClick={this.onClick} ><FontAwesomeIcon icon={faWindowClose} className="buttonCloseModal"/></p>
                         <div className="flex-in-container">
+                        {this.state.networkError ? <Alert variant="danger" dismissible onClose={this.handleDismiss}> Network error </Alert> : null}
+                        {this.state.success ? <Alert variant="success" dismissible onClose={this.handleDismiss}> Information updated </Alert> : null}
                             <p className="modalText">Input a comment about your week {this.props.id}</p>
                             <div className="centeredEls">
                             <textarea name="description" placeholder="This week I ..." className="textarea form-control" value={this.state.description} rows={"5"} onChange={this.handleChange}></textarea>

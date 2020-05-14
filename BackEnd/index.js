@@ -706,7 +706,7 @@ app.post('/update/field', async (req, res) => {
   console.log(emotionrating)
   console.log(description)
 
-  db.query("SELECT cf.id from calendar_field cf join calendar c on (c.user_id = cf.calendar_id) where week_number='" + week_number + "' and user_id='" + userId + "';").then(data => {
+  db.query("SELECT cf.id from calendar_field cf join calendar c on (c.id = cf.calendar_id) where week_number='" + week_number + "' and user_id='" + userId + "';").then(data => {
     console.log("esto",data)
     console.log(data[0].id)
     db.query("UPDATE calendar_field SET text = '" + description + "' , rating = '" + emotionrating + "' where id= '" + data[0].id + "';").then(data => {
