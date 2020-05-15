@@ -17,7 +17,8 @@
     display:flex;
     justify-content: center;
     max-height:100vh;
-    display:block
+    
+    /* overflow-x:hidden;   */
 }
 .subsection1{
     width:100vw;
@@ -25,7 +26,8 @@
     height:80vh;
     background-color:white;
     display:flex;
-    justify-content:center;  
+    justify-content:center;
+    
 }
 
 .section1Content{
@@ -105,7 +107,7 @@
 .section2{
     
     position:relative;
-    height:30vh;
+    height:35vh;
     background-color:lightblue;
     display:block;
     display:flex;
