@@ -50,7 +50,7 @@ const Layout = ({ children }) => {
                 <p className="h1Section1">Start tracking your life with MementoMori</p>
                 <p className="pSection1">Changed the way of perceiving life for thousands of people</p>
                 <div className="buttonCenterSection1">
-                  <button className="buttonSection1">Try the app</button>
+                  <button className="buttonSection1"><a href="https://app.mementomori.io/login">Try the app</a></button>
                 </div>
                 <div className="bigTextSection1Container">
                   <div className="bigTextSection1">
