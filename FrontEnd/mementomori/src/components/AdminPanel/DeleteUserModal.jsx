@@ -25,7 +25,7 @@ class DeleteUserModal extends React.Component{
                     {this.props.userDeletedError ? <Alert className="alertRegister userDeleted" variant="danger" dismissible onClose={this.props.handleDismiss}>
                         Error deleting the user
                                     </Alert> : null} */}
-                    <h6 className="text-center">Are you sure that you want to delete the user?</h6>
+                    <h6 className="text-center deleteText">Are you sure that you want to delete the user?</h6>
                     <div className="text-center">
                         <button class="btn btn-danger btnDel" onClick={() => this.props.deleteUser()}>Delete user</button>
                         <button class="btn btn-primary btnDel" onClick={() => this.props.closeDeleteUserModal()}>Cancel</button>

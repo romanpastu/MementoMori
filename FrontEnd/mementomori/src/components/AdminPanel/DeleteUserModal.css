@@ -1,3 +1,11 @@
+@font-face {
+  font-family: 'OpenSans-Bold';
+  src: local('OpenSans-Bold'), url(./../../assets/OpenSans-Bold.ttf) format('TrueType');
+}
+
+.deleteText{
+  font-family: OpenSans-Light;
+}
 .modal-window-1{
   
     position:fixed;
