@@ -1,9 +1,14 @@
+
+
 *{
     margin: 0;
     padding:0;
     box-sizing: border-box;
     font-family: sans-serif;
+   
 }
+
+
 a{
     text-decoration:none;
     color:white;
@@ -16,6 +21,7 @@ a{
 
 
 .section1{
+    position:relative;
     height:100vh;
     background-color: lightblue;
     display:flex;
@@ -44,14 +50,14 @@ a{
     margin-bottom:4vh;
     font-family: Calligraffitti;
     font-weight: 900;
-    font-size:2em;
+    font-size:1.8vw;
     color:lightblue;
 }
 
 .h1Section1{
     text-align:center;
     margin-bottom:2vh;
-    font-size:4em;
+    font-size:3.8vw;
     font-weight: 600;
     color:lightblue
 }
@@ -59,7 +65,7 @@ a{
     text-align:center;
     font-weight:400;
     color:rgb(175, 175, 175);
-    font-size:2em;
+    font-size:1.6vw;
 }
 .pSection1Big{
     text-align:center;
@@ -98,7 +104,7 @@ a{
 .buttonSection1{
     width:10vw;
     height:7vh;
-    font-size:1.4em;
+    font-size:1.3vw;
     background-color: rgb(92, 155, 236);
     border: none;
     color:white;
@@ -134,7 +140,7 @@ a{
 
 .faIcon{
     color:white;
-    font-size:1.5em;
+    font-size:1.5vw;
 }
 
 .icon{
@@ -144,7 +150,8 @@ a{
 .gridTitle{
     color:white;
     font-weight: 800;
-    font-size:1.2em;
+    font-size:1.1vw; 
+    
     margin-bottom:1vh;
     
 }
@@ -153,4 +160,81 @@ a{
     text-align:justify;
     color:rgb(117, 117, 117);
     font-weight:600;
+    font-size:0.8vw;
+}
+
+@media only screen and (max-width: 425px) {
+
+    .logo{
+        font-size:10vw;
+    }
+
+    .h1Section1{
+        font-size:6vw;
+    }
+    
+    .pSection1{
+        font-size:4vw;
+    }
+
+    .buttonSection1{
+        width:30vw;
+        height:5vh;
+        font-size:4vw;
+        margin-top:3vh;
+        margin-bottom:3vh;
+    }
+    .pSection1Big{
+        text-align:center;
+        color:rgb(175, 175, 175);
+        font-size:5vw;
+    }
+    .bigTextSection1{
+        width:100%;
+    }
+
+    .imgContainerSection1{
+        display:flex;
+        justify-content:center;
+        width:90vw;
+        height:40vh;
+        margin-top:5vh;
+    }
+
+    .faIcon{
+        display:none
+    }
+
+    .propertiesGrid{
+        display:flex;
+        flex-direction:column;
+        width:80vw;
+        justify-content: center;
+        
+    }
+
+    .gridTitle{
+        color:white;
+        font-weight: 800;
+        font-size:6vw; 
+        margin-bottom:1vh;
+        
+    }
+    
+    .gridText{
+        text-align:justify;
+        color:rgb(117, 117, 117);
+        font-weight:600;
+        font-size:4vw;
+    }
+
+    .section2{
+        height:65vh;
+        padding-top:0;
+    }
+
+    .boxContainer{
+        margin-bottom:1vh;
+    }
+
 }
