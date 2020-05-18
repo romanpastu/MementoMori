@@ -6,6 +6,7 @@ import { getUserId } from '../services/userInfo.js'
 import { connect } from "react-redux"
 import { setCurrentWeek } from "../redux/actions/reduxActions.js"
 import store from "../redux/store/reduxStore.js"
+import constants from '../constants.js'
 var moment = require('moment');
 moment().format();
 
