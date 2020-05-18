@@ -145,7 +145,7 @@ class App extends React.Component {
           <LifeExpectancyRoute name={"life_expectancy"} path="/lifeExpectancy" render={(props) => <LifeExpectancy {...props} setYearsRedirect={this.setYearsRedirect} />} />
           <Route path="/login" render={(props) => <LoginPage login={this.login} authed={this.state.isAuthenticated} {...props} />} />
           <Route path="/admin" render={(props) => <Admin authed={this.state.isAuthenticated} {...props} />} />
-          <Route path="/" render={(props) => this.props.history.push("/login")} />
+          {/* <Route path="/" render={(props) => this.props.history.push("/login")} /> */}
           <PrivateRoute path="/stats" name={"stats"} authed={this.state.isAuthenticated} render={(props) => <StatsPage  {...props} logout={this.logout} />} />
         </Switch>
       </div>
