@@ -5,6 +5,7 @@ import MyResponsivePie from './charts/MyResponsivePie'
 import store from "../redux/store/reduxStore.js"
 import API from '../services/axiosObject.js';
 import { getUserId } from '../services/userInfo.js'
+import constants from '../constants.js'
 import './StatsPage.css'
 
 class StatsPage extends React.Component {
@@ -24,7 +25,7 @@ class StatsPage extends React.Component {
 
     componentDidMount() {
         console.log("api")
-        API.get('/chart/lineal/emotion/' + getUserId()).then(response => {
+        API.get(constants.urlBackend +'/chart/lineal/emotion/' + getUserId()).then(response => {
              console.log(response.data[0])
             this.setState({
                 dataLinealEmotion: response.data
@@ -35,7 +36,7 @@ class StatsPage extends React.Component {
             }
             )
         })
-        API.get('/chart/cumulative/emotion/' + getUserId()).then(response => {
+        API.get(constants.urlBackend +'/chart/cumulative/emotion/' + getUserId()).then(response => {
             // console.log(response.data[0])
             this.setState({
                 dataCumulativeEmotion: response.data
@@ -46,7 +47,7 @@ class StatsPage extends React.Component {
             }
             )
         })
-        API.get('/chart/cumulative-maxpotential/emotion/' + getUserId()).then(response => {
+        API.get(constants.urlBackend +'/chart/cumulative-maxpotential/emotion/' + getUserId()).then(response => {
             // console.log(response.data[0])
             this.setState({
                 dataCumulativeMaxPotentialEmotion: response.data
@@ -58,7 +59,7 @@ class StatsPage extends React.Component {
             }
             )
         })
-        API.get('/chart/pie/emotion/'+getUserId()).then(response =>{
+        API.get(constants.urlBackend +'/chart/pie/emotion/'+getUserId()).then(response =>{
             // console.log("datapieresponse")
             // console.log(response)
             this.setState({
