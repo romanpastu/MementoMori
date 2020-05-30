@@ -35,7 +35,7 @@ const { isAuthRefreshed } = require('./isAuthRefreshed.js')
 //express protection middleware
 //this is yet to have implemented the refreshing route
 function requireLogin(req, res, next) {
-  console.log("hola")
+  
   try {
 
     const userId = isAuth(req)
@@ -298,7 +298,7 @@ app.post('/protected', async (req, res) => {
 })
 
 //generate calendar
-app.post('/generateCalendar', requireLogin,async (req, res) => {
+app.post('/generateCalendar', requireLogin, async (req, res) => {
 
   const userId = req.body.userId
   const yearsToLive = Math.trunc(req.body.yearsToLive).toString()
@@ -371,7 +371,7 @@ app.post('/generateCalendar', requireLogin,async (req, res) => {
 })
 
 //get lineal emotion chart data
-app.get('/chart/lineal/emotion/:id',requireLogin, async (req, res) => {
+app.get('/chart/lineal/emotion/:id', requireLogin, async (req, res) => {
   const userId = req.params.id
 
   function getCurrentWeek(birth_date) {
@@ -434,7 +434,7 @@ app.get('/chart/lineal/emotion/:id',requireLogin, async (req, res) => {
 
 
 //get cumulative emotion chart data
-app.get('/chart/cumulative/emotion/:id',requireLogin, async (req, res) => {
+app.get('/chart/cumulative/emotion/:id', requireLogin, async (req, res) => {
   const userId = req.params.id
 
   function getCurrentWeek(birth_date) {
@@ -502,7 +502,7 @@ app.get('/chart/cumulative/emotion/:id',requireLogin, async (req, res) => {
 })
 
 //get cumulative emotion vs max potential emotion chart data
-app.get('/chart/cumulative-maxpotential/emotion/:id',requireLogin, async (req, res) => {
+app.get('/chart/cumulative-maxpotential/emotion/:id', requireLogin, async (req, res) => {
   const userId = req.params.id
 
   function getCurrentWeek(birth_date) {
@@ -588,7 +588,7 @@ app.get('/chart/cumulative-maxpotential/emotion/:id',requireLogin, async (req, r
 })
 
 //Get pie chart
-app.get('/chart/pie/emotion/:id',requireLogin, async (req, res) => {
+app.get('/chart/pie/emotion/:id', requireLogin, async (req, res) => {
   const userId = req.params.id
 
   function getCurrentWeek(birth_date) {
@@ -677,7 +677,7 @@ app.get('/chart/pie/emotion/:id',requireLogin, async (req, res) => {
 })
 
 //update field
-app.post('/update/field', requireLogin,async (req, res) => {
+app.post('/update/field', requireLogin, async (req, res) => {
   const userId = req.body.userId
   const week_number = req.body.week_number
   const emotionrating = req.body.emotionRating
@@ -703,7 +703,7 @@ app.post('/update/field', requireLogin,async (req, res) => {
 
 
 //get user
-app.get('/getUserGenerateCalendar/:id',requireLogin, async (req, res) => {
+app.get('/getUserGenerateCalendar/:id', requireLogin, async (req, res) => {
   const userId = req.params.id
 
   db.query("SELECT * FROM users where id = '" + userId + "';").then(data => {
@@ -748,7 +748,7 @@ app.get('/getUserGenerateCalendar/:id',requireLogin, async (req, res) => {
 })
 
 //get user field info
-app.get('/getUserFieldsInfo/:id',requireLogin, async (req, res) => {
+app.get('/getUserFieldsInfo/:id', requireLogin, async (req, res) => {
   const userId = req.params.id
   console.log(userId)
   db.query("SELECT CF.text, CF.rating, CF.week_number from calendar C join calendar_field CF on C.id = CF.calendar_id where C.user_id = '" + userId + "';").then(data =>
@@ -762,20 +762,60 @@ app.get('/getUserFieldsInfo/:id',requireLogin, async (req, res) => {
 
 //User Crud Related Routes
 
-app.get("/userlist", function (req, res){
-  db.query("SELECT * FROM users").then(data =>{
+app.get("/userlist", function (req, res) {
+  db.query("SELECT * FROM users").then(data => {
     console.log(data)
     res.send(data)
   })
 })
 
-app.post("/user/delete/:id",requireLogin, function(req,res){
+app.post("/user/delete/:id", requireLogin, function (req, res) {
   console.log(req.params.id)
   db.query("DELETE FROM users where id=" + req.params.id).then(data => {
     res.status(200).send("deleted");
   }).catch(err => res.send(err))
 })
 
+app.post("/user/update/:id", requireLogin, async (req, res) => {
+  const { firstName, secondName, mail, password1, password2 } = req.body
+  const userId = req.params.id
+
+  if (firstName == "" || secondName == "") {
+    res.status(402).send("invalid names")
+    throw new Error("invalid names");
+  }
+
+  //checks if the mail is valid
+  if ((mail.match(/@/g) || []).length != 1) {
+    res.status(401).send("invalid mail")
+    throw new Error("Invalid mail");
+  };
+
+  if (password1 != password2) {
+    res.status(403).send("password dont match")
+    throw new Error("Passwords dont mach")
+  } else if (password1 != "") {
+    var pass = await hash(req.password1, 10)
+
+    db.query("UPDATE users SET password='" + pass + "' where id='" + userId + "';").then(data => {
+      console.log("primer update")
+    }).catch(err => {
+      res.status(405).send("db error")
+      console.log(err)
+    })
+  }
+
+  db.query("UPDATE users SET email='" + mail + "' , first_name='" + firstName + "',second_name='" + secondName + "' where id='" + userId + "' ;").then(data => {
+    console.log("ultimo update")
+    res.status(200).send("user data updated")
+  }).catch(err => {
+    res.status(405).send("db error")
+    console.log(err)
+  })
+
+
+  // console.log(firstName, secondName, mail, password1, password2)
+})
 
 //Express port
 app.listen(1234, () => {

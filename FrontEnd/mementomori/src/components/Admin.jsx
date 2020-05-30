@@ -23,8 +23,8 @@ export default class Admin extends Component {
                 firstName: "",
                 secondName: "",
                 email: "",
-                password1: "hola",
-                password2: "hola"
+                password1: "",
+                password2: ""
             }
         }
         this.getUserList = this.getUserList.bind(this)
@@ -171,6 +171,11 @@ export default class Admin extends Component {
         var password1 = this.state.editUserInfo.password1
         var password2 = this.state.editUserInfo.password2
 
+        API.post('/user/update/' + this.state.rowId, { firstName, secondName, mail, password1, password2 }).then( res => {
+            if(res.status == 200){
+                this.getUserList();
+            }
+        })
         console.log(firstName, secondName, mail, password1, password2)
     }
 
