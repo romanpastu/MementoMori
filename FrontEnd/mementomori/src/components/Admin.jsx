@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import DeleteUserModal from "../components/AdminPanel/DeleteUserModal"
 import { faEdit, faTrashAlt } from '@fortawesome/free-regular-svg-icons'
 import { Alert } from 'react-bootstrap'
+import EditUserModal from '../components/AdminPanel/EditUserModal'
 export default class Admin extends Component {
     constructor(props) {
         super(props)
@@ -16,14 +17,25 @@ export default class Admin extends Component {
             rowEmail: "",
             userDeleted: false,
             userDeletedError: true,
-            showDeleteUserModal: false
+            showDeleteUserModal: false,
+            showEditUserModal: false,
+            editUserInfo:{
+                firstName: "",
+                secondName: "",
+                email: ""
+            }
         }
         this.getUserList = this.getUserList.bind(this)
         this.deleteUser = this.deleteUser.bind(this)
         this.showDeleteUserModal = this.showDeleteUserModal.bind(this)
         this.closeDeleteUserModal = this.closeDeleteUserModal.bind(this)
         this.handleDismiss = this.handleDismiss.bind(this)
-
+        this.showEditUserModal = this.showEditUserModal.bind(this)
+        this.closeEditUserModal = this.closeEditUserModal.bind(this)
+        //handlechangebinding
+        this.handleChangeFirstName = this.handleChangeFirstName.bind(this)
+        this.handleChangeSecondName = this.handleChangeSecondName.bind(this)
+        this.handleChangeMail = this.handleChangeMail.bind(this)
     }
 
     getUserList() {
@@ -96,6 +108,44 @@ export default class Admin extends Component {
         })
     }
 
+    showEditUserModal(rowId,rowEmail, rowFirstName,rowSecondName){
+        let obj = Object.assign({}, this.state.editUserInfo)
+
+        obj.firstName = rowFirstName
+        obj.secondName = rowSecondName
+        obj.email = rowEmail
+
+        this.setState({
+            showEditUserModal: true,
+            rowId: rowId,
+            editUserInfo: obj
+        })
+    }
+    closeEditUserModal(){
+        this.setState({
+            showEditUserModal: false
+        })
+    }
+
+    //handleChange Functions for the User Edit
+    handleChangeFirstName = (evt) => {
+        this.setState({
+            editUserInfo: Object.assign({}, this.state.editUserInfo, { firstName: evt.target.value })
+        })
+    }
+
+    handleChangeSecondName = (evt) => {
+        this.setState({
+            editUserInfo: Object.assign({}, this.state.editUserInfo, { secondName: evt.target.value })
+        })
+    }
+
+    handleChangeMail = (evt) => {
+        this.setState({
+            editUserInfo: Object.assign({}, this.state.editUserInfo, { email: evt.target.value })
+        })
+    }
+
     render() {
         var users = this.state.userList
 
@@ -126,7 +176,7 @@ export default class Admin extends Component {
                         return (
                             <Tr className={row.className} key={row.id}>
                                 <Td column="Email">{row.email}</Td>
-                                <Td column="Manage"><div><FontAwesomeIcon className="editIcon" onClick={() => console.log("hi")} icon={faEdit}></FontAwesomeIcon>
+                                <Td column="Manage"><div><FontAwesomeIcon className="editIcon" onClick={() => this.showEditUserModal(row.id, row.email, row.first_name,row.second_name)} icon={faEdit}></FontAwesomeIcon>
                                     <FontAwesomeIcon className="editIcon" onClick={() => this.showDeleteUserModal(row.id, row.email)} icon={faTrashAlt}></FontAwesomeIcon>
                                 </div></Td>
                             </Tr>
@@ -134,6 +184,14 @@ export default class Admin extends Component {
                     })}
                 </Table>
                 <DeleteUserModal showDeleteUserModal={this.state.showDeleteUserModal} closeDeleteUserModal={this.closeDeleteUserModal} userDeleted={this.state.userDeleted} deleteUser={this.deleteUser} handleDismiss={this.handleDismiss} />
+                <EditUserModal
+                handleChangeFirstName = { this.handleChangeFirstName}
+                handleChangeSecondName = {this.handleChangeSecondName}
+                handleChangeMail = {this.handleChangeMail}
+                showEditUserModal={this.state.showEditUserModal} closeEditUserModal={this.closeEditUserModal}
+                rowId={this.state.rowId}
+                userInfo={this.state.editUserInfo}
+                />
             </div>
         )
     }
