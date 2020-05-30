@@ -1,21 +1,21 @@
 const Cookies = require('js-cookie');
 const jwtDecode = require('jwt-decode');
 
-// const isAdmin = () =>{
+ const isAdmin = () =>{
 
-//     var decoded = [];
-//     decoded.permited = [];
-//     var accesstoken = Cookies.get('accesstoken');
-//     if(accesstoken){
-//      var decoded  = jwtDecode(accesstoken)
-//     }
+    var decoded = [];
+     decoded.permited = [];
+     var accesstoken = Cookies.get('accesstoken');
+     if(accesstoken){
+      var decoded  = jwtDecode(accesstoken)
+     }
 
-//     if(decoded.permited.includes("admin")){
-//         return true;
-//     }else{
-//         return false;
-//     }
-// }
+     if(decoded.permited.includes("admin")){
+         return true;
+     }else{
+         return false;
+     }
+ }
 
 const getUserId = () =>{
     
@@ -30,5 +30,5 @@ const getUserId = () =>{
 }
 
 module.exports = {
-     getUserId
+     getUserId, isAdmin
 }

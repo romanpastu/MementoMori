@@ -1,0 +1,14 @@
+.headerClose{
+    right:0;
+    color: red;
+    top:0;
+    position:absolute;
+    margin-right:1%;
+    margin-top:1%;
+    font-size:1.3em;
+    cursor:pointer
+}
+
+.label-color-edit{
+    color: black 
+}
