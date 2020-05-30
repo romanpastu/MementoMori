@@ -35,7 +35,7 @@ const { isAuthRefreshed } = require('./isAuthRefreshed.js')
 //express protection middleware
 //this is yet to have implemented the refreshing route
 function requireLogin(req, res, next) {
-  
+
   try {
 
     const userId = isAuth(req)
@@ -794,21 +794,26 @@ app.post("/user/update/:id", requireLogin, async (req, res) => {
   if (password1 != password2) {
     res.status(403).send("password dont match")
     throw new Error("Passwords dont mach")
-  } else if (password1 != "") {
-    var pass = await hash(req.password1, 10)
-
-    db.query("UPDATE users SET password='" + pass + "' where id='" + userId + "';").then(data => {
-      console.log("primer update")
-    }).catch(err => {
-      res.status(405).send("db error")
-      console.log(err)
-    })
   }
 
-  db.query("UPDATE users SET email='" + mail + "' , first_name='" + firstName + "',second_name='" + secondName + "' where id='" + userId + "' ;").then(data => {
+  db.query("UPDATE users SET email='" + mail + "' , first_name='" + firstName + "',second_name='" + secondName + "' where id='" + userId + "' ;").then(async (data) => {
     console.log("ultimo update")
-    res.status(200).send("user data updated")
-  }).catch(err => {
+
+    if (password1 != "") {
+      
+      var pass = await hash(password1, 10)
+      db.query("UPDATE users SET password='" + pass + "' where id='" + userId + "';").then(data => {
+        console.log("primer update")
+        res.status(200).send("user data updated")
+      }).catch(err => {
+        res.status(405).send("db error")
+        console.log(err)
+      })
+    }else{
+      res.status(200).send("user data updated")
+    }
+  }
+  ).catch(err => {
     res.status(405).send("db error")
     console.log(err)
   })

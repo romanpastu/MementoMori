@@ -25,6 +25,13 @@ export default class Admin extends Component {
                 email: "",
                 password1: "",
                 password2: ""
+            },
+            userUpdateErrors:{
+                success: false,
+                wrongEmail: false,
+                wrongPassword: false,
+                wrongName: false,
+                dbError: false
             }
         }
         this.getUserList = this.getUserList.bind(this)
@@ -35,10 +42,13 @@ export default class Admin extends Component {
         this.showEditUserModal = this.showEditUserModal.bind(this)
         this.closeEditUserModal = this.closeEditUserModal.bind(this)
         this.handleSubmitUserEdit = this.handleSubmitUserEdit.bind(this)
+        this.handleDismissUserEdit = this.handleDismissUserEdit.bind(this)
+        this.updateEditErrors = this.updateEditErrors.bind(this)
         //handlechangebinding
         this.handleChangeFirstName = this.handleChangeFirstName.bind(this)
         this.handleChangeSecondName = this.handleChangeSecondName.bind(this)
         this.handleChangeMail = this.handleChangeMail.bind(this)
+        
     }
 
     getUserList() {
@@ -112,6 +122,7 @@ export default class Admin extends Component {
     }
 
     showEditUserModal(rowId,rowEmail, rowFirstName,rowSecondName){
+        this.handleDismissUserEdit();
         let obj = Object.assign({}, this.state.editUserInfo)
 
         obj.firstName = rowFirstName
@@ -161,9 +172,52 @@ export default class Admin extends Component {
         })
     }
 
+    //handleDismiss for the user Edit
+
+    handleDismissUserEdit(){
+        console.log("hola")
+        let obj = Object.assign({}, this.state.userUpdateErrors)
+
+        obj.success= false;
+        obj.wrongEmail= false;
+        obj.wrongPassword = false;
+        obj.wrongName = false;
+        obj.dbError = false;
+
+        this.setState({
+            userUpdateErrors: obj
+        })
+    }
+
     //handleSubmit for the User Edit
+
+    updateEditErrors(err){
+        let obj = Object.assign({}, this.state.userUpdateErrors)
+
+        if(err == 401){
+            obj.wrongEmail = true
+        }
+        if (err == 402){
+            obj.wrongName = true
+        }
+        if(err == 403){
+            obj.wrongPassword = true
+        }
+        if(err == 405){
+            obj.dbError= true
+        }
+        if(err == 200){
+            obj.success = true
+        }
+
+        this.setState({
+            userUpdateErrors: obj
+        })
+    
+    }
+
     handleSubmitUserEdit(event) {
-        
+        this.handleDismissUserEdit();
         event.preventDefault();
         var firstName= this.state.editUserInfo.firstName
         var secondName = this.state.editUserInfo.secondName
@@ -172,12 +226,31 @@ export default class Admin extends Component {
         var password2 = this.state.editUserInfo.password2
 
         API.post('/user/update/' + this.state.rowId, { firstName, secondName, mail, password1, password2 }).then( res => {
-            if(res.status == 200){
+            console.log(res)
+           console.log("updated")
+           this.updateEditErrors(200)
+           this.getUserList();
+        }).catch(err => {
+            if(err.response.status == 200){
                 this.getUserList();
+            }else if(err.response.status == 401){
+                console.log("wrong email")
+                this.updateEditErrors(401)
+            }else if(err.response.status == 402){
+                console.log("invalid names")
+                this.updateEditErrors(402)
+            }else if(err.response.status == 403){
+                console.log("passwords dont match")
+                this.updateEditErrors(403)
+            }else if(err.response.status == 405){
+                console.log("db error")
+                this.updateEditErrors(405)
             }
         })
         console.log(firstName, secondName, mail, password1, password2)
     }
+
+   
 
     render() {
         var users = this.state.userList
@@ -227,6 +300,8 @@ export default class Admin extends Component {
                 showEditUserModal={this.state.showEditUserModal} closeEditUserModal={this.closeEditUserModal}
                 rowId={this.state.rowId}
                 userInfo={this.state.editUserInfo}
+                userUpdateErrors={this.state.userUpdateErrors}
+                handleDismiss={this.handleDismissUserEdit}
                 />
             </div>
         )
