@@ -1,7 +1,5 @@
 const { verify } = require('jsonwebtoken');
-let constants = require('./constants.js')
-let pgp = require("pg-promise")(/*options*/);
-let db = pgp(constants.dbUrl);
+const {db} = require('./database.js')
 const { createAccessToken, createRefreshToken, sendAccessToken, sendRefreshToken } = require('./token.js')
 
 

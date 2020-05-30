@@ -1,5 +1,4 @@
 require('dotenv/config')
-let constants = require('./constants.js')
 
 //express use settings
 const express = require("express");
@@ -16,8 +15,7 @@ app.use(cors());
 
 
 //db settings
-const pgp = require("pg-promise")();
-const db = pgp(constants.dbUrl)
+const {db} = require('./database.js')
 
 //moment
 var moment = require('moment');
