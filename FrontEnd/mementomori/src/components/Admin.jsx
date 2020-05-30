@@ -22,7 +22,9 @@ export default class Admin extends Component {
             editUserInfo:{
                 firstName: "",
                 secondName: "",
-                email: ""
+                email: "",
+                password1: "hola",
+                password2: "hola"
             }
         }
         this.getUserList = this.getUserList.bind(this)
@@ -32,6 +34,7 @@ export default class Admin extends Component {
         this.handleDismiss = this.handleDismiss.bind(this)
         this.showEditUserModal = this.showEditUserModal.bind(this)
         this.closeEditUserModal = this.closeEditUserModal.bind(this)
+        this.handleSubmitUserEdit = this.handleSubmitUserEdit.bind(this)
         //handlechangebinding
         this.handleChangeFirstName = this.handleChangeFirstName.bind(this)
         this.handleChangeSecondName = this.handleChangeSecondName.bind(this)
@@ -146,6 +149,31 @@ export default class Admin extends Component {
         })
     }
 
+    handleChangePassword1 = (evt) => {
+        this.setState({
+            editUserInfo: Object.assign({}, this.state.editUserInfo, { password1: evt.target.value })
+        })
+    }
+
+    handleChangePassword2 = (evt) => {
+        this.setState({
+            editUserInfo: Object.assign({}, this.state.editUserInfo, { password2: evt.target.value })
+        })
+    }
+
+    //handleSubmit for the User Edit
+    handleSubmitUserEdit(event) {
+        
+        event.preventDefault();
+        var firstName= this.state.editUserInfo.firstName
+        var secondName = this.state.editUserInfo.secondName
+        var mail = this.state.editUserInfo.email
+        var password1 = this.state.editUserInfo.password1
+        var password2 = this.state.editUserInfo.password2
+
+        console.log(firstName, secondName, mail, password1, password2)
+    }
+
     render() {
         var users = this.state.userList
 
@@ -188,6 +216,9 @@ export default class Admin extends Component {
                 handleChangeFirstName = { this.handleChangeFirstName}
                 handleChangeSecondName = {this.handleChangeSecondName}
                 handleChangeMail = {this.handleChangeMail}
+                handleSubmit={this.handleSubmitUserEdit}
+                handleChangePassword1 = {this.handleChangePassword1}
+                handleChangePassword2 = {this.handleChangePassword2}
                 showEditUserModal={this.state.showEditUserModal} closeEditUserModal={this.closeEditUserModal}
                 rowId={this.state.rowId}
                 userInfo={this.state.editUserInfo}

@@ -21,7 +21,7 @@ class EditUserModal extends React.Component {
             <div className="flex-container">
 
                 <div id="open-modal" className="modal-window-1">
-                    <form >
+                    <form onSubmit={this.props.handleSubmit}>
                         <FontAwesomeIcon className="headerClose" icon={faTimesCircle} onClick={this.props.closeEditUserModal}/>
                         <div style={{ marginTop: "20px" }}>
 
@@ -49,8 +49,8 @@ class EditUserModal extends React.Component {
 
                         <div class="form-group emailgroup">
                             <label for="exampleFormControlInput1" className="label-color-edit">New Password</label>
-                            <input type="password" class="form-control" placeholder="Input new password" />
-                            <input type="password" class="form-control" placeholder="Confirm new password" style={{ marginTop: "5px" }} />
+                            <input type="password" class="form-control" placeholder="Input new password" onChange={this.props.handleChangePassword1}/>
+                            <input type="password" class="form-control" placeholder="Confirm new password" onChange={this.props.handleChangePassword2} style={{ marginTop: "5px" }} />
                         </div>
 
                         <div className="text-center"><button className="btn btn-primary">Update User</button></div>
