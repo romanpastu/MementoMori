@@ -118,7 +118,7 @@ app.post('/register', async (req, res) => {
   const hashedPassword = await hash(password, 10);
   db.query("INSERT INTO USERS (email, password, birth_date, first_name, second_name) VALUES ('" + email + "','" + hashedPassword + "','" + birthDate + "','" + firstName + "','" + secondName + "')").then(function (data) {
     db.query("SELECT id from users where email='" + email + "';").then(function (data) {
-      db.query("INSERT INTO user_permissions values ('" + data[0].id + "', 'false', 'true')").then(function (data) {
+      db.query("INSERT INTO user_permissions values ('" + data[0].id + "', 'false', 'true', 'false', 'false', 'false')").then(function (data) {
         res.send("inserted");
         console.log("inserted")
       }).catch(function (error) {
@@ -349,7 +349,7 @@ app.post('/generateCalendar', requireLogin, async (req, res) => {
               console.log("series generated")
               /******/
               //the lifeExpectanceSet restriction is removed and access to dashboard is granted
-              db.query("UPDATE user_permissions SET life_expectancy =  'false' , dashboard = 'true' , stats = 'true', admin = 'false'  WHERE user_id = '" + userId + "';").then(data => {
+              db.query("UPDATE user_permissions SET life_expectancy =  'false' , dashboard = 'true' , stats = 'true', admin = 'false' , profile_info = 'true' WHERE user_id = '" + userId + "';").then(data => {
                 console.log("everything generated")
                 res.send("100")
                 console.log(data)
