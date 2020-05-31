@@ -243,6 +243,28 @@ app.post('/refresh_token', (req, res) => {
 
 })
 
+//logout
+app.post('/logout', async(req,res) => {
+
+  const authorization = req.headers['authorization'];
+  if(authorization == undefined) {
+    res.send("provide a valid token")
+  }
+  const token = authorization.split(' ')[1];
+  var decoded = decode(token, { complete: true });
+  var userId = decoded.payload.userId
+  console.log("logging out")
+  console.log(userId)
+  db.query("UPDATE users set refreshtoken = 'null' where id="+userId).then( res=>{
+    console.log(res)
+    res.status(200).send("logged out")
+  }).catch(err =>{
+    console.log(res.send(err))
+    res.send(err)
+  })
+  
+})
+
 //token verification route 
 app.post('/verify', async (req, res) => {
   try {
@@ -280,7 +302,7 @@ app.post('/protected', async (req, res) => {
 app.post('/generateCalendar', requireLogin, async (req, res) => {
 
   const authorization = req.headers['authorization'];
-  if (authorization == undefined) {
+  if(authorization == undefined) {
     res.send("provide a valid token")
   }
   const token = authorization.split(' ')[1];

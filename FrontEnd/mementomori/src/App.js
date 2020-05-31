@@ -19,6 +19,7 @@ import LifeExpectancyRoute from './components/LifeExpectancyRoute'
 import LifeExpectancy from './components/LifeExpectancy'
 import { connect } from "react-redux";
 import { lifeExpectancySet } from "./redux/actions/reduxActions.js"
+import API from './services/axiosObject';
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -61,14 +62,19 @@ class App extends React.Component {
   } trade
 
   logout = () => {
-    Cookies.remove('accesstoken')
-    this.setState({
-      isAuthenticated: false,
-      authenticationChecked: true
-    }, () => {
-      this.props.lifeExpectancySet(true)
-      this.props.history.push("/login")
+    API.post(constants.urlBackend + "/logout").then(res => {
+      Cookies.remove('accesstoken')
+      this.setState({
+        isAuthenticated: false,
+        authenticationChecked: true
+      }, () => {
+        this.props.lifeExpectancySet(true)
+        this.props.history.push("/login")
+      })
+    }).catch(err =>{
+      console.log(err)
     })
+
 
   }
 
