@@ -28,7 +28,7 @@ class ProfilePage extends React.Component {
     }
 
     componentDidMount() {
-        API.get(constants.urlBackend + '/user/info/').then(res => {
+        API.get(constants.urlBackend + '/user/info').then(res => {
             console.log(res.data)
             this.setState({
                 email: res.data[0].email,

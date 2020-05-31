@@ -79,7 +79,8 @@ export default class Admin extends Component {
     }
 
     deleteUser() {
-        API.post(constants.urlBackend+'user/delete/' + this.state.rowId).then(response => {
+        console.log("bn")
+        API.post(constants.urlBackend+'/user/delete/' + this.state.rowId).then(response => {
             console.log("Respuesta al borrar")
             console.log(response.data)
             console.log(response.status)
