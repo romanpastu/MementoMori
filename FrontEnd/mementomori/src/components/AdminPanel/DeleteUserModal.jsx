@@ -1,8 +1,8 @@
 import React from 'react'
 import './DeleteUserModal.css'
 
-class DeleteUserModal extends React.Component{
-    constructor(props){
+class DeleteUserModal extends React.Component {
+    constructor(props) {
         super(props)
         this.state = {
 
@@ -27,7 +27,9 @@ class DeleteUserModal extends React.Component{
                                     </Alert> : null} */}
                     <h6 className="text-center deleteText">Are you sure that you want to delete the user?</h6>
                     <div className="text-center">
-                        <button class="btn btn-danger btnDel" onClick={() => this.props.deleteUser()}>Delete user</button>
+                        <button class="btn btn-danger btnDel"onClick={() => this.props.deleteUser()}>
+                            Delete user
+                        </button>
                         <button class="btn btn-primary btnDel" onClick={() => this.props.closeDeleteUserModal()}>Cancel</button>
                     </div>
 

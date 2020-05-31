@@ -25,7 +25,7 @@ class StatsPage extends React.Component {
 
     componentDidMount() {
         console.log("api")
-        API.get(constants.urlBackend +'/chart/lineal/emotion/' + getUserId()).then(response => {
+        API.get(constants.urlBackend +'/chart/lineal/emotion').then(response => {
              console.log(response.data[0])
             this.setState({
                 dataLinealEmotion: response.data
@@ -36,7 +36,7 @@ class StatsPage extends React.Component {
             }
             )
         })
-        API.get(constants.urlBackend +'/chart/cumulative/emotion/' + getUserId()).then(response => {
+        API.get(constants.urlBackend +'/chart/cumulative/emotion').then(response => {
             // console.log(response.data[0])
             this.setState({
                 dataCumulativeEmotion: response.data
@@ -47,7 +47,7 @@ class StatsPage extends React.Component {
             }
             )
         })
-        API.get(constants.urlBackend +'/chart/cumulative-maxpotential/emotion/' + getUserId()).then(response => {
+        API.get(constants.urlBackend +'/chart/cumulative-maxpotential/emotion').then(response => {
             // console.log(response.data[0])
             this.setState({
                 dataCumulativeMaxPotentialEmotion: response.data
@@ -59,7 +59,7 @@ class StatsPage extends React.Component {
             }
             )
         })
-        API.get(constants.urlBackend +'/chart/pie/emotion/'+getUserId()).then(response =>{
+        API.get(constants.urlBackend +'/chart/pie/emotion').then(response =>{
             // console.log("datapieresponse")
             // console.log(response)
             this.setState({

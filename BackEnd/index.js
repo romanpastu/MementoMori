@@ -15,7 +15,7 @@ app.use(cors());
 
 
 //db settings
-const {db} = require('./database.js')
+const { db } = require('./database.js')
 
 //moment
 var moment = require('moment');
@@ -65,24 +65,6 @@ function requireLogin(req, res, next) {
 }
 
 //express calls
-//default helloworld
-app.get("/hello", (req, res) => {
-  res.send("Hello world");
-});
-//protected helloworld
-app.get("/helloP", requireLogin, (req, res) => {
-  res.send("Hello world");
-});
-
-app.post("/test", (req, res) => {
-  db.query("SELECT * FROM test").then(data => {
-    console.log(data)
-    res.send(data);
-  }).catch(err => {
-    err.send("fail")
-  })
-
-})
 
 //User login/register/auth related queries
 
@@ -192,9 +174,7 @@ app.post('/login', async (req, res) => {
 })
 
 app.post('/refresh_token', (req, res) => {
-
   const authorization = req.headers['authorization'];
-
   if (!authorization) throw new Error("You need to login");
   accesstoken = authorization.split(' ')[1];
   var userId = verify(accesstoken, process.env.ACCESS_TOKEN_SECRET, { ignoreExpiration: true })
@@ -296,10 +276,17 @@ app.post('/protected', async (req, res) => {
   }
 })
 
-//generate calendar
+//generate calendar - user restricted
 app.post('/generateCalendar', requireLogin, async (req, res) => {
 
-  const userId = req.body.userId
+  const authorization = req.headers['authorization'];
+  if (authorization == undefined) {
+    res.send("provide a valid token")
+  }
+  const token = authorization.split(' ')[1];
+  var decoded = decode(token, { complete: true });
+  var userId = decoded.payload.userId
+
   const yearsToLive = Math.trunc(req.body.yearsToLive).toString()
   const registerDate = req.body.registerDate
 
@@ -370,8 +357,14 @@ app.post('/generateCalendar', requireLogin, async (req, res) => {
 })
 
 //get lineal emotion chart data
-app.get('/chart/lineal/emotion/:id', requireLogin, async (req, res) => {
-  const userId = req.params.id
+app.get('/chart/lineal/emotion', requireLogin, async (req, res) => {
+  const authorization = req.headers['authorization'];
+  if (authorization == undefined) {
+    res.send("provide a valid token")
+  }
+  const token = authorization.split(' ')[1];
+  var decoded = decode(token, { complete: true });
+  var userId = decoded.payload.userId
 
   function getCurrentWeek(birth_date) {
     var current_date = moment();
@@ -433,8 +426,14 @@ app.get('/chart/lineal/emotion/:id', requireLogin, async (req, res) => {
 
 
 //get cumulative emotion chart data
-app.get('/chart/cumulative/emotion/:id', requireLogin, async (req, res) => {
-  const userId = req.params.id
+app.get('/chart/cumulative/emotion', requireLogin, async (req, res) => {
+  const authorization = req.headers['authorization'];
+  if (authorization == undefined) {
+    res.send("provide a valid token")
+  }
+  const token = authorization.split(' ')[1];
+  var decoded = decode(token, { complete: true });
+  var userId = decoded.payload.userId
 
   function getCurrentWeek(birth_date) {
     var current_date = moment();
@@ -501,8 +500,14 @@ app.get('/chart/cumulative/emotion/:id', requireLogin, async (req, res) => {
 })
 
 //get cumulative emotion vs max potential emotion chart data
-app.get('/chart/cumulative-maxpotential/emotion/:id', requireLogin, async (req, res) => {
-  const userId = req.params.id
+app.get('/chart/cumulative-maxpotential/emotion', requireLogin, async (req, res) => {
+  const authorization = req.headers['authorization'];
+  if (authorization == undefined) {
+    res.send("provide a valid token")
+  }
+  const token = authorization.split(' ')[1];
+  var decoded = decode(token, { complete: true });
+  var userId = decoded.payload.userId
 
   function getCurrentWeek(birth_date) {
     var current_date = moment();
@@ -587,8 +592,14 @@ app.get('/chart/cumulative-maxpotential/emotion/:id', requireLogin, async (req, 
 })
 
 //Get pie chart
-app.get('/chart/pie/emotion/:id', requireLogin, async (req, res) => {
-  const userId = req.params.id
+app.get('/chart/pie/emotion', requireLogin, async (req, res) => {
+  const authorization = req.headers['authorization'];
+  if (authorization == undefined) {
+    res.send("provide a valid token")
+  }
+  const token = authorization.split(' ')[1];
+  var decoded = decode(token, { complete: true });
+  var userId = decoded.payload.userId
 
   function getCurrentWeek(birth_date) {
     var current_date = moment();
@@ -677,7 +688,14 @@ app.get('/chart/pie/emotion/:id', requireLogin, async (req, res) => {
 
 //update field
 app.post('/update/field', requireLogin, async (req, res) => {
-  const userId = req.body.userId
+  const authorization = req.headers['authorization'];
+  if (authorization == undefined) {
+    res.send("provide a valid token")
+  }
+  const token = authorization.split(' ')[1];
+  var decoded = decode(token, { complete: true });
+  var userId = decoded.payload.userId
+  
   const week_number = req.body.week_number
   const emotionrating = req.body.emotionRating
   const description = req.body.description
@@ -702,8 +720,14 @@ app.post('/update/field', requireLogin, async (req, res) => {
 
 
 //get user
-app.get('/getUserGenerateCalendar/:id', requireLogin, async (req, res) => {
-  const userId = req.params.id
+app.get('/getUserGenerateCalendar', requireLogin, async (req, res) => {
+  const authorization = req.headers['authorization'];
+  if (authorization == undefined) {
+    res.send("provide a valid token")
+  }
+  const token = authorization.split(' ')[1];
+  var decoded = decode(token, { complete: true });
+  var userId = decoded.payload.userId
 
   db.query("SELECT * FROM users where id = '" + userId + "';").then(data => {
 
@@ -747,8 +771,14 @@ app.get('/getUserGenerateCalendar/:id', requireLogin, async (req, res) => {
 })
 
 //get user field info
-app.get('/getUserFieldsInfo/:id', requireLogin, async (req, res) => {
-  const userId = req.params.id
+app.get('/getUserFieldsInfo', requireLogin, async (req, res) => {
+  const authorization = req.headers['authorization'];
+  if (authorization == undefined) {
+    res.send("provide a valid token")
+  }
+  const token = authorization.split(' ')[1];
+  var decoded = decode(token, { complete: true });
+  var userId = decoded.payload.userId
   console.log(userId)
   db.query("SELECT CF.text, CF.rating, CF.week_number from calendar C join calendar_field CF on C.id = CF.calendar_id where C.user_id = '" + userId + "';").then(data =>
     res.send(data)
@@ -761,7 +791,23 @@ app.get('/getUserFieldsInfo/:id', requireLogin, async (req, res) => {
 
 //User Crud Related Routes
 
-app.get("/userlist", function (req, res) {
+app.get("/userlist", requireLogin, function (req, res) {
+
+  const authorization = req.headers['authorization'];
+  if (authorization == undefined) {
+    res.send("provide a valid token")
+  }
+  const token = authorization.split(' ')[1];
+  var decoded = decode(token, { complete: true });
+  console.log(decoded)
+  var permited = decoded.payload.permited;
+  if(!permited.includes("admin")){
+    res.status(400).send("this actions is limited to admins")
+    throw new Error("Token doesn't belong to an admin")
+  }
+  
+
+
   db.query("SELECT * FROM users").then(data => {
     console.log(data)
     res.send(data)
@@ -770,7 +816,19 @@ app.get("/userlist", function (req, res) {
 
 //for admin
 app.post("/user/delete/:id", requireLogin, function (req, res) {
-  console.log(req.params.id)
+  const authorization = req.headers['authorization'];
+  if (authorization == undefined) {
+    res.send("provide a valid token")
+  }
+  const token = authorization.split(' ')[1];
+  var decoded = decode(token, { complete: true });
+  console.log(decoded)
+  var permited = decoded.payload.permited;
+  if(!permited.includes("admin")){
+    res.status(400).send("this actions is limited to admins")
+    throw new Error("Token doesn't belong to an admin")
+  }
+  
   db.query("DELETE FROM users where id=" + req.params.id).then(data => {
     res.status(200).send("deleted");
   }).catch(err => res.send(err))
@@ -778,6 +836,19 @@ app.post("/user/delete/:id", requireLogin, function (req, res) {
 
 //for admin
 app.post("/user/update/:id", requireLogin, async (req, res) => {
+  const authorization = req.headers['authorization'];
+  if (authorization == undefined) {
+    res.send("provide a valid token")
+  }
+  const token = authorization.split(' ')[1];
+  var decoded = decode(token, { complete: true });
+  console.log(decoded)
+  var permited = decoded.payload.permited;
+  if(!permited.includes("admin")){
+    res.status(400).send("this actions is limited to admins")
+    throw new Error("Token doesn't belong to an admin")
+  }
+  
   const { firstName, secondName, mail, password1, password2 } = req.body
   const userId = req.params.id
 
@@ -801,7 +872,7 @@ app.post("/user/update/:id", requireLogin, async (req, res) => {
     console.log("ultimo update")
 
     if (password1 != "") {
-      
+
       var pass = await hash(password1, 10)
       db.query("UPDATE users SET password='" + pass + "' where id='" + userId + "';").then(data => {
         console.log("primer update")
@@ -810,7 +881,7 @@ app.post("/user/update/:id", requireLogin, async (req, res) => {
         res.status(405).send("db error")
         console.log(err)
       })
-    }else{
+    } else {
       res.status(200).send("user data updated")
     }
   }
@@ -819,18 +890,19 @@ app.post("/user/update/:id", requireLogin, async (req, res) => {
     console.log(err)
   })
 })
-
 //for user
-app.post('/user/update', requireLogin, function(req,res) {
+app.post('/user/update', requireLogin, function (req, res) {
   const authorization = req.headers['authorization'];
-  if(authorization == undefined){
+  if (authorization == undefined) {
     res.send("provide a valid token")
   }
-  const token = authorization.split(' ')[1]; 
-  var decoded = decode(token, {complete: true});
+  const token = authorization.split(' ')[1];
+  var decoded = decode(token, { complete: true });
   var userId = decoded.payload.userId
+  
   const { firstName, secondName, mail, password1, password2 } = req.body
   console.log(req.body)
+
   if (firstName == "" || secondName == "") {
     res.status(402).send("invalid names")
     throw new Error("invalid names");
@@ -851,7 +923,7 @@ app.post('/user/update', requireLogin, function(req,res) {
     console.log("ultimo update")
 
     if (password1 != "") {
-      
+
       var pass = await hash(password1, 10)
       db.query("UPDATE users SET password='" + pass + "' where id='" + userId + "';").then(data => {
         console.log("primer update")
@@ -860,7 +932,7 @@ app.post('/user/update', requireLogin, function(req,res) {
         res.status(405).send("db error")
         console.log(err)
       })
-    }else{
+    } else {
       res.status(200).send("user data updated")
     }
   }
@@ -872,20 +944,34 @@ app.post('/user/update', requireLogin, function(req,res) {
 //for user
 app.get('/user/info', requireLogin, function (req, res) {
   const authorization = req.headers['authorization'];
-  if(authorization == undefined){
+  if (authorization == undefined) {
     res.send("provide a valid token")
   }
-  const token = authorization.split(' ')[1]; 
-  var decoded = decode(token, {complete: true});
+  const token = authorization.split(' ')[1];
+  var decoded = decode(token, { complete: true });
   var userId = decoded.payload.userId
- 
-  db.query("SELECT * FROM users where id='"+userId+"'").then(data =>{
+
+  db.query("SELECT * FROM users where id='" + userId + "'").then(data => {
     res.send(data)
-  }).catch(err =>{
+  }).catch(err => {
     res.send(err)
   })
-  
-  
+
+
+})
+//for user
+app.post("/user/delete", requireLogin, function (req, res) {
+  console.log(req.params.id)
+  const authorization = req.headers['authorization'];
+  if (authorization == undefined) {
+    res.send("provide a valid token")
+  }
+  const token = authorization.split(' ')[1];
+  var decoded = decode(token, { complete: true });
+  var userId = decoded.payload.userId
+  db.query("DELETE FROM users where id=" + userId).then(data => {
+    res.status(200).send("deleted");
+  }).catch(err => res.send(err))
 })
 
 //Express port

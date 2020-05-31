@@ -24,9 +24,7 @@ class CalendarGrid extends React.Component {
 
   componentDidMount() {
 
-    const userId = getUserId();
-
-    API.get(constants.urlBackend + '/getUserFieldsInfo/' + userId).then(response => {
+    API.get(constants.urlBackend + '/getUserFieldsInfo').then(response => {
       this.setState({
         fieldsInfo: response.data,
         loaded: true
