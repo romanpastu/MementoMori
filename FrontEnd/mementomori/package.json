@@ -33,7 +33,7 @@
     "react-virtualized": "^9.21.2",
     "react-virtualized-auto-sizer": "^1.0.2",
     "react-window": "^1.8.5",
-    "reactable": "^1.1.0",
+    "reactable": "^1.0.2",
     "recompose": "^0.30.0",
     "redux": "^4.0.5"
   },
