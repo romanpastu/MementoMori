@@ -4,6 +4,7 @@ import Navbar from './Navbar'
 import API from '../services/axiosObject.js'
 import constants from '../constants.js'
 import { Alert } from 'react-bootstrap'
+import Cookies from 'js-cookie';
 import DeleteUserModal from '../components/AdminPanel/DeleteUserModal'
 class ProfilePage extends React.Component {
     constructor(props) {
@@ -196,6 +197,13 @@ class ProfilePage extends React.Component {
                                 <div class="col">
                                     <label for="inputEmail4">Email</label>
                                     <input type="email" class="form-control" placeholder="Email" name="email" value={this.state.email} onChange={this.handleChange} />
+                                </div>
+                            </div>
+                            <div class="row" style={{ marginTop: "1vh" }}>
+                                <div class="col">
+                                    <label for="inputEmail4">Api Key</label>
+                                    <input type="email" class="form-control" placeholder="Api Key" name="apikey" readOnly value={Cookies.get('accesstoken')}  />
+                                    <small className="docs" onClick={ () => this.props.history.push('/docs')}>docs</small>
                                 </div>
                             </div>
                             <div class="row" style={{ marginTop: "1vh" }}>

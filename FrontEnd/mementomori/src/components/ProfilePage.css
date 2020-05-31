@@ -23,3 +23,13 @@
     font-weight:500;
     font-size:1.3em;
 }
+
+.docs{
+    color: black;
+    font-weight:500;
+    font-style:italic;
+    cursor: pointer;
+}
+.docs:hover{
+    color:white
+}
