@@ -36,7 +36,7 @@ class Calendario extends React.Component {
     componentDidMount() {
         const userId = getUserId();
         
-        API.get(constants.urlBackend +'/getUserGenerateCalendar/' + userId).then(response => {
+        API.get(constants.urlBackend +'/getUserGenerateCalendar').then(response => {
             console.log(response.data)
             this.setState({
                 birth_date: moment(response.data.birthDate),

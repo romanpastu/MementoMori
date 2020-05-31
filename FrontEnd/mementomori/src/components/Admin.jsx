@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import API from '../services/axiosObject.js'
+import constants from '../constants.js'
 import './Admin.css'
 import Navbar from './Navbar'
 import Reactable from "reactable"
@@ -52,7 +53,7 @@ export default class Admin extends Component {
     }
 
     getUserList() {
-        API.get('/userlist').then(response => {
+        API.get(constants.urlBackend+'/userlist').then(response => {
             this.setState({
                 userList: response.data
             }, () => {
@@ -78,7 +79,7 @@ export default class Admin extends Component {
     }
 
     deleteUser() {
-        API.post('user/delete/' + this.state.rowId).then(response => {
+        API.post(constants.urlBackend+'user/delete/' + this.state.rowId).then(response => {
             console.log("Respuesta al borrar")
             console.log(response.data)
             console.log(response.status)
@@ -225,7 +226,7 @@ export default class Admin extends Component {
         var password1 = this.state.editUserInfo.password1
         var password2 = this.state.editUserInfo.password2
 
-        API.post('/user/update/' + this.state.rowId, { firstName, secondName, mail, password1, password2 }).then( res => {
+        API.post(constants.urlBackend+'/user/update/' + this.state.rowId, { firstName, secondName, mail, password1, password2 }).then( res => {
             console.log(res)
            console.log("updated")
            this.updateEditErrors(200)

@@ -80,11 +80,10 @@ class CalendarFieldModal extends React.Component {
             networkError: false,
             success: false
         })
-        const userId = getUserId();
         const week_number = this.props.id;
         const emotionRating = this.state.emotionRating;
         const description = this.state.description;
-        API.post(constants.urlBackend+"/update/field", { week_number, userId, emotionRating, description }).then(response=>{
+        API.post(constants.urlBackend+"/update/field", { week_number, emotionRating, description }).then(response=>{
             if(response.status == 200){
                 console.log("saved")
                 //If we have saved the element properly, we update the timesSaved so its not 0 anymore
