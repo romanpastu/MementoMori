@@ -768,6 +768,7 @@ app.get("/userlist", function (req, res) {
   })
 })
 
+//for admin
 app.post("/user/delete/:id", requireLogin, function (req, res) {
   console.log(req.params.id)
   db.query("DELETE FROM users where id=" + req.params.id).then(data => {
@@ -775,6 +776,7 @@ app.post("/user/delete/:id", requireLogin, function (req, res) {
   }).catch(err => res.send(err))
 })
 
+//for admin
 app.post("/user/update/:id", requireLogin, async (req, res) => {
   const { firstName, secondName, mail, password1, password2 } = req.body
   const userId = req.params.id
@@ -816,11 +818,58 @@ app.post("/user/update/:id", requireLogin, async (req, res) => {
     res.status(405).send("db error")
     console.log(err)
   })
-
-
-  // console.log(firstName, secondName, mail, password1, password2)
 })
 
+//for user
+app.post('/user/update', requireLogin, function(req,res) {
+  const authorization = req.headers['authorization'];
+  if(authorization == undefined){
+    res.send("provide a valid token")
+  }
+  const token = authorization.split(' ')[1]; 
+  var decoded = decode(token, {complete: true});
+  var userId = decoded.payload.userId
+  const { firstName, secondName, mail, password1, password2 } = req.body
+  console.log(req.body)
+  if (firstName == "" || secondName == "") {
+    res.status(402).send("invalid names")
+    throw new Error("invalid names");
+  }
+
+  //checks if the mail is valid
+  if ((mail.match(/@/g) || []).length != 1) {
+    res.status(401).send("invalid mail")
+    throw new Error("Invalid mail");
+  };
+
+  if (password1 != password2) {
+    res.status(403).send("password dont match")
+    throw new Error("Passwords dont mach")
+  }
+
+  db.query("UPDATE users SET email='" + mail + "' , first_name='" + firstName + "',second_name='" + secondName + "' where id='" + userId + "' ;").then(async (data) => {
+    console.log("ultimo update")
+
+    if (password1 != "") {
+      
+      var pass = await hash(password1, 10)
+      db.query("UPDATE users SET password='" + pass + "' where id='" + userId + "';").then(data => {
+        console.log("primer update")
+        res.status(200).send("user data updated")
+      }).catch(err => {
+        res.status(405).send("db error")
+        console.log(err)
+      })
+    }else{
+      res.status(200).send("user data updated")
+    }
+  }
+  ).catch(err => {
+    res.status(405).send("db error")
+    console.log(err)
+  })
+})
+//for user
 app.get('/user/info', requireLogin, function (req, res) {
   const authorization = req.headers['authorization'];
   if(authorization == undefined){
