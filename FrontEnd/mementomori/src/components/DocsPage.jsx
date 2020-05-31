@@ -10,7 +10,9 @@ class DocsPage extends React.Component{
             Api Operations (You must provide your api token as a bearer token in order to obtain access)
             <br></br>
             <br></br>
-            hi
+            Get:
+            <br></br>
+            - '/user/info' --> Returns the info of your user
         </div>
     }
 }
