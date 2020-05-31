@@ -23,7 +23,8 @@ moment().format();
 
 //requires for jwt management and auth
 const cookieParser = require('cookie-parser')
-const { verify } = require('jsonwebtoken')
+const { verify, decode } = require('jsonwebtoken')
+
 const { hash, compare } = require('bcryptjs')
 const { createAccessToken, createRefreshToken, sendAccessToken, sendRefreshToken } = require('./token.js')
 const { isAuth } = require('./isAuth.js')
@@ -818,6 +819,24 @@ app.post("/user/update/:id", requireLogin, async (req, res) => {
 
 
   // console.log(firstName, secondName, mail, password1, password2)
+})
+
+app.get('/user/info', requireLogin, function (req, res) {
+  const authorization = req.headers['authorization'];
+  if(authorization == undefined){
+    res.send("provide a valid token")
+  }
+  const token = authorization.split(' ')[1]; 
+  var decoded = decode(token, {complete: true});
+  var userId = decoded.payload.userId
+ 
+  db.query("SELECT * FROM users where id='"+userId+"'").then(data =>{
+    res.send(data)
+  }).catch(err =>{
+    res.send(err)
+  })
+  
+  
 })
 
 //Express port
