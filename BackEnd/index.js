@@ -23,7 +23,8 @@ moment().format();
 
 //requires for jwt management and auth
 const cookieParser = require('cookie-parser')
-const { verify } = require('jsonwebtoken')
+const { verify, decode } = require('jsonwebtoken')
+
 const { hash, compare } = require('bcryptjs')
 const { createAccessToken, createRefreshToken, sendAccessToken, sendRefreshToken } = require('./token.js')
 const { isAuth } = require('./isAuth.js')
@@ -118,7 +119,7 @@ app.post('/register', async (req, res) => {
   const hashedPassword = await hash(password, 10);
   db.query("INSERT INTO USERS (email, password, birth_date, first_name, second_name) VALUES ('" + email + "','" + hashedPassword + "','" + birthDate + "','" + firstName + "','" + secondName + "')").then(function (data) {
     db.query("SELECT id from users where email='" + email + "';").then(function (data) {
-      db.query("INSERT INTO user_permissions values ('" + data[0].id + "', 'false', 'true')").then(function (data) {
+      db.query("INSERT INTO user_permissions values ('" + data[0].id + "', 'false', 'true', 'false', 'false', 'false')").then(function (data) {
         res.send("inserted");
         console.log("inserted")
       }).catch(function (error) {
@@ -349,7 +350,7 @@ app.post('/generateCalendar', requireLogin, async (req, res) => {
               console.log("series generated")
               /******/
               //the lifeExpectanceSet restriction is removed and access to dashboard is granted
-              db.query("UPDATE user_permissions SET life_expectancy =  'false' , dashboard = 'true' , stats = 'true', admin = 'false'  WHERE user_id = '" + userId + "';").then(data => {
+              db.query("UPDATE user_permissions SET life_expectancy =  'false' , dashboard = 'true' , stats = 'true', admin = 'false' , profile_info = 'true' WHERE user_id = '" + userId + "';").then(data => {
                 console.log("everything generated")
                 res.send("100")
                 console.log(data)
@@ -767,6 +768,7 @@ app.get("/userlist", function (req, res) {
   })
 })
 
+//for admin
 app.post("/user/delete/:id", requireLogin, function (req, res) {
   console.log(req.params.id)
   db.query("DELETE FROM users where id=" + req.params.id).then(data => {
@@ -774,6 +776,7 @@ app.post("/user/delete/:id", requireLogin, function (req, res) {
   }).catch(err => res.send(err))
 })
 
+//for admin
 app.post("/user/update/:id", requireLogin, async (req, res) => {
   const { firstName, secondName, mail, password1, password2 } = req.body
   const userId = req.params.id
@@ -815,9 +818,74 @@ app.post("/user/update/:id", requireLogin, async (req, res) => {
     res.status(405).send("db error")
     console.log(err)
   })
+})
 
+//for user
+app.post('/user/update', requireLogin, function(req,res) {
+  const authorization = req.headers['authorization'];
+  if(authorization == undefined){
+    res.send("provide a valid token")
+  }
+  const token = authorization.split(' ')[1]; 
+  var decoded = decode(token, {complete: true});
+  var userId = decoded.payload.userId
+  const { firstName, secondName, mail, password1, password2 } = req.body
+  console.log(req.body)
+  if (firstName == "" || secondName == "") {
+    res.status(402).send("invalid names")
+    throw new Error("invalid names");
+  }
 
-  // console.log(firstName, secondName, mail, password1, password2)
+  //checks if the mail is valid
+  if ((mail.match(/@/g) || []).length != 1) {
+    res.status(401).send("invalid mail")
+    throw new Error("Invalid mail");
+  };
+
+  if (password1 != password2) {
+    res.status(403).send("password dont match")
+    throw new Error("Passwords dont mach")
+  }
+
+  db.query("UPDATE users SET email='" + mail + "' , first_name='" + firstName + "',second_name='" + secondName + "' where id='" + userId + "' ;").then(async (data) => {
+    console.log("ultimo update")
+
+    if (password1 != "") {
+      
+      var pass = await hash(password1, 10)
+      db.query("UPDATE users SET password='" + pass + "' where id='" + userId + "';").then(data => {
+        console.log("primer update")
+        res.status(200).send("user data updated")
+      }).catch(err => {
+        res.status(405).send("db error")
+        console.log(err)
+      })
+    }else{
+      res.status(200).send("user data updated")
+    }
+  }
+  ).catch(err => {
+    res.status(405).send("db error")
+    console.log(err)
+  })
+})
+//for user
+app.get('/user/info', requireLogin, function (req, res) {
+  const authorization = req.headers['authorization'];
+  if(authorization == undefined){
+    res.send("provide a valid token")
+  }
+  const token = authorization.split(' ')[1]; 
+  var decoded = decode(token, {complete: true});
+  var userId = decoded.payload.userId
+ 
+  db.query("SELECT * FROM users where id='"+userId+"'").then(data =>{
+    res.send(data)
+  }).catch(err =>{
+    res.send(err)
+  })
+  
+  
 })
 
 //Express port

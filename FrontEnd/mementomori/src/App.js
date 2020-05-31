@@ -4,6 +4,7 @@ import './App.css';
 import Calendario from "./components/Calendario"
 import LoginPage from "./components/LoginPage"
 import StatsPage from "./components/StatsPage"
+import ProfilePage from "./components/ProfilePage"
 import Admin from "./components/Admin"
 import { Route, Switch, withRouter } from 'react-router-dom'
 import qs from 'qs'
@@ -146,7 +147,8 @@ class App extends React.Component {
           <Route path="/login" render={(props) => <LoginPage login={this.login} authed={this.state.isAuthenticated} {...props} />} />
           <PrivateRoute path="/admin" name={"admin"} authed={this.state.isAuthenticated} render={(props) => <Admin authed={this.state.isAuthenticated} logout={this.logout} {...props} />} />
           <PrivateRoute path="/stats" name={"stats"} authed={this.state.isAuthenticated} render={(props) => <StatsPage  {...props} logout={this.logout} />} />
-          <Route path="/" render={(props) => this.props.history.push("/login")} /> 
+          <PrivateRoute path="/profile" name={"profile_info"} authed={this.state.isAuthenticated} render={(props) => <ProfilePage {...props} logout={this.logout} />} />
+          <Route path="/" render={(props) => this.props.history.push("/login")} />  
         </Switch>
       </div>
     )

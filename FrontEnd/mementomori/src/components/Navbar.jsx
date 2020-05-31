@@ -39,7 +39,7 @@ export default class Navbar extends Component {
                 <div className="navEl nav1"><FontAwesomeIcon icon={faCalendar} className="navIcon" onClick={() => this.props.history.push("/dashboard")}/></div>
                 <div className="navEl nav4"><FontAwesomeIcon icon={faChartLine} className="navIcon" onClick={() => this.props.history.push("/stats")}/></div>
                 {this.state.admin ? <div className="navEl nav5"><FontAwesomeIcon icon={faUserCog} className="navIcon" onClick={() => this.props.history.push("/admin")}/></div> : null}
-                <div className="navEl nav2"><FontAwesomeIcon icon={faUser} className="navIcon" /></div>
+                <div className="navEl nav2"><FontAwesomeIcon icon={faUser} className="navIcon" onClick={() => this.props.history.push("/profile")}/></div>
                 <div className="navEl nav3"><FontAwesomeIcon icon={faPowerOff} className="navIcon" onClick={this.logout}/></div>
             </div>
         )
