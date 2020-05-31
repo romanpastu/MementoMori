@@ -3,6 +3,7 @@ import compose from 'recompose/compose'
 import './App.css';
 import Calendario from "./components/Calendario"
 import LoginPage from "./components/LoginPage"
+import DocsPage from "./components/DocsPage"
 import StatsPage from "./components/StatsPage"
 import ProfilePage from "./components/ProfilePage"
 import Admin from "./components/Admin"
@@ -35,7 +36,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    console.log("estados ",this.state.isAuthenticated, this.state.authenticationChecked)
+    console.log("estados ", this.state.isAuthenticated, this.state.authenticationChecked)
     //calls the auth service to decide the auth state value
     isAuthenticated().then((result) => {
       if (result === true) {
@@ -44,10 +45,10 @@ class App extends React.Component {
             isAuthenticated: true,
             authenticationChecked: true
           }, () => {
-            if(checkLifeExpectancySet()){
+            if (checkLifeExpectancySet()) {
               //the lifeExpectancy is yet to set
               this.props.lifeExpectancySet(true)
-            }else{
+            } else {
               //the lifeExpectancy is set
               this.props.lifeExpectancySet(false)
             }
@@ -57,18 +58,18 @@ class App extends React.Component {
         this.setState({ isAuthenticated: false, authenticationChecked: true })
       }
     });
-  }trade
-  
+  } trade
+
   logout = () => {
     Cookies.remove('accesstoken')
     this.setState({
-      isAuthenticated : false,
+      isAuthenticated: false,
       authenticationChecked: true
-    }, () =>{
+    }, () => {
       this.props.lifeExpectancySet(true)
       this.props.history.push("/login")
     })
-    
+
   }
 
   login = (email, password, direction) => {
@@ -123,7 +124,7 @@ class App extends React.Component {
   setYearsRedirect = () => {
     console.log("llega a caso?")
     isAuthenticated().then((result) => {
-      console.log("en el redirect el status es: "+result)
+      console.log("en el redirect el status es: " + result)
       if (result === true) {
         this.setState({ isAuthenticated: true, authenticationChecked: true }, () => {
           this.props.history.push('/dashboard');
@@ -148,7 +149,9 @@ class App extends React.Component {
           <PrivateRoute path="/admin" name={"admin"} authed={this.state.isAuthenticated} render={(props) => <Admin authed={this.state.isAuthenticated} logout={this.logout} {...props} />} />
           <PrivateRoute path="/stats" name={"stats"} authed={this.state.isAuthenticated} render={(props) => <StatsPage  {...props} logout={this.logout} />} />
           <PrivateRoute path="/profile" name={"profile_info"} authed={this.state.isAuthenticated} render={(props) => <ProfilePage {...props} logout={this.logout} />} />
-          <Route path="/" render={(props) => this.props.history.push("/login")} />  
+          <Route path="/docs" render={(props) => <DocsPage />} />
+          <Route path="/" render={(props) => this.props.history.push("/login")} />
+
         </Switch>
       </div>
     )
