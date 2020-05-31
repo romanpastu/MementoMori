@@ -15,7 +15,7 @@ app.use(cors());
 
 
 //db settings
-const {db} = require('./database.js')
+const { db } = require('./database.js')
 
 //moment
 var moment = require('moment');
@@ -801,7 +801,7 @@ app.post("/user/update/:id", requireLogin, async (req, res) => {
     console.log("ultimo update")
 
     if (password1 != "") {
-      
+
       var pass = await hash(password1, 10)
       db.query("UPDATE users SET password='" + pass + "' where id='" + userId + "';").then(data => {
         console.log("primer update")
@@ -810,7 +810,7 @@ app.post("/user/update/:id", requireLogin, async (req, res) => {
         res.status(405).send("db error")
         console.log(err)
       })
-    }else{
+    } else {
       res.status(200).send("user data updated")
     }
   }
@@ -821,13 +821,13 @@ app.post("/user/update/:id", requireLogin, async (req, res) => {
 })
 
 //for user
-app.post('/user/update', requireLogin, function(req,res) {
+app.post('/user/update', requireLogin, function (req, res) {
   const authorization = req.headers['authorization'];
-  if(authorization == undefined){
+  if (authorization == undefined) {
     res.send("provide a valid token")
   }
-  const token = authorization.split(' ')[1]; 
-  var decoded = decode(token, {complete: true});
+  const token = authorization.split(' ')[1];
+  var decoded = decode(token, { complete: true });
   var userId = decoded.payload.userId
   const { firstName, secondName, mail, password1, password2 } = req.body
   console.log(req.body)
@@ -851,7 +851,7 @@ app.post('/user/update', requireLogin, function(req,res) {
     console.log("ultimo update")
 
     if (password1 != "") {
-      
+
       var pass = await hash(password1, 10)
       db.query("UPDATE users SET password='" + pass + "' where id='" + userId + "';").then(data => {
         console.log("primer update")
@@ -860,7 +860,7 @@ app.post('/user/update', requireLogin, function(req,res) {
         res.status(405).send("db error")
         console.log(err)
       })
-    }else{
+    } else {
       res.status(200).send("user data updated")
     }
   }
@@ -872,20 +872,34 @@ app.post('/user/update', requireLogin, function(req,res) {
 //for user
 app.get('/user/info', requireLogin, function (req, res) {
   const authorization = req.headers['authorization'];
-  if(authorization == undefined){
+  if (authorization == undefined) {
     res.send("provide a valid token")
   }
-  const token = authorization.split(' ')[1]; 
-  var decoded = decode(token, {complete: true});
+  const token = authorization.split(' ')[1];
+  var decoded = decode(token, { complete: true });
   var userId = decoded.payload.userId
- 
-  db.query("SELECT * FROM users where id='"+userId+"'").then(data =>{
+
+  db.query("SELECT * FROM users where id='" + userId + "'").then(data => {
     res.send(data)
-  }).catch(err =>{
+  }).catch(err => {
     res.send(err)
   })
-  
-  
+
+
+})
+//for user
+app.post("/user/delete", requireLogin, function (req, res) {
+  console.log(req.params.id)
+  const authorization = req.headers['authorization'];
+  if (authorization == undefined) {
+    res.send("provide a valid token")
+  }
+  const token = authorization.split(' ')[1];
+  var decoded = decode(token, { complete: true });
+  var userId = decoded.payload.userId
+  db.query("DELETE FROM users where id=" + userId).then(data => {
+    res.status(200).send("deleted");
+  }).catch(err => res.send(err))
 })
 
 //Express port

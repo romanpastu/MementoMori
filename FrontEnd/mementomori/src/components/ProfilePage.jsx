@@ -4,6 +4,7 @@ import Navbar from './Navbar'
 import API from '../services/axiosObject.js'
 import constants from '../constants.js'
 import { Alert } from 'react-bootstrap'
+import DeleteUserModal from '../components/AdminPanel/DeleteUserModal'
 class ProfilePage extends React.Component {
     constructor(props) {
         super(props)
@@ -18,7 +19,9 @@ class ProfilePage extends React.Component {
             wrongEmail: false,
             wrongName: false,
             wrongPassword: false,
-            dbError: false
+            dbError: false,
+            showDeleteUserModal: false,
+            userDeletedError: false
 
         }
     }
@@ -58,7 +61,8 @@ class ProfilePage extends React.Component {
             wrongEmail: false,
             wrongName: false,
             wrongPassword: false,
-            dbError: false
+            dbError: false,
+            userDeletedError: false
         })
     }
 
@@ -70,7 +74,8 @@ class ProfilePage extends React.Component {
             wrongEmail: false,
             wrongName: false,
             wrongPassword: false,
-            dbError: false
+            dbError: false,
+            userDeletedError: false
         })
         var firstName = this.state.firstName;
         var secondName = this.state.secondName;
@@ -123,8 +128,34 @@ class ProfilePage extends React.Component {
     }
 
     deleteProfile = (evt) => {
-        evt.preventDefault();
+        
         console.log("deleting")
+
+        API.post(constants.urlBackend+ '/user/delete').then(res =>{
+            this.props.logout();
+        }).catch(err =>{
+            if(!err.response){
+                this.setState({
+                    userDeletedError: true
+                })
+            }
+        })
+    }
+
+    showDeleteUserModal = (evt) => {
+        evt.preventDefault();
+        this.setState({
+            showDeleteUserModal: true
+        })
+    }
+
+    closeDeleteUserModal = (evt) => {
+        
+        this.setState({
+            showDeleteUserModal: false
+        }, () => {
+
+        })
     }
 
     render() {
@@ -139,9 +170,11 @@ class ProfilePage extends React.Component {
                 <div className="profileContainer">
                 {this.state.success ? <Alert className="text-center " style={{ width: "50%", float: "none", margin: "0 auto", marginBottom: "1vw" }} variant="success" dismissible onClose={this.handleDismiss}> User updated</Alert>: null}
                 {this.state.wrongEmail ? <Alert className="text-center " style={{ width: "50%", float: "none", margin: "0 auto", marginBottom: "1vw" }} variant="danger" dismissible onClose={this.handleDismiss}> Invalid Email Format</Alert>: null}
+                {this.state.userDeletedError ? <Alert className="text-center " style={{ width: "50%", float: "none", margin: "0 auto", marginBottom: "1vw" }} variant="danger" dismissible onClose={this.handleDismiss}> There was an erro deleting the user</Alert>: null}
                 {this.state.wrongName ? <Alert className="text-center " style={{ width: "50%", float: "none", margin: "0 auto", marginBottom: "1vw" }} variant="danger" dismissible onClose={this.handleDismiss}> Wrong Name format</Alert>: null}
                 {this.state.wrongPassword ? <Alert className="text-center " style={{ width: "50%", float: "none", margin: "0 auto", marginBottom: "1vw" }} variant="danger" dismissible onClose={this.handleDismiss}> Password dont match</Alert>: null}
                 {this.state.dbError ? <Alert className="text-center " style={{ width: "50%", float: "none", margin: "0 auto", marginBottom: "1vw" }} variant="danger" dismissible onClose={this.handleDismiss}> Database error</Alert>: null}
+                <DeleteUserModal showDeleteUserModal={this.state.showDeleteUserModal} closeDeleteUserModal={this.closeDeleteUserModal} deleteUser={this.deleteProfile}  />
                 
                     <div className="profileCard">
                         <div className="text-center">
@@ -174,7 +207,7 @@ class ProfilePage extends React.Component {
                             </div>
                             <div className="text-center buttonProfileUpdate">
                                 <button type="submit" class="btn btn-primary" style={{ marginRight: "0.5vw" }} onClick={this.handleSubmit}>Update</button>
-                                <button class="btn btn-danger" onClick={this.deleteProfile} style={{ marginLeft: "0.5vw" }}>Delete Profile</button>
+                                <button class="btn btn-danger" onClick={this.showDeleteUserModal} style={{ marginLeft: "0.5vw" }}>Delete Profile</button>
                             </div>
                         </form>
                     </div>
