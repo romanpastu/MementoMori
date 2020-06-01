@@ -76,24 +76,29 @@ app.post('/register', async (req, res) => {
   // if moment(birthDate).isAfter(m)
   if (password1 != password2) {
     res.status(400).send(new Error('Passwords must be equal'));
+    throw new Error("Passwords must be equal");
   }
   if (password2 == '') {
     res.status(405).send(new Error('Theres no password'));
+    throw new Error("Theres no password");
   }
   if (!email.match(/@/g)) {
     res.status(401).send(new Error('wrong email'))
+    throw new Error("wrong email");
   }
   if (firstName == '') {
     res.status(402).send(new Error('You must specify a first name'))
+    throw new Error("You must specify a first name");
   }
 
   if (moment(birthDate).isAfter(current_date, 'day')) {
-    console.log("date")
     res.status(403).send(new Error('You cant be born in the future'))
+    throw new Error("You cant be born in the future");
   }
 
   if (birthDate == '') {
     res.status(404).send(new Error('No date'))
+    throw new Error("No date");
   }
 
 
