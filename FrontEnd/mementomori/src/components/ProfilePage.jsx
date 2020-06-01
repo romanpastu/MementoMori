@@ -4,6 +4,7 @@ import Navbar from './Navbar'
 import API from '../services/axiosObject.js'
 import constants from '../constants.js'
 import { Alert } from 'react-bootstrap'
+import { CircularProgress } from '@material-ui/core';
 import Cookies from 'js-cookie';
 import DeleteUserModal from '../components/AdminPanel/DeleteUserModal'
 class ProfilePage extends React.Component {
@@ -161,7 +162,8 @@ class ProfilePage extends React.Component {
 
     render() {
         if (this.state.loading == true) {
-            return <p>loading...</p>
+            return <div className="gridLoadingContainer"><CircularProgress color="secondary" iconStyle={"width: 1000, height:1000"} />
+                <p className="loadingText1">Loading...</p></div>
         }
         return (
             <div>
