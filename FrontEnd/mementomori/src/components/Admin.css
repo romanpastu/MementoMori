@@ -46,3 +46,19 @@ table a{
 .editIcon:hover{
     color:darkgrey;
 }
+
+.gridLoadingContainer{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    height:100vh; 
+  }
+  
+  .loadingText1{
+    margin:0;
+    margin-left:1vw;
+    padding:0;
+    color:black;
+    
+  }
+  

@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import DeleteUserModal from "../components/AdminPanel/DeleteUserModal"
 import { faEdit, faTrashAlt } from '@fortawesome/free-regular-svg-icons'
 import { Alert } from 'react-bootstrap'
+import { CircularProgress } from '@material-ui/core';
 import EditUserModal from '../components/AdminPanel/EditUserModal'
 export default class Admin extends Component {
     constructor(props) {
@@ -20,14 +21,14 @@ export default class Admin extends Component {
             userDeletedError: true,
             showDeleteUserModal: false,
             showEditUserModal: false,
-            editUserInfo:{
+            editUserInfo: {
                 firstName: "",
                 secondName: "",
                 email: "",
                 password1: "",
                 password2: ""
             },
-            userUpdateErrors:{
+            userUpdateErrors: {
                 success: false,
                 wrongEmail: false,
                 wrongPassword: false,
@@ -49,11 +50,11 @@ export default class Admin extends Component {
         this.handleChangeFirstName = this.handleChangeFirstName.bind(this)
         this.handleChangeSecondName = this.handleChangeSecondName.bind(this)
         this.handleChangeMail = this.handleChangeMail.bind(this)
-        
+
     }
 
     getUserList() {
-        API.get(constants.urlBackend+'/userlist').then(response => {
+        API.get(constants.urlBackend + '/userlist').then(response => {
             this.setState({
                 userList: response.data
             }, () => {
@@ -80,7 +81,7 @@ export default class Admin extends Component {
 
     deleteUser() {
         console.log("bn")
-        API.post(constants.urlBackend+'/user/delete/' + this.state.rowId).then(response => {
+        API.post(constants.urlBackend + '/user/delete/' + this.state.rowId).then(response => {
             console.log("Respuesta al borrar")
             console.log(response.data)
             console.log(response.status)
@@ -96,8 +97,8 @@ export default class Admin extends Component {
                     userDeletedError: true
                 })
             }
-        }).catch( err => {
-            if(!err.response){
+        }).catch(err => {
+            if (!err.response) {
                 this.setState({
                     userDeletedError: true
                 })
@@ -123,7 +124,7 @@ export default class Admin extends Component {
         })
     }
 
-    showEditUserModal(rowId,rowEmail, rowFirstName,rowSecondName){
+    showEditUserModal(rowId, rowEmail, rowFirstName, rowSecondName) {
         this.handleDismissUserEdit();
         let obj = Object.assign({}, this.state.editUserInfo)
 
@@ -137,7 +138,7 @@ export default class Admin extends Component {
             editUserInfo: obj
         })
     }
-    closeEditUserModal(){
+    closeEditUserModal() {
         this.setState({
             showEditUserModal: false
         })
@@ -176,12 +177,12 @@ export default class Admin extends Component {
 
     //handleDismiss for the user Edit
 
-    handleDismissUserEdit(){
+    handleDismissUserEdit() {
         console.log("hola")
         let obj = Object.assign({}, this.state.userUpdateErrors)
 
-        obj.success= false;
-        obj.wrongEmail= false;
+        obj.success = false;
+        obj.wrongEmail = false;
         obj.wrongPassword = false;
         obj.wrongName = false;
         obj.dbError = false;
@@ -193,58 +194,58 @@ export default class Admin extends Component {
 
     //handleSubmit for the User Edit
 
-    updateEditErrors(err){
+    updateEditErrors(err) {
         let obj = Object.assign({}, this.state.userUpdateErrors)
 
-        if(err == 401){
+        if (err == 401) {
             obj.wrongEmail = true
         }
-        if (err == 402){
+        if (err == 402) {
             obj.wrongName = true
         }
-        if(err == 403){
+        if (err == 403) {
             obj.wrongPassword = true
         }
-        if(err == 405){
-            obj.dbError= true
+        if (err == 405) {
+            obj.dbError = true
         }
-        if(err == 200){
+        if (err == 200) {
             obj.success = true
         }
 
         this.setState({
             userUpdateErrors: obj
         })
-    
+
     }
 
     handleSubmitUserEdit(event) {
         this.handleDismissUserEdit();
         event.preventDefault();
-        var firstName= this.state.editUserInfo.firstName
+        var firstName = this.state.editUserInfo.firstName
         var secondName = this.state.editUserInfo.secondName
         var mail = this.state.editUserInfo.email
         var password1 = this.state.editUserInfo.password1
         var password2 = this.state.editUserInfo.password2
 
-        API.post(constants.urlBackend+'/user/update/' + this.state.rowId, { firstName, secondName, mail, password1, password2 }).then( res => {
+        API.post(constants.urlBackend + '/user/update/' + this.state.rowId, { firstName, secondName, mail, password1, password2 }).then(res => {
             console.log(res)
-           console.log("updated")
-           this.updateEditErrors(200)
-           this.getUserList();
+            console.log("updated")
+            this.updateEditErrors(200)
+            this.getUserList();
         }).catch(err => {
-            if(err.response.status == 200){
+            if (err.response.status == 200) {
                 this.getUserList();
-            }else if(err.response.status == 401){
+            } else if (err.response.status == 401) {
                 console.log("wrong email")
                 this.updateEditErrors(401)
-            }else if(err.response.status == 402){
+            } else if (err.response.status == 402) {
                 console.log("invalid names")
                 this.updateEditErrors(402)
-            }else if(err.response.status == 403){
+            } else if (err.response.status == 403) {
                 console.log("passwords dont match")
                 this.updateEditErrors(403)
-            }else if(err.response.status == 405){
+            } else if (err.response.status == 405) {
                 console.log("db error")
                 this.updateEditErrors(405)
             }
@@ -252,7 +253,7 @@ export default class Admin extends Component {
         console.log(firstName, secondName, mail, password1, password2)
     }
 
-   
+
 
     render() {
         var users = this.state.userList
@@ -262,7 +263,8 @@ export default class Admin extends Component {
             Tr = Reactable.Tr;
 
         if (users.length === 0) {
-            return <p>loading</p>
+            return <div className="gridLoadingContainer"><CircularProgress color="secondary" iconStyle={"width: 1000, height:1000"} />
+                <p className="loadingText1">Loading...</p></div>
         }
         return (
             <div>
@@ -284,7 +286,7 @@ export default class Admin extends Component {
                         return (
                             <Tr className={row.className} key={row.id}>
                                 <Td column="Email">{row.email}</Td>
-                                <Td column="Manage"><div><FontAwesomeIcon className="editIcon" onClick={() => this.showEditUserModal(row.id, row.email, row.first_name,row.second_name)} icon={faEdit}></FontAwesomeIcon>
+                                <Td column="Manage"><div><FontAwesomeIcon className="editIcon" onClick={() => this.showEditUserModal(row.id, row.email, row.first_name, row.second_name)} icon={faEdit}></FontAwesomeIcon>
                                     <FontAwesomeIcon className="editIcon" onClick={() => this.showDeleteUserModal(row.id, row.email)} icon={faTrashAlt}></FontAwesomeIcon>
                                 </div></Td>
                             </Tr>
@@ -293,17 +295,17 @@ export default class Admin extends Component {
                 </Table>
                 <DeleteUserModal showDeleteUserModal={this.state.showDeleteUserModal} closeDeleteUserModal={this.closeDeleteUserModal} userDeleted={this.state.userDeleted} deleteUser={this.deleteUser} handleDismiss={this.handleDismiss} />
                 <EditUserModal
-                handleChangeFirstName = { this.handleChangeFirstName}
-                handleChangeSecondName = {this.handleChangeSecondName}
-                handleChangeMail = {this.handleChangeMail}
-                handleSubmit={this.handleSubmitUserEdit}
-                handleChangePassword1 = {this.handleChangePassword1}
-                handleChangePassword2 = {this.handleChangePassword2}
-                showEditUserModal={this.state.showEditUserModal} closeEditUserModal={this.closeEditUserModal}
-                rowId={this.state.rowId}
-                userInfo={this.state.editUserInfo}
-                userUpdateErrors={this.state.userUpdateErrors}
-                handleDismiss={this.handleDismissUserEdit}
+                    handleChangeFirstName={this.handleChangeFirstName}
+                    handleChangeSecondName={this.handleChangeSecondName}
+                    handleChangeMail={this.handleChangeMail}
+                    handleSubmit={this.handleSubmitUserEdit}
+                    handleChangePassword1={this.handleChangePassword1}
+                    handleChangePassword2={this.handleChangePassword2}
+                    showEditUserModal={this.state.showEditUserModal} closeEditUserModal={this.closeEditUserModal}
+                    rowId={this.state.rowId}
+                    userInfo={this.state.editUserInfo}
+                    userUpdateErrors={this.state.userUpdateErrors}
+                    handleDismiss={this.handleDismissUserEdit}
                 />
             </div>
         )
