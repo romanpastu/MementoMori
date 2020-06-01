@@ -452,7 +452,7 @@ app.get('/chart/lineal/emotion', requireLogin, async (req, res) => {
       dataComposed.sort(compare_weekN)
 
       var fullChart = [{
-        "id": "emotion",
+        "id": "E",
         "color": "blue",
         "data": dataComposed
       }]
@@ -527,7 +527,7 @@ app.get('/chart/cumulative/emotion', requireLogin, async (req, res) => {
       })
 
       var fullChart = [{
-        "id": "cumulative emotion",
+        "id": "CE",
         "color": "hsl(196, 97%, 50%)",
         "data": dataComposed
       }]
@@ -615,11 +615,11 @@ app.get('/chart/cumulative-maxpotential/emotion', requireLogin, async (req, res)
       }
 
       var fullChart = [{
-        "id": "cumulative emotion",
+        "id": "CE",
         "color": "blue",
         "data": dataComposed
       }, {
-        "id": "max potential accumulated emotion",
+        "id": "MPCE",
         "color": "green",
         "data": maxpotential
       }]
