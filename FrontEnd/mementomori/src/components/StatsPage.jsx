@@ -6,6 +6,7 @@ import store from "../redux/store/reduxStore.js"
 import API from '../services/axiosObject.js';
 import { getUserId } from '../services/userInfo.js'
 import constants from '../constants.js'
+import { CircularProgress } from '@material-ui/core';
 import './StatsPage.css'
 
 class StatsPage extends React.Component {
@@ -94,7 +95,8 @@ class StatsPage extends React.Component {
                         legend: 'Lineal emotion',
                         legendOffset: 36,
                         legendPosition: 'middle'
-                    }} /> : null}
+                    }} /> : <div className="gridLoadingContainer2"><CircularProgress color="secondary" iconStyle={"width: 1000, height:1000"} />
+                    <p className="loadingText1">Loading...</p></div>}
                     {this.state.loadedDataCumulativeEmotion ? <MyResponsiveLine id="cumulative-emotion-chart" data={this.state.dataCumulativeEmotion} axisBottom={{
                         orient: 'bottom',
                         tickSize: 5,
@@ -103,7 +105,8 @@ class StatsPage extends React.Component {
                         legend: 'Cumulative emotion',
                         legendOffset: 36,
                         legendPosition: 'middle'
-                    }} /> : null}
+                    }} /> : <div className="gridLoadingContainer2"><CircularProgress color="secondary" iconStyle={"width: 1000, height:1000"} />
+                    <p className="loadingText1">Loading...</p></div>}
                     {this.state.loadedDataCumulativeMaxPotentialEmotion ? <MyResponsiveLine id="cumulative-emotion-max-portential-chart" data={this.state.dataCumulativeMaxPotentialEmotion} axisBottom={{
                         orient: 'bottom',
                         tickSize: 5,
@@ -112,8 +115,10 @@ class StatsPage extends React.Component {
                         legend: 'Cumulative emotion vs max potential cumulative emotion',
                         legendOffset: 36,
                         legendPosition: 'middle'
-                    }} /> : null}
-                    {this.state.loadedDataPie ?<MyResponsivePie data={this.state.dataPie}/> : null}
+                    }} /> : <div className="gridLoadingContainer2"><CircularProgress color="secondary" iconStyle={"width: 1000, height:1000"} />
+                    <p className="loadingText1">Loading...</p></div>}
+                    {this.state.loadedDataPie ?<MyResponsivePie data={this.state.dataPie}/> : <div className="gridLoadingContainer2"><CircularProgress color="secondary" iconStyle={"width: 1000, height:1000"} />
+                <p className="loadingText1">Loading...</p></div>}
                     
                 </div>
             </div>

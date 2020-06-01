@@ -8,3 +8,18 @@
     color:purple;
     font-weight:bold
 }
+
+.gridLoadingContainer2{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    
+  }
+  
+  .loadingText1{
+    margin:0;
+    margin-left:1vw;
+    padding:0;
+    color:black;
+    
+  }
