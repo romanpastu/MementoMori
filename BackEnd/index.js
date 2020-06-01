@@ -332,9 +332,16 @@ app.post('/generateCalendar', requireLogin, async (req, res) => {
     return Math.ceil(weeks_to_live);
   }
 
+  function getWeeksToRegisterDate(register_date, birth_date){
+    var weeks_to_date = moment(new Date(filterDate(register_date))).diff(birth_date, 'days') / 7;
+    //Returns lived weeks to date rounded to lower number because we dont want to overwrite the current ongoing week
+    return Math.floor(weeks_to_date);
+  }
+
 
   if (yearsToLive > 100 || yearsToLive < 1) {
     res.status(400).send(new Error('Invalid years'));
+    throw new Error('Invalid years')
   }
 
 
@@ -344,6 +351,14 @@ app.post('/generateCalendar', requireLogin, async (req, res) => {
     var deathDate = ""
     //sets the death_date and the weeks to live
     deathDate = moment(filterDate(birth_date)).add(yearsToLive, 'years')
+
+    //check that the weeks to live are bigger than the weeks to register date
+    if(getWeeksToLive(deathDate, birth_date) <= (getWeeksToRegisterDate(birth_date, registerDate)*-1)){
+      res.status(408).send(new Error("The resulting total weeks are smaller than the weeks spent up to register"))
+      throw new Error("The resulting total weeks are smaller than the weeks spent up to register")
+    }
+
+
     db.query("UPDATE users SET death_date = '" + moment(deathDate).format('YYYY-MM-DD').toString() + "' , weeks_to_live = '" + getWeeksToLive(deathDate, birth_date) + "' WHERE id = '" + userId + "';").then(data => {
       console.log(data)
       /*******/

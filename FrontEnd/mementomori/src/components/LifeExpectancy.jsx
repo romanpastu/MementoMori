@@ -10,7 +10,8 @@ class LifeExpectancy extends React.Component {
         super(props)
         this.state = {
             yearsToLive: "",
-            invalidYears: false
+            invalidYears: false,
+            invalidYearsAlreadyLived: false
         }
         this.handleSubmit = this.handleSubmit.bind(this)
         this.handleDismiss = this.handleDismiss.bind(this)
@@ -32,7 +33,8 @@ class LifeExpectancy extends React.Component {
 
     handleSubmit() {
         this.setState({
-            invalidYears: false
+            invalidYears: false,
+            invalidYearsAlreadyLived: false
         })
         const yearsToLive = this.state.yearsToLive;
         const registerDate = moment().format("YYYY-MM-DD");
@@ -53,6 +55,10 @@ class LifeExpectancy extends React.Component {
                 this.setState({
                     invalidYears: true
                 })
+            }else if(err.response.status == 408){
+                this.setState({
+                    invalidYearsAlreadyLived: true
+                })
             }
             console.log(err.response.status)
         })
@@ -60,7 +66,8 @@ class LifeExpectancy extends React.Component {
 
     handleDismiss(){
         this.setState({
-            invalidYears: false
+            invalidYears: false,
+            invalidYearsAlreadyLived: false
         })
     }
 
@@ -69,6 +76,7 @@ class LifeExpectancy extends React.Component {
             <div className="lifeExpectancyContainer">
                 <div className="lifeExpectancyForm">
                 {this.state.invalidYears ? <Alert variant="danger" dismissible onClose={this.handleDismiss}> Years must be between 1 and 100 </Alert> : null}
+                {this.state.invalidYearsAlreadyLived ? <Alert variant="danger" dismissible onClose={this.handleDismiss}> You have inputed less years than your current lifespan. </Alert> : null}
                     <p className="p-life-expectancy">Input the number of years that you expect to live</p>
                     <input type="number" name="yearsToLive" className="input-life-expetancy" onChange={this.handleChange} />
                     <button type="submit" class="btn btn-primary btn-life-expectancy" onClick={this.handleSubmit}>Submit</button>
