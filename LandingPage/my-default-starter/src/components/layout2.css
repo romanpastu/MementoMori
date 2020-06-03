@@ -102,6 +102,9 @@ a{
     
 }
 .buttonSection1{
+    display:flex;
+    align-items: center;
+    justify-content: center;
     width:10vw;
     height:7vh;
     font-size:1.3vw;
