@@ -26,7 +26,8 @@ class RegisterForm extends React.Component {
             noFirstName: false,
             wrongDate : false,
             noDate: false,
-            noPassword: false
+            noPassword: false,
+            weakPassword: false
 
         }
         this.handleSubmit = this.handleSubmit.bind(this)
@@ -51,7 +52,8 @@ class RegisterForm extends React.Component {
             noFirstName: false,
             wrongDate: false,
             noDate: false,
-            noPassword: false
+            noPassword: false,
+            weakPassword: false
         })
         event.preventDefault();
         const { email, firstName, secondName, password1, password2, birthDate } = this.state;
@@ -106,6 +108,10 @@ class RegisterForm extends React.Component {
                 this.setState({
                     noPassword: true
                 })
+            }else if(err.response.status == 406){
+                this.setState({
+                    weakPassword: true
+                })
             }
             console.log("el error")
             console.log(err)
@@ -118,7 +124,8 @@ class RegisterForm extends React.Component {
             noFirstName: false,
             wrongDate: false,
             noDate: false,
-            noPassword: false
+            noPassword: false,
+            weakPassword: false
         })
     }
 
@@ -132,6 +139,7 @@ class RegisterForm extends React.Component {
                 {this.state.wrongDate ? <Alert variant="danger" dismissible onClose={this.handleDismiss}> Invalid Date </Alert> : null}
                 {this.state.noDate ? <Alert variant="danger" dismissible onClose={this.handleDismiss}> Theres no date </Alert> : null}
                 {this.state.noPassword ? <Alert variant="danger" dismissible onClose={this.handleDismiss}> Theres no password </Alert> : null}
+                {this.state.weakPassword ? <Alert variant="danger" dismissible onClose={this.handleDismiss}> Weak password. It must have 1 lowerCase, 1 UpperCase, 1 Number or special character, and be at least 8 char long </Alert> : null}
                     <div class="form-group">
                         <label for="exampleInputEmail1">Email address</label>
                         <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" onChange={this.handleChange} />

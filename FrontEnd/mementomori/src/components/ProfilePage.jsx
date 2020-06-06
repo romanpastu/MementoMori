@@ -23,7 +23,8 @@ class ProfilePage extends React.Component {
             wrongPassword: false,
             dbError: false,
             showDeleteUserModal: false,
-            userDeletedError: false
+            userDeletedError: false,
+            weakPassword: false
 
         }
     }
@@ -64,7 +65,8 @@ class ProfilePage extends React.Component {
             wrongName: false,
             wrongPassword: false,
             dbError: false,
-            userDeletedError: false
+            userDeletedError: false,
+            weakPassword: false
         })
     }
 
@@ -77,7 +79,8 @@ class ProfilePage extends React.Component {
             wrongName: false,
             wrongPassword: false,
             dbError: false,
-            userDeletedError: false
+            userDeletedError: false,
+            weakPassword: false
         })
         var firstName = this.state.firstName;
         var secondName = this.state.secondName;
@@ -122,6 +125,12 @@ class ProfilePage extends React.Component {
                 console.log("db error")
                 this.setState({
                     dbError: true
+                }, () => {
+                    console.log(this.state)
+                })
+            }else if (err.response.status == 404) {
+                this.setState({
+                    weakPassword: true
                 }, () => {
                     console.log(this.state)
                 })
@@ -177,6 +186,7 @@ class ProfilePage extends React.Component {
                 {this.state.wrongName ? <Alert className="text-center " style={{ width: "50%", float: "none", margin: "0 auto", marginBottom: "1vw" }} variant="danger" dismissible onClose={this.handleDismiss}> Wrong Name format</Alert>: null}
                 {this.state.wrongPassword ? <Alert className="text-center " style={{ width: "50%", float: "none", margin: "0 auto", marginBottom: "1vw" }} variant="danger" dismissible onClose={this.handleDismiss}> Password dont match</Alert>: null}
                 {this.state.dbError ? <Alert className="text-center " style={{ width: "50%", float: "none", margin: "0 auto", marginBottom: "1vw" }} variant="danger" dismissible onClose={this.handleDismiss}> Database error</Alert>: null}
+                {this.state.weakPassword ? <Alert variant="danger" dismissible onClose={this.handleDismiss}> Weak password. It must have 1 lowerCase, 1 UpperCase, 1 Number or special character, and be at least 8 char long </Alert> : null}
                 <DeleteUserModal showDeleteUserModal={this.state.showDeleteUserModal} closeDeleteUserModal={this.closeDeleteUserModal} deleteUser={this.deleteProfile}  />
                 
                     <div className="profileCard">
