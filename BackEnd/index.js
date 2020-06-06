@@ -914,7 +914,6 @@ app.post("/user/update/:id", requireLogin, async (req, res) => {
     res.status(403).send("password dont match")
     throw new Error("Passwords dont mach")
   }
-
   
 
   db.query("UPDATE users SET email='" + mail + "' , first_name='" + firstName + "',second_name='" + secondName + "' where id='" + userId + "' ;").then(async (data) => {
