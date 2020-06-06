@@ -21,6 +21,10 @@
     "moment": "^2.24.0",
     "mongoose": "^5.8.6",
     "nodemon": "^2.0.2",
-    "pg-promise": "^10.4.4"
+    "pg-promise": "^10.4.4",
+    "swagger": "^0.7.5",
+    "swagger-jsdoc": "^4.0.0",
+    "swagger-ui-dist": "^3.26.0",
+    "swagger-ui-express": "^4.1.4"
   }
 }
