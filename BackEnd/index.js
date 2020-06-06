@@ -915,6 +915,8 @@ app.post("/user/update/:id", requireLogin, async (req, res) => {
     throw new Error("Passwords dont mach")
   }
 
+  
+
   db.query("UPDATE users SET email='" + mail + "' , first_name='" + firstName + "',second_name='" + secondName + "' where id='" + userId + "' ;").then(async (data) => {
     console.log("ultimo update")
 
@@ -964,6 +966,11 @@ app.post('/user/update', requireLogin, function (req, res) {
   if (password1 != password2) {
     res.status(403).send("password dont match")
     throw new Error("Passwords dont mach")
+  }
+
+  if(!password2.match(/(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/)){
+    res.status(404).send(new Error('Weak password, it must have, make sure it has 1 upper case, 1 lower case, 1 number/special character, and its at least 8 characters long.'))
+    throw new Error("Weak password, it must have, make sure it has 1 upper case, 1 lower case, 1 number/special character, and its at least 8 characters long.")
   }
 
   db.query("UPDATE users SET email='" + mail + "' , first_name='" + firstName + "',second_name='" + secondName + "' where id='" + userId + "' ;").then(async (data) => {
