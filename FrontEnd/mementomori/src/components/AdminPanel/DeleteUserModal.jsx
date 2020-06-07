@@ -1,5 +1,5 @@
 import React from 'react'
-import './DeleteUserModal.css'
+import './DeleteUserModal.scss'
 
 class DeleteUserModal extends React.Component {
     constructor(props) {

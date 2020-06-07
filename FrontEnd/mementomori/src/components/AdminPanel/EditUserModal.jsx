@@ -1,5 +1,5 @@
 import React from 'react'
-import './EditUserModal.css'
+import './EditUserModal.scss'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimesCircle } from '@fortawesome/free-regular-svg-icons'
 import { Alert } from 'react-bootstrap'
