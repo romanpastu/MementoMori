@@ -1,0 +1,50 @@
+:root {
+}
+.row {
+	.tbn {
+		color: white;
+		background: var(--button);
+		border-color: var(--buton);
+	}
+	.btn:hover {
+		color: white;
+		background: var(--button-hover);
+		border-color: var(--button-hover);
+	}
+}
+table {
+	table-layout: fixed;
+	width: 50%;
+	tr {
+		td:last-child {
+			white-space: nowrap;
+			width: 10px;
+			padding-right: 2vw;
+			text-align: right;
+		}
+		th:last-child {
+			text-align: right;
+		}
+	}
+	a {
+		margin-left: 3px;
+	}
+}
+.gridLoadingContainer {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+}
+.loadingText1 {
+	margin: 0;
+	margin-left: 1vw;
+	padding: 0;
+	color: black;
+}
+.table input {
+	width: 100%;
+}
+.editIcon:hover {
+	color: darkgrey;
+}

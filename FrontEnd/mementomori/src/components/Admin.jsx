@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import API from '../services/axiosObject.js'
 import constants from '../constants.js'
-import './Admin.css'
+// import './Admin.css'
+import './styles/Admin.scss'
 import Navbar from './Navbar'
 import Reactable from "reactable"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -278,7 +279,7 @@ export default class Admin extends Component {
                 <Table
                     className="table"
                     filterable={['Email']}
-                    itesPerPage={8}
+                    itemsPerPage={12}
                     currentPage={0}
                     sortable={true}
                 >

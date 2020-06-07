@@ -2,12 +2,10 @@ import React from 'react'
 import Navbar from './Navbar'
 import MyResponsiveLine from './charts/MyResponsiveLine'
 import MyResponsivePie from './charts/MyResponsivePie'
-import store from "../redux/store/reduxStore.js"
 import API from '../services/axiosObject.js';
-import { getUserId } from '../services/userInfo.js'
 import constants from '../constants.js'
 import { CircularProgress } from '@material-ui/core';
-import './StatsPage.css'
+import './styles/StatsPage.scss'
 
 class StatsPage extends React.Component {
     constructor(props) {

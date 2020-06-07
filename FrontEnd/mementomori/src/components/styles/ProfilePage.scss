@@ -1,0 +1,31 @@
+.profileContainer {
+	height: 90vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+.profileCard {
+	background: rgb(130, 207, 233);
+	padding: 1vw;
+	box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+	border-radius: 30px;
+	border: 1px solid rgb(100, 163, 223);
+}
+.buttonProfileUpdate {
+	margin-top: 1vw;
+}
+.profileP {
+	color: white;
+	font-weight: 500;
+	font-size: 1.3em;
+}
+.docs {
+	color: black;
+	font-weight: 500;
+	font-style: italic;
+	cursor: pointer;
+	&:hover {
+		color: white;
+	}
+}

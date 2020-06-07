@@ -1,5 +1,5 @@
 import React from 'react'
-import './LifeExpectancy.css'
+import './styles/LifeExpectancy.scss'
 import API from '../services/axiosObject.js';
 import constants from '../constants.js'
 import refreshTheToken from '../services/refreshTheToken.js'

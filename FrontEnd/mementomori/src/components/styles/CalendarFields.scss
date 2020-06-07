@@ -1,0 +1,64 @@
+.cube {
+	float: left;
+	border: 1px solid rgba(0, 0, 0, .2);
+	margin: 0;
+	&:hover {
+		background: blue;
+		cursor: pointer;
+	}
+}
+.cube-lived {
+	background: rgb(43, 96, 160);
+	float: left;
+	border: 1px solid rgba(0, 0, 0, .2);
+	margin: 0;
+}
+.purple {
+	background: #ab3fdd;
+}
+.black {
+	background: black;
+}
+.white {
+	background: white;
+}
+.green {
+	background: rgb(0, 146, 0);
+}
+.red {
+	background: red;
+}
+.rating1 {
+	background: hsl(0, 100%, 95%);
+}
+.rating2 {
+	background: hsl(0, 100%, 85%);
+}
+.rating3 {
+	background: hsl(0, 100%, 75%);
+}
+.rating4 {
+	background: hsl(0, 100%, 65%);
+}
+.rating5 {
+	background: hsl(0, 100%, 55%);
+}
+.cross {
+	width: 100%;
+	height: 100%;
+	animation: currentWeekMarker 1s infinite;
+}
+@keyframes currentWeekMarker {
+	0% {
+		border: 2px solid rgba(0, 0, 0, .2);
+	}
+	50% {
+		border: 2px solid  yellow;
+	}
+	100% {
+		border: 2px solid rgba(0, 0, 0, .2);
+	}
+}
+.selectedBordered {
+	background: rgba(0, 0, 255, 0.336);
+}
