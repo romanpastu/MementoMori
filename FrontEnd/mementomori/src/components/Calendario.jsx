@@ -1,7 +1,7 @@
 import React from 'react'
 import CalendarGrid from './CalendarGrid'
 import API from '../services/axiosObject.js';
-import './Calendario.css'
+import './styles/Calendario.scss'
 import { getUserId } from '../services/userInfo.js'
 import { connect } from "react-redux"
 import { setCurrentWeek } from "../redux/actions/reduxActions.js"

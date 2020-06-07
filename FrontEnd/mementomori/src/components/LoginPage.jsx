@@ -1,5 +1,5 @@
 import React from 'react'
-import './LoginPage.css'
+import './styles/LoginPage.scss'
 import LoginFrom from './LoginForm'
 import RegisterForm from './RegisterForm'
 import { connect } from "react-redux"

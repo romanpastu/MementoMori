@@ -1,5 +1,6 @@
 import React from 'react'
-import './CalendarFieldModal.css'
+// import './CalendarFieldModal.css'
+import './styles/CalendarFieldModal.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faWindowClose } from '@fortawesome/free-solid-svg-icons'
 import { getUserId } from '../services/userInfo.js'

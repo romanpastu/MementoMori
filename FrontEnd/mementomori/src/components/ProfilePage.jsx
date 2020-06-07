@@ -1,5 +1,5 @@
 import React from 'react'
-import './ProfilePage.css'
+import './styles/ProfilePage.scss'
 import Navbar from './Navbar'
 import API from '../services/axiosObject.js'
 import constants from '../constants.js'

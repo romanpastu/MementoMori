@@ -1,0 +1,33 @@
+.lifeExpectancyContainer {
+	background: rgb(108, 195, 224);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100vh;
+	color: white;
+}
+.lifeExpectancyForm {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+.btn-life-expectancy {
+	width: 25%;
+	background: rgba(255, 255, 255, 0) !important;
+	border-color: rgb(255, 255, 255) !important;
+	&:hover {
+		background: rgba(255, 255, 255, 0.5) !important;
+	}
+}
+.input-life-expetancy {
+	margin-bottom: 1vw;
+}
+.p-life-expectancy {
+	font-size: 1.2em;
+}
+input[type="number"] {
+	background: rgba(255, 255, 255, 0.5);
+	&:focus {
+		background: rgba(255, 255, 255, 0.5);
+	}
+}

@@ -5,7 +5,7 @@ import { getUserId } from '../services/userInfo.js'
 import API from '../services/axiosObject.js';
 import constants from '../constants.js'
 import { CircularProgress } from '@material-ui/core';
-import './CalendarGrid.css'
+import './styles/CalendarGrid.scss'
 
 
 class CalendarGrid extends React.Component {

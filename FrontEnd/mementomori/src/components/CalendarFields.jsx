@@ -1,5 +1,5 @@
 import React from 'react'
-import './CalendarFields.css'
+import './styles/CalendarFields.scss'
 import CalendarFieldModal from './CalendarFieldModal'
 
 class CalendarFields extends React.Component {

@@ -1,10 +1,8 @@
 import React, { Component } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPowerOff, faUser, faColumns, faChartLine, faCalendar , faUserCog} from '@fortawesome/free-solid-svg-icons'
-import { Redirect } from 'react-router'
-import Cookies from 'js-cookie';
 import {isAdmin} from '../services/userInfo.js'
-import './Navbar.css'
+import './styles/Navbar.scss'
 
 export default class Navbar extends Component {
     constructor(props) {
