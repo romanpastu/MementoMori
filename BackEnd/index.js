@@ -18,7 +18,7 @@ const swaggerOptions = {
   swaggerDefinition: {
     info: {
       title: "MementoMori API",
-      description: "MementoMori API information",
+      description: "MementoMori API information. API tokens should be inputed like: 'Bearer: [token]'",
       contact: {
         name: "Román Pastshenko Slautskiy"
       },
@@ -100,6 +100,15 @@ function requireLogin(req, res, next) {
 }
 
 //express calls
+
+/**
+ * @swagger
+ * securityDefinitions:
+ *  Bearer:
+ *    type: apiKey
+ *    name: Authorization
+ *    in: header
+ */
 
 //User login/register/auth related queries
 
@@ -294,14 +303,11 @@ app.post('/login', async (req, res) => {
  * @swagger
  * /refresh_token:
  *  post:
+ *    security:
+ *       - Bearer: []
  *    description: Use to refresh your access token
  *    produces:
  *       - Access token
- *    parameters:
- *       - name: Access token
- *         description: Your access token.
- *         in: Authorization Bearer
- *         required: true
  *    responses:
  *      'accesstoken':
  *        description: Empty if a wrong token is provided, else it will return a new accesstoken
@@ -379,14 +385,11 @@ app.post('/refresh_token', (req, res) => {
  * @swagger
  * /logout:
  *  post:
+ *    security:
+ *       - Bearer: []
  *    description: Used to revoke an accesstoken refreshing (logout)
  *    produces:
  *       - status code
- *    parameters:
- *       - name: Access token
- *         description: Your access token.
- *         in: Authorization Bearer
- *         required: true
  *    responses:
  *      '200':
  *        description: Access Token Loged out Successfully || Provide a valid token. Logging out happens in both cases, but access token might not get invalidated if the connection was lost.
@@ -418,14 +421,11 @@ app.post('/logout', async (req, res) => {
  * @swagger
  * /verify:
  *  post:
+ *    security:
+ *       - Bearer: []
  *    description: Used to check if an accesstoken is valid
  *    produces:
  *       - status code
- *    parameters:
- *       - name: Access token
- *         description: Your access token.
- *         in: Authorization Bearer
- *         required: true
  *    responses:
  *      'valid:res':
  *        description: Access token is valid.
@@ -469,14 +469,12 @@ app.post('/protected', async (req, res) => {
  * @swagger
  * /generateCalendar:
  *  post:
+ *    security:
+ *       - Bearer: []
  *    description: Used to generate a new calendar for an user
  *    produces:
  *       - status code/string
  *    parameters:
- *       - name: Access token
- *         description: Your access token.
- *         in: Authorization Bearer
- *         required: true
  *       - name: Years To Live
  *         description: Used to calculate the calendar size.
  *         in: Form Data
@@ -594,14 +592,11 @@ app.post('/generateCalendar', requireLogin, async (req, res) => {
  * @swagger
  * /chart/lineal/emotion:
  *  get:
+ *    security:
+ *       - Bearer: []
  *    description: Return a lineal emotion chart
  *    produces:
  *       - Data-Array-Json
- *    parameters:
- *       - name: Access token
- *         description: Your access token.
- *         in: Authorization Bearer
- *         required: true
  *    responses:
  *      'Data-Array-Json':
  *        description: Chart Data.
@@ -681,14 +676,11 @@ app.get('/chart/lineal/emotion', requireLogin, async (req, res) => {
  * @swagger
  * /chart/cumulative/emotion:
  *  get:
+ *    security:
+ *       - Bearer: []
  *    description: Return a cumulative emotion chart
  *    produces:
  *       - Data-Array-Json
- *    parameters:
- *       - name: Access token
- *         description: Your access token.
- *         in: Authorization Bearer
- *         required: true
  *    responses:
  *      'Data-Array-Json':
  *        description: Chart Data.
@@ -773,14 +765,11 @@ app.get('/chart/cumulative/emotion', requireLogin, async (req, res) => {
  * @swagger
  * /chart/cumulative-maxpotential/emotion:
  *  get:
+ *    security:
+ *       - Bearer: []
  *    description: Return a cumulative vs maxpotential emotion chart
  *    produces:
  *       - Data-Array-Json
- *    parameters:
- *       - name: Access token
- *         description: Your access token.
- *         in: Authorization Bearer
- *         required: true
  *    responses:
  *      'Data-Array-Json':
  *        description: Chart Data.
@@ -883,14 +872,11 @@ app.get('/chart/cumulative-maxpotential/emotion', requireLogin, async (req, res)
  * @swagger
  * /chart/pie/emotion:
  *  get:
+ *    security:
+ *       - Bearer: []
  *    description: Return a pie emotion chart
  *    produces:
  *       - Data-Array-Json
- *    parameters:
- *       - name: Access token
- *         description: Your access token.
- *         in: Authorization Bearer
- *         required: true
  *    responses:
  *      'Data-Array-Json':
  *        description: Chart Data.
@@ -996,14 +982,12 @@ app.get('/chart/pie/emotion', requireLogin, async (req, res) => {
  * @swagger
  * /update/field:
  *  post:
+ *    security:
+ *       - Bearer: []
  *    description: Updates a calendar field
  *    produces:
  *       - Status / Error
  *    parameters:
- *       - name: Access token
- *         description: Your access token.
- *         in: Authorization Bearer
- *         required: true
  *       - name: Week Number
  *         description: The week number of the calendar
  *         in: Form Data
@@ -1058,14 +1042,11 @@ app.post('/update/field', requireLogin, async (req, res) => {
  * @swagger
  * /getUserGenerateCalendar:
  *  get:
+ *    security:
+ *       - Bearer: []
  *    description: Returns the calendar of the user
  *    produces:
  *       - Array-Json
- *    parameters:
- *       - name: Access token
- *         description: Your access token.
- *         in: Authorization Bearer
- *         required: true
  *    responses:
  *      'array-json':
  *        description: Returns an array containing the json of the calendar.
@@ -1127,14 +1108,11 @@ app.get('/getUserGenerateCalendar', requireLogin, async (req, res) => {
  * @swagger
  * /getUserFieldsInfo:
  *  get:
+ *    security:
+ *       - Bearer: []
  *    description: Returns the info of all calendar fields
  *    produces:
  *       - Array-Json
- *    parameters:
- *       - name: Access token
- *         description: Your access token.
- *         in: Authorization Bearer
- *         required: true
  *    responses:
  *      'array-json':
  *        description: Returns an array containing the json of the calendar fields.
@@ -1164,14 +1142,11 @@ app.get('/getUserFieldsInfo', requireLogin, async (req, res) => {
  * @swagger
  * /userlist:
  *  get:
+ *    security:
+ *       - Bearer: []
  *    description: Returns the info of all users
  *    produces:
- *       - Array-Json
- *    parameters:
- *       - name: Access token [ADMIN]
- *         description: Your access token.
- *         in: Authorization Bearer
- *         required: true
+ *       - application/json, text/plain
  *    responses:
  *      'array-json':
  *        description: Returns an array containing an object with all the users.
@@ -1209,14 +1184,12 @@ app.get("/userlist", requireLogin, function (req, res) {
  * @swagger
  * /user/delete/:id:
  *  post:
+ *    security:
+ *       - Bearer: []
  *    description: Deletes an user given his id
  *    produces:
  *       - Status code
  *    parameters:
- *       - name: Access token [ADMIN]
- *         description: Your access token.
- *         in: Authorization Bearer
- *         required: true
  *       - id: User id
  *         description: The user id
  *         in: request parameter
@@ -1253,14 +1226,12 @@ app.post("/user/delete/:id", requireLogin, function (req, res) {
  * @swagger
  * /user/update/:id:
  *  post:
+ *    security:
+ *       - Bearer: []
  *    description: Updates an user given his id
  *    produces:
  *       - Status code
  *    parameters:
- *       - name: Access token [ADMIN]
- *         description: Your access token.
- *         in: Authorization Bearer
- *         required: true
  *       - id: User id
  *         description: The user id
  *         in: request parameter
@@ -1355,14 +1326,12 @@ app.post("/user/update/:id", requireLogin, async (req, res) => {
  * @swagger
  * /user/update:
  *  post:
+ *    security:
+ *       - Bearer: []
  *    description: Updates an user given an accesstoken
  *    produces:
  *       - Status code
  *    parameters:
- *       - name: Access token
- *         description: Your access token.
- *         in: Authorization Bearer
- *         required: true
  *       - id: User id
  *         description: The user id
  *         in: request parameter
@@ -1455,14 +1424,11 @@ app.post('/user/update', requireLogin, function (req, res) {
  * @swagger
  * /user/info:
  *  get:
+ *    security:
+ *       - Bearer: []
  *    description: Returns the info of an user
  *    produces:
  *       - Status code | Array-Json
- *    parameters:
- *       - name: Access token
- *         description: Your access token.
- *         in: Authorization Bearer
- *         required: true
  *    responses:
  *      'user-info[JSON]':
  *        description: Returns the info of the user.
@@ -1491,14 +1457,11 @@ app.get('/user/info', requireLogin, function (req, res) {
  * @swagger
  * /user/delete:
  *  post:
+ *    security:
+ *       - Bearer: []
  *    description: Deletes the user whose token is provided
  *    produces:
  *       - Status code
- *    parameters:
- *       - name: Access token
- *         description: Your access token.
- *         in: Authorization Bearer
- *         required: true
  *    responses:
  *      '200':
  *        description: User deleted properly.
