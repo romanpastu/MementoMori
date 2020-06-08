@@ -4,6 +4,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimesCircle } from '@fortawesome/free-regular-svg-icons'
 import { Alert } from 'react-bootstrap'
 
+/**
+ * Component rendered in the admin panel that renders a modal to edit users.
+ * 
+ * @component
+ * @prop {function} handleDismiss Prop that allows to dismiss the alerts
+ * @prop {function} handleSubmit Prop that handles the submitting of the form to edit the users
+ * @prop {function} closeEditUserModal Prop that closes the modal
+ * @prop {var} showEditUserModal Prop that triggers the rendering of the modal
+ * @prop {var} userUpdateErrors Prop that contains the different errors that can happen during the update of the user
+ * @prop {var} userInfo Prop that contains the user info
+ * @prop {function} handleChange... Props that allows to manage the changes in various inputs
+ */
+
 class EditUserModal extends React.Component {
     constructor(props) {
         super(props)

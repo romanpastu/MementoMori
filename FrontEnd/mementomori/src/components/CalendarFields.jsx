@@ -3,7 +3,7 @@ import './styles/CalendarFields.scss'
 import CalendarFieldModal from './CalendarFieldModal'
 
 /**
- * Component that renders the calendar fields, and composes the whole calendar.
+ * Component that renders the calendar fields individually.
  * 
  * @component
  * @prop {var} currentWeek Prop received by the field wich contains the id of the current week number [globally]

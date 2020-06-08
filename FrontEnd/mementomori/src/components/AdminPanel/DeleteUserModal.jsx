@@ -1,6 +1,14 @@
 import React from 'react'
 import './DeleteUserModal.scss'
 
+/**
+ * Component rendered in the admin panel that renders a modal to edit users.
+ * 
+ * @component
+ * @prop {var} showDeleteUserModal Prop that triggers the rendering of the delete user modal
+ * @prop {function} deleteUser Prop that allows to delete a function
+ * @prop {function} closeDeleteUserModal Prop that allows to close the deleting modal
+ */
 class DeleteUserModal extends React.Component {
     constructor(props) {
         super(props)
