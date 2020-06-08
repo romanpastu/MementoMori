@@ -10,11 +10,21 @@ import constants from '../constants.js'
 var moment = require('moment');
 moment().format();
 
+
+
 function mapDispatchToProps(dispatch) {
     return {
         setCurrentWeek: element => dispatch(setCurrentWeek(element))
     }
   }
+
+/**
+ * Component that contains the main functions to calculate the calendar dara, its the Parent component, and contains the rest of the components.
+ * 
+ * @component
+ * @prop {dispatcher} setCurrentWeek Prop received by the calendar from the global react store, it allows to set the current week in the redux store
+ * @prop {function} logout Prop received by the grid and passed down to the navbar, it allows to perform a logout
+ */
 
 class Calendario extends React.Component {
     constructor(props) {

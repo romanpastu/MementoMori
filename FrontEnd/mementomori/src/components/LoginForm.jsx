@@ -1,5 +1,13 @@
 import React from 'react'
 import { Alert } from 'react-bootstrap'
+
+/**
+ * Component that contains Login Form rendered in the Login Page.
+ * 
+ * @component
+ * @prop {function} login Prop received by the Form, which when triggered and successfully processed redirects the user to the main app dashboard
+ */
+
 class LoginForm extends React.Component {
     constructor(props) {
         super(props)

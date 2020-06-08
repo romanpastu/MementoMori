@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Calendario.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Calendario.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react'
+import CalendarGrid from './CalendarGrid'
+import API from '../services/axiosObject.js';
+import './styles/Calendario.scss'
+import { getUserId } from '../services/userInfo.js'
+import { connect } from "react-redux"
+import { setCurrentWeek } from "../redux/actions/reduxActions.js"
+import store from "../redux/store/reduxStore.js"
+import constants from '../constants.js'
+var moment = require('moment');
+moment().format();
+
+
+
+function mapDispatchToProps(dispatch) {
+    return {
+        setCurrentWeek: element => dispatch(setCurrentWeek(element))
+    }
+  }
+
+/**
+ * Component that contains the main functions to calculate the calendar dara, its the Parent component, and contains the rest of the components.
+ * 
+ * @component
+ * @prop {dispatcher} setCurrentWeek Prop received by the calendar from the global react store, it allows to set the current week in the redux store
+ * @prop {function} logout Prop received by the grid and passed down to the navbar, it allows to perform a logout
+ */
+
+class Calendario extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            birth_date: "",
+            years_to_live: "",
+            death_date: "",
+            register_date: "",
+            weeks_to_live: ""
+        };
+
+        this.getCurrentWeek = this.getCurrentWeek.bind(this);
+
+    }
+
+
+    componentDidMount() {
+        const userId = getUserId();
+        
+        API.get(constants.urlBackend +'/getUserGenerateCalendar').then(response => {
+            console.log(response.data)
+            this.setState({
+                birth_date: moment(response.data.birthDate),
+                years_to_live: response.data.years_to_live,
+                register_date: moment(response.data.register_date),
+                death_date: moment(response.data.death_date),
+                weeks_to_live: response.data.weeks_to_live
+            }, () => {
+                console.log(this.state)
+                this.props.setCurrentWeek(this.getCurrentWeek())
+                console.log("esto es el almacenamiento")
+                console.log(store.getState().currentWeek)
+            })
+            
+        })
+
+    }
+
+
+    //this function is used to get the weeks until registration date to mark it as grey area, unused
+    getWeeksToRegisterDate() {
+        var register_date = this.state.register_date;
+        var weeks_to_date = moment(new Date(register_date)).diff(this.state.birth_date, 'days') / 7;
+        //console.log("weeks lived up to registration date:" + Math.floor(weeks_to_date));
+
+        //Returns lived weeks to date rounded to lower number because we dont want to overwrite the current ongoing week
+        return Math.floor(weeks_to_date);
+    }
+
+    //this function returns the current ongoing week
+    getCurrentWeek() {
+        var current_date = moment();
+        var weeks_to_date = moment(new Date(current_date)).diff(this.state.birth_date, 'days') / 7;
+        //console.log("week lived to date:" + Math.floor(weeks_to_date));
+
+        //Returns lived weeks to date rounded to lower number because we dont want to overwrite the current ongoing week
+        return Math.floor(weeks_to_date);
+    }
+
+
+    render() {
+        // if (!this.state.loaded) return null;
+        return (
+            &lt;div className="calendar-container">
+
+                &lt;CalendarGrid logout={this.props.logout} weeksToRegisterDate={this.getWeeksToRegisterDate()} totalWeeks={this.state.weeks_to_live} currentWeek={this.getCurrentWeek()} {...this.props}/>
+
+            &lt;/div>
+        )
+    }
+}
+export default connect(null, mapDispatchToProps)(Calendario)
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Admin.html">Admin</a></li><li><a href="CalendarFieldModal.html">CalendarFieldModal</a></li><li><a href="CalendarFields.html">CalendarFields</a></li><li><a href="CalendarGrid.html">CalendarGrid</a></li><li><a href="Calendario.html">Calendario</a></li><li><a href="DeleteUserModal.html">DeleteUserModal</a></li><li><a href="DocsPage.html">DocsPage</a></li><li><a href="EditUserModal.html">EditUserModal</a></li><li><a href="LifeExpectancy.html">LifeExpectancy</a></li><li><a href="LoginForm.html">LoginForm</a></li><li><a href="LoginPage.html">LoginPage</a></li><li><a href="Navbar.html">Navbar</a></li><li><a href="ProfilePage.html">ProfilePage</a></li><li><a href="RegisterForm.html">RegisterForm</a></li><li><a href="StatsPage.html">StatsPage</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Mon Jun 08 2020 17:48:52 GMT+0200 (GMT+02:00)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -2,6 +2,17 @@ import React from 'react'
 import './styles/CalendarFields.scss'
 import CalendarFieldModal from './CalendarFieldModal'
 
+/**
+ * Component that renders the calendar fields individually.
+ * 
+ * @component
+ * @prop {var} currentWeek Prop received by the field wich contains the id of the current week number [globally]
+ * @prop {var} weekId Prop received by the field wich contains the id of the week matched to the field
+ * @prop {var} description Prop received by the field wich contains the description of the week matched to the field
+ * @prop {var} rating Prop received by the field wich contains the rating of the week matched to the field
+ * @prop {var} weeksToRegisterDate Prop received by the field wich contains the number of weeks till the register date [globally]
+ */
+
 class CalendarFields extends React.Component {
     constructor(props) {
         super(props);

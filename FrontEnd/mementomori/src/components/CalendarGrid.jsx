@@ -1,12 +1,20 @@
 import React from 'react'
 import CalendarFields from './CalendarFields'
 import Navbar from './Navbar'
-import { getUserId } from '../services/userInfo.js'
 import API from '../services/axiosObject.js';
 import constants from '../constants.js'
 import { CircularProgress } from '@material-ui/core';
 import './styles/CalendarGrid.scss'
 
+/**
+ * Component that renders the calendar fields, and composes the whole calendar.
+ * 
+ * @component
+ * @prop {var} totalWeeks Prop received by the grid, in order to check the amount of calendarFields components to render
+ * @prop {var} weeksToRegisterDate Prop received by grid and passed down to its child component CalendarFields in order to set a proper color
+ * @prop {var} currentWeek Prop received by grid and passed down to its child component CalendarFields in order to set a proper color
+ * @prop {function} logout Prop received by the grid and passed down to the navbar, it allows to perform a logout
+ */
 
 class CalendarGrid extends React.Component {
 

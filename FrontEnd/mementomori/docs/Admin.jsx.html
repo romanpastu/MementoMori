@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Admin.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Admin.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { Component } from "react";
+import API from '../services/axiosObject.js'
+import constants from '../constants.js'
+import './styles/Admin.scss'
+import Navbar from './Navbar'
+import Reactable from "reactable"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import DeleteUserModal from "../components/AdminPanel/DeleteUserModal"
+import { faEdit, faTrashAlt } from '@fortawesome/free-regular-svg-icons'
+import { Alert } from 'react-bootstrap'
+import { CircularProgress } from '@material-ui/core';
+import EditUserModal from '../components/AdminPanel/EditUserModal'
+
+/**
+ * Component that renders the admin panel, where the admin can see the users available in the system and perform various actions like editing and deleting them.
+ * 
+ * @component
+ * @prop {function} logout Function that allows to logout the user
+ */
+
+class Admin extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            userList: [],
+            rowId: "",
+            rowEmail: "",
+            userDeleted: false,
+            userDeletedError: true,
+            showDeleteUserModal: false,
+            showEditUserModal: false,
+            editUserInfo: {
+                firstName: "",
+                secondName: "",
+                email: "",
+                password1: "",
+                password2: ""
+            },
+            userUpdateErrors: {
+                success: false,
+                wrongEmail: false,
+                wrongPassword: false,
+                wrongName: false,
+                dbError: false
+            }
+        }
+        this.getUserList = this.getUserList.bind(this)
+        this.deleteUser = this.deleteUser.bind(this)
+        this.showDeleteUserModal = this.showDeleteUserModal.bind(this)
+        this.closeDeleteUserModal = this.closeDeleteUserModal.bind(this)
+        this.handleDismiss = this.handleDismiss.bind(this)
+        this.showEditUserModal = this.showEditUserModal.bind(this)
+        this.closeEditUserModal = this.closeEditUserModal.bind(this)
+        this.handleSubmitUserEdit = this.handleSubmitUserEdit.bind(this)
+        this.handleDismissUserEdit = this.handleDismissUserEdit.bind(this)
+        this.updateEditErrors = this.updateEditErrors.bind(this)
+        //handlechangebinding
+        this.handleChangeFirstName = this.handleChangeFirstName.bind(this)
+        this.handleChangeSecondName = this.handleChangeSecondName.bind(this)
+        this.handleChangeMail = this.handleChangeMail.bind(this)
+
+    }
+
+    getUserList() {
+        API.get(constants.urlBackend + '/userlist').then(response => {
+            this.setState({
+                userList: response.data
+            }, () => {
+                console.log(this.state.userList)
+            })
+        })
+    }
+
+    componentDidMount() {
+        this.getUserList();
+        this.setState({
+            userDeletedError: false,
+            userDeleted: false,
+            showDeleteUserModal: false
+        })
+    }
+
+    handleDismiss() {
+        this.setState({
+            userDeleted: false,
+            userDeletedError: false
+        })
+    }
+
+    deleteUser() {
+        console.log("bn")
+        API.post(constants.urlBackend + '/user/delete/' + this.state.rowId).then(response => {
+            console.log("Respuesta al borrar")
+            console.log(response.data)
+            console.log(response.status)
+            if (response.status == 200) {
+                this.setState({
+                    showDeleteUserModal: false,
+                    userDeleted: true
+                }, () => {
+                    this.getUserList();
+                })
+            } else {
+                this.setState({
+                    userDeletedError: true
+                })
+            }
+        }).catch(err => {
+            if (!err.response) {
+                this.setState({
+                    userDeletedError: true
+                })
+            }
+        })
+    }
+
+    showDeleteUserModal(rowId, rowEmail) {
+        this.setState({
+            showDeleteUserModal: true,
+            rowId: rowId,
+            selectedMail: rowEmail,
+            userDeletedError: false,
+            userDeleted: false
+        })
+    }
+
+    closeDeleteUserModal() {
+        this.setState({
+            showDeleteUserModal: false
+        }, () => {
+
+        })
+    }
+
+    showEditUserModal(rowId, rowEmail, rowFirstName, rowSecondName) {
+        this.handleDismissUserEdit();
+        let obj = Object.assign({}, this.state.editUserInfo)
+
+        obj.firstName = rowFirstName
+        obj.secondName = rowSecondName
+        obj.email = rowEmail
+
+        this.setState({
+            showEditUserModal: true,
+            rowId: rowId,
+            editUserInfo: obj
+        })
+    }
+    closeEditUserModal() {
+        this.setState({
+            showEditUserModal: false
+        })
+    }
+
+    //handleChange Functions for the User Edit
+    handleChangeFirstName = (evt) => {
+        this.setState({
+            editUserInfo: Object.assign({}, this.state.editUserInfo, { firstName: evt.target.value })
+        })
+    }
+
+    handleChangeSecondName = (evt) => {
+        this.setState({
+            editUserInfo: Object.assign({}, this.state.editUserInfo, { secondName: evt.target.value })
+        })
+    }
+
+    handleChangeMail = (evt) => {
+        this.setState({
+            editUserInfo: Object.assign({}, this.state.editUserInfo, { email: evt.target.value })
+        })
+    }
+
+    handleChangePassword1 = (evt) => {
+        this.setState({
+            editUserInfo: Object.assign({}, this.state.editUserInfo, { password1: evt.target.value })
+        })
+    }
+
+    handleChangePassword2 = (evt) => {
+        this.setState({
+            editUserInfo: Object.assign({}, this.state.editUserInfo, { password2: evt.target.value })
+        })
+    }
+
+    //handleDismiss for the user Edit
+
+    handleDismissUserEdit() {
+        console.log("hola")
+        let obj = Object.assign({}, this.state.userUpdateErrors)
+
+        obj.success = false;
+        obj.wrongEmail = false;
+        obj.wrongPassword = false;
+        obj.wrongName = false;
+        obj.dbError = false;
+
+        this.setState({
+            userUpdateErrors: obj
+        })
+    }
+
+    //handleSubmit for the User Edit
+
+    updateEditErrors(err) {
+        let obj = Object.assign({}, this.state.userUpdateErrors)
+
+        if (err == 401) {
+            obj.wrongEmail = true
+        }
+        if (err == 402) {
+            obj.wrongName = true
+        }
+        if (err == 403) {
+            obj.wrongPassword = true
+        }
+        if (err == 405) {
+            obj.dbError = true
+        }
+        if (err == 200) {
+            obj.success = true
+        }
+
+        this.setState({
+            userUpdateErrors: obj
+        })
+
+    }
+
+    handleSubmitUserEdit(event) {
+        this.handleDismissUserEdit();
+        event.preventDefault();
+        var firstName = this.state.editUserInfo.firstName
+        var secondName = this.state.editUserInfo.secondName
+        var mail = this.state.editUserInfo.email
+        var password1 = this.state.editUserInfo.password1
+        var password2 = this.state.editUserInfo.password2
+
+        API.post(constants.urlBackend + '/user/update/' + this.state.rowId, { firstName, secondName, mail, password1, password2 }).then(res => {
+            console.log(res)
+            console.log("updated")
+            this.updateEditErrors(200)
+            this.getUserList();
+        }).catch(err => {
+            if (err.response.status == 200) {
+                this.getUserList();
+            } else if (err.response.status == 401) {
+                console.log("wrong email")
+                this.updateEditErrors(401)
+            } else if (err.response.status == 402) {
+                console.log("invalid names")
+                this.updateEditErrors(402)
+            } else if (err.response.status == 403) {
+                console.log("passwords dont match")
+                this.updateEditErrors(403)
+            } else if (err.response.status == 405) {
+                console.log("db error")
+                this.updateEditErrors(405)
+            }
+        })
+        console.log(firstName, secondName, mail, password1, password2)
+    }
+
+
+
+    render() {
+        var users = this.state.userList
+
+        const Table = Reactable.Table,
+            Td = Reactable.Td,
+            Tr = Reactable.Tr;
+
+        if (users.length === 0) {
+            return &lt;div className="gridLoadingContainer">&lt;CircularProgress color="secondary" iconStyle={"width: 1000, height:1000"} />
+                &lt;p className="loadingText1">Loading...&lt;/p>&lt;/div>
+        }
+        return (
+            &lt;div>
+                &lt;Navbar {...this.props} logout={this.props.logout} />
+                {this.state.userDeleted ? &lt;div className="row " > &lt;Alert className="text-center " style={{ width: "50%", float: "none", margin: "0 auto", marginBottom: "1vw" }} variant="success" dismissible onClose={this.handleDismiss}>
+                    User deleted properly
+                                    &lt;/Alert> &lt;/div> : null}
+                {this.state.userDeletedError ? &lt;div className="row "> &lt;Alert className="text-center " style={{ width: "50%", float: "none", margin: "0 auto ", marginBottom: "1vw" }} variant="danger" dismissible onClose={this.handleDismiss}>
+                    Error deleting the user
+                                    &lt;/Alert> &lt;/div> : null}
+                &lt;Table
+                    className="table"
+                    filterable={['Email']}
+                    itemsPerPage={12}
+                    currentPage={0}
+                    sortable={true}
+                >
+                    {users.map((row) => {
+                        return (
+                            &lt;Tr className={row.className} key={row.id}>
+                                &lt;Td column="Email">{row.email}&lt;/Td>
+                                &lt;Td column="Manage">&lt;div>&lt;FontAwesomeIcon className="editIcon" onClick={() => this.showEditUserModal(row.id, row.email, row.first_name, row.second_name)} icon={faEdit}>&lt;/FontAwesomeIcon>
+                                    &lt;FontAwesomeIcon className="editIcon" onClick={() => this.showDeleteUserModal(row.id, row.email)} icon={faTrashAlt}>&lt;/FontAwesomeIcon>
+                                &lt;/div>&lt;/Td>
+                            &lt;/Tr>
+                        )
+                    })}
+                &lt;/Table>
+                &lt;DeleteUserModal showDeleteUserModal={this.state.showDeleteUserModal} closeDeleteUserModal={this.closeDeleteUserModal} userDeleted={this.state.userDeleted} deleteUser={this.deleteUser} handleDismiss={this.handleDismiss} />
+                &lt;EditUserModal
+                    handleChangeFirstName={this.handleChangeFirstName}
+                    handleChangeSecondName={this.handleChangeSecondName}
+                    handleChangeMail={this.handleChangeMail}
+                    handleSubmit={this.handleSubmitUserEdit}
+                    handleChangePassword1={this.handleChangePassword1}
+                    handleChangePassword2={this.handleChangePassword2}
+                    showEditUserModal={this.state.showEditUserModal} closeEditUserModal={this.closeEditUserModal}
+                    rowId={this.state.rowId}
+                    userInfo={this.state.editUserInfo}
+                    userUpdateErrors={this.state.userUpdateErrors}
+                    handleDismiss={this.handleDismissUserEdit}
+                />
+            &lt;/div>
+        )
+    }
+}
+
+export default Admin</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Admin.html">Admin</a></li><li><a href="CalendarFieldModal.html">CalendarFieldModal</a></li><li><a href="CalendarFields.html">CalendarFields</a></li><li><a href="CalendarGrid.html">CalendarGrid</a></li><li><a href="Calendario.html">Calendario</a></li><li><a href="DeleteUserModal.html">DeleteUserModal</a></li><li><a href="DocsPage.html">DocsPage</a></li><li><a href="EditUserModal.html">EditUserModal</a></li><li><a href="LifeExpectancy.html">LifeExpectancy</a></li><li><a href="LoginForm.html">LoginForm</a></li><li><a href="LoginPage.html">LoginPage</a></li><li><a href="Navbar.html">Navbar</a></li><li><a href="ProfilePage.html">ProfilePage</a></li><li><a href="RegisterForm.html">RegisterForm</a></li><li><a href="StatsPage.html">StatsPage</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Mon Jun 08 2020 17:48:52 GMT+0200 (GMT+02:00)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: CalendarFields.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: CalendarFields.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react'
+import './styles/CalendarFields.scss'
+import CalendarFieldModal from './CalendarFieldModal'
+
+/**
+ * Component that renders the calendar fields individually.
+ * 
+ * @component
+ * @prop {var} currentWeek Prop received by the field wich contains the id of the current week number [globally]
+ * @prop {var} weekId Prop received by the field wich contains the id of the week matched to the field
+ * @prop {var} description Prop received by the field wich contains the description of the week matched to the field
+ * @prop {var} rating Prop received by the field wich contains the rating of the week matched to the field
+ * @prop {var} weeksToRegisterDate Prop received by the field wich contains the number of weeks till the register date [globally]
+ */
+
+class CalendarFields extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            fieldId: "",
+            description: this.props.description,
+            showModal: false,
+            emotionRating:  this.props.rating,
+            //   emotionRating:  Math.floor(Math.random() * 5) + 1 
+        };
+        //console.log(props) //week number, beginning with 0
+        this.showModal = this.showModal.bind(this);
+        this.closeModal = this.closeModal.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+    }
+
+    componentDidMount() {
+        
+        this.setState({
+            fieldId: this.props.weekId
+        }, () => {
+            // console.log("initial show modal state")
+            // console.log(this.state.showModal)
+        });
+    }
+
+
+    showModal() {
+        // console.log("showmodal state before any click")
+        // console.log(this.state.showModal)
+        this.setState({
+            showModal: true
+        }, () => {
+            // console.log("clicked show modal")
+            // console.log(this.state.showModal)
+        });
+
+    }
+
+
+    closeModal(el, timesUpdated) {
+        console.log("el")
+        console.log(el)
+        this.setState({
+            showModal: false
+        }, () => {
+            // console.log("clicked closeModal")
+            // console.log(this.state.showModal)
+        });
+        if(timesUpdated >= 0){
+            this.setState( {
+                emotionRating: el
+            })
+        }
+    }
+
+    handleChange(event){
+        this.setState({ 
+            emotionRating: event.target.value 
+        }, () => {
+             console.log("emotion state after change")
+            console.log(this.state.emotionRating)
+        });
+       console.log("triggered")
+    }
+
+
+
+    render() {
+        var weekId = this.props.weekId;
+
+        //current week, round up
+        //lived weeks, round down
+        //total weeks, round up
+        if (weekId &lt; this.props.weeksToRegisterDate) {
+            return &lt;div id={weekId} className="cube-lived">&lt;/div>
+        } else {
+            if(this.state.emotionRating == 0){
+                var currentStyle = (weekId == this.props.currentWeek) ? " white" /*replace this to green to return the green indicator*/: "white";
+            }else if(this.state.emotionRating == 1){
+                var currentStyle = (weekId == this.props.currentWeek) ? "rating1" /*replace this to green to return the green indicator*/ : "rating1";
+            }else if(this.state.emotionRating == 2){
+                var currentStyle = (weekId == this.props.currentWeek) ? " rating2" /*replace this to green to return the green indicator*/: "rating2";
+            }else if(this.state.emotionRating == 3){
+                var currentStyle = (weekId == this.props.currentWeek) ? " rating3" /*replace this to green to return the green indicator*/: "rating3";
+            }else if(this.state.emotionRating == 4){
+                var currentStyle = (weekId == this.props.currentWeek) ? " rating4" /*replace this to green to return the green indicator*/: "rating4";
+            }else if(this.state.emotionRating == 5){
+                var currentStyle = (weekId == this.props.currentWeek) ? " rating5" /*replace this to green to return the green indicator*/: "rating5";
+            }
+            // const currentStyle = (weekId == this.props.currentWeek) ? "green" : "white"; {/*Uncomment this to return the green indicator*/}
+            var style = "cube " + currentStyle;
+            
+
+            return &lt;div id={weekId} title={weekId} className={style}
+                {...(!this.state.showModal &amp;&amp; { onClick: this.showModal })}
+            >
+                
+                {weekId == this.props.currentWeek ? &lt;div className="cross " >&lt;/div> : &lt;div className="cube-white">&lt;/div> } {/*Remove this to return the green indicator*/}
+                &lt;CalendarFieldModal show={this.state.showModal} close={this.closeModal} id={weekId} emotionRating={this.state.emotionRating} description={this.state.description} handleChange={this.handleChange} />
+            &lt;/div>
+        }
+
+
+    }
+}
+export default CalendarFields;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Admin.html">Admin</a></li><li><a href="CalendarFieldModal.html">CalendarFieldModal</a></li><li><a href="CalendarFields.html">CalendarFields</a></li><li><a href="CalendarGrid.html">CalendarGrid</a></li><li><a href="Calendario.html">Calendario</a></li><li><a href="DeleteUserModal.html">DeleteUserModal</a></li><li><a href="DocsPage.html">DocsPage</a></li><li><a href="EditUserModal.html">EditUserModal</a></li><li><a href="LifeExpectancy.html">LifeExpectancy</a></li><li><a href="LoginForm.html">LoginForm</a></li><li><a href="LoginPage.html">LoginPage</a></li><li><a href="Navbar.html">Navbar</a></li><li><a href="ProfilePage.html">ProfilePage</a></li><li><a href="RegisterForm.html">RegisterForm</a></li><li><a href="StatsPage.html">StatsPage</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Mon Jun 08 2020 17:48:52 GMT+0200 (GMT+02:00)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

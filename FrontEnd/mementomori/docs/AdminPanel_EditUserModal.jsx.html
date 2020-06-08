@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: AdminPanel/EditUserModal.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: AdminPanel/EditUserModal.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react'
+import './EditUserModal.scss'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimesCircle } from '@fortawesome/free-regular-svg-icons'
+import { Alert } from 'react-bootstrap'
+
+/**
+ * Component rendered in the admin panel that renders a modal to edit users.
+ * 
+ * @component
+ * @prop {function} handleDismiss Prop that allows to dismiss the alerts
+ * @prop {function} handleSubmit Prop that handles the submitting of the form to edit the users
+ * @prop {function} closeEditUserModal Prop that closes the modal
+ * @prop {var} showEditUserModal Prop that triggers the rendering of the modal
+ * @prop {var} userUpdateErrors Prop that contains the different errors that can happen during the update of the user
+ * @prop {var} userInfo Prop that contains the user info
+ * @prop {function} handleChange... Props that allows to manage the changes in various inputs
+ */
+
+class EditUserModal extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+
+        }
+    }
+
+    render() {
+        if (!this.props.showEditUserModal) {
+            return null;
+        }
+
+        return &lt;div className="modalBg">
+            &lt;div className="flex-container">
+
+                &lt;div id="open-modal" className="modal-window-1">
+                    &lt;form onSubmit={this.props.handleSubmit}>
+                        &lt;FontAwesomeIcon className="headerClose" icon={faTimesCircle} onClick={this.props.closeEditUserModal} />
+                        &lt;div style={{ marginTop: "20px" }}>
+                            {this.props.userUpdateErrors.success ? &lt;Alert className="text-center " style={{ width: "80%", float: "none", margin: "0 auto", marginBottom: "1vw" }} variant="success" dismissible onClose={this.props.handleDismiss}>
+                                User Updated
+                                    &lt;/Alert> : null}
+                            {this.props.userUpdateErrors.wrongEmail ? &lt;Alert className="text-center " style={{ width: "80%", float: "none", margin: "0 auto", marginBottom: "1vw" }} variant="danger" dismissible onClose={this.props.handleDismiss}>
+                                Wrong Email Format
+                                    &lt;/Alert> : null}
+                            {this.props.userUpdateErrors.wrongName ? &lt;Alert className="text-center " style={{ width: "80%", float: "none", margin: "0 auto", marginBottom: "1vw" }} variant="danger" dismissible onClose={this.props.handleDismiss}>
+                                Invalid names
+                                    &lt;/Alert> : null}
+                            {this.props.userUpdateErrors.wrongPassword ? &lt;Alert className="text-center " style={{ width: "80%", float: "none", margin: "0 auto", marginBottom: "1vw" }} variant="danger" dismissible onClose={this.props.handleDismiss}>
+                                Passwords dont match
+                                    &lt;/Alert> : null}
+                            {this.props.userUpdateErrors.dbError ? &lt;Alert className="text-center " style={{ width: "80%", float: "none", margin: "0 auto", marginBottom: "1vw" }} variant="danger" dismissible onClose={this.props.handleDismiss}>
+                                Database error
+                                    &lt;/Alert> : null}
+
+                        &lt;/div>
+                        &lt;div class="form-group">
+                            &lt;label for="exampleInputEmail1" className="label-color-edit">#&lt;/label>
+                            &lt;input type="email" name="id" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="User Id" readOnly value={this.props.rowId} />
+                        &lt;/div>
+
+                        &lt;div class="form-group">
+                            &lt;label for="exampleInputEmail1" className="label-color-edit">First Name&lt;/label>
+                            &lt;input type="name" name="firstName" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter first name" value={this.props.userInfo.firstName} onChange={this.props.handleChangeFirstName} />
+                        &lt;/div>
+
+                        &lt;div class="form-group">
+                            &lt;label for="exampleInputEmail1" className="label-color-edit">Second Name&lt;/label>
+                            &lt;input type="name" name="secondName" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Second Name" value={this.props.userInfo.secondName} onChange={this.props.handleChangeSecondName} />
+                        &lt;/div>
+
+
+                        &lt;div class="form-group">
+                            &lt;label for="exampleInputEmail1" className="label-color-edit">Mail&lt;/label>
+                            &lt;input type="text" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" value={this.props.userInfo.email} onChange={this.props.handleChangeMail} />
+                        &lt;/div>
+
+                        &lt;div class="form-group emailgroup">
+                            &lt;label for="exampleFormControlInput1" className="label-color-edit">New Password&lt;/label>
+                            &lt;input type="password" class="form-control" placeholder="Input new password" onChange={this.props.handleChangePassword1} />
+                            &lt;input type="password" class="form-control" placeholder="Confirm new password" onChange={this.props.handleChangePassword2} style={{ marginTop: "5px" }} />
+                        &lt;/div>
+
+                        &lt;div className="text-center">&lt;button className="btn btn-primary">Update User&lt;/button>&lt;/div>
+                    &lt;/form>
+                &lt;/div>
+            &lt;/div>
+        &lt;/div>
+    }
+}
+
+export default EditUserModal;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Admin.html">Admin</a></li><li><a href="CalendarFieldModal.html">CalendarFieldModal</a></li><li><a href="CalendarFields.html">CalendarFields</a></li><li><a href="CalendarGrid.html">CalendarGrid</a></li><li><a href="Calendario.html">Calendario</a></li><li><a href="DeleteUserModal.html">DeleteUserModal</a></li><li><a href="DocsPage.html">DocsPage</a></li><li><a href="EditUserModal.html">EditUserModal</a></li><li><a href="LifeExpectancy.html">LifeExpectancy</a></li><li><a href="LoginForm.html">LoginForm</a></li><li><a href="LoginPage.html">LoginPage</a></li><li><a href="Navbar.html">Navbar</a></li><li><a href="ProfilePage.html">ProfilePage</a></li><li><a href="RegisterForm.html">RegisterForm</a></li><li><a href="StatsPage.html">StatsPage</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Mon Jun 08 2020 17:48:52 GMT+0200 (GMT+02:00)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

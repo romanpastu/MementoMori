@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import API from '../services/axiosObject.js'
 import constants from '../constants.js'
-// import './Admin.css'
 import './styles/Admin.scss'
 import Navbar from './Navbar'
 import Reactable from "reactable"
@@ -11,7 +10,15 @@ import { faEdit, faTrashAlt } from '@fortawesome/free-regular-svg-icons'
 import { Alert } from 'react-bootstrap'
 import { CircularProgress } from '@material-ui/core';
 import EditUserModal from '../components/AdminPanel/EditUserModal'
-export default class Admin extends Component {
+
+/**
+ * Component that renders the admin panel, where the admin can see the users available in the system and perform various actions like editing and deleting them.
+ * 
+ * @component
+ * @prop {function} logout Function that allows to logout the user
+ */
+
+class Admin extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -312,3 +319,5 @@ export default class Admin extends Component {
         )
     }
 }
+
+export default Admin

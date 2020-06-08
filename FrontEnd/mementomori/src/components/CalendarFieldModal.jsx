@@ -7,6 +7,18 @@ import { getUserId } from '../services/userInfo.js'
 import API from '../services/axiosObject.js';
 import constants from '../constants.js'
 import { Alert } from 'react-bootstrap'
+/**
+ * Component that renders the modal to edit a field in the calendar.
+ * 
+ * @component
+ * @prop {var} description Prop received by the field modal wich contains the data of the description of the week
+ * @prop {var} emotionRating Prop received by the field modal wich contains the data that rates the emotion
+ * @prop {function} close Function that allows close the modal
+ * @prop {var} id Prop received by the field modal wich contains the id of the field
+ * @prop {function} show Function that allows to trigger the rendering of the modal
+ */
+
+
 class CalendarFieldModal extends React.Component {
     constructor(props) {
         super(props);

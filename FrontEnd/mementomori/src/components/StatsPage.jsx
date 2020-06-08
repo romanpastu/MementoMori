@@ -6,6 +6,13 @@ import API from '../services/axiosObject.js';
 import constants from '../constants.js'
 import { CircularProgress } from '@material-ui/core';
 import './styles/StatsPage.scss'
+/**
+ * Component that renders the stats page.
+ * 
+ * @component
+ * @prop {function} logout Prop received by the StatsPage and passed down to the navbar, it allows to perform a logout
+ */
+
 
 class StatsPage extends React.Component {
     constructor(props) {

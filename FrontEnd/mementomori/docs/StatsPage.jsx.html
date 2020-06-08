@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: StatsPage.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: StatsPage.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react'
+import Navbar from './Navbar'
+import MyResponsiveLine from './charts/MyResponsiveLine'
+import MyResponsivePie from './charts/MyResponsivePie'
+import API from '../services/axiosObject.js';
+import constants from '../constants.js'
+import { CircularProgress } from '@material-ui/core';
+import './styles/StatsPage.scss'
+/**
+ * Component that renders the stats page.
+ * 
+ * @component
+ * @prop {function} logout Prop received by the StatsPage and passed down to the navbar, it allows to perform a logout
+ */
+
+
+class StatsPage extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            dataLinealEmotion: [],
+            loadedDataLinealEmotion: false,
+            dataCumulativeEmotion : [],
+            loadedDataCumulativeEmotion: false,
+            dataCumulativeMaxPotentialEmotion: [],
+            loadedDataCumulativeMaxPotentialEmotion: false,
+            dataPie: [],
+            loadedDataPie: false
+        }
+    }
+
+    componentDidMount() {
+        console.log("api")
+        API.get(constants.urlBackend +'/chart/lineal/emotion').then(response => {
+             console.log(response.data[0])
+            this.setState({
+                dataLinealEmotion: response.data
+            }, () => {
+                this.setState({
+                    loadedDataLinealEmotion: true
+                })
+            }
+            )
+        })
+        API.get(constants.urlBackend +'/chart/cumulative/emotion').then(response => {
+            // console.log(response.data[0])
+            this.setState({
+                dataCumulativeEmotion: response.data
+            }, () => {
+                this.setState({
+                    loadedDataCumulativeEmotion: true
+                })
+            }
+            )
+        })
+        API.get(constants.urlBackend +'/chart/cumulative-maxpotential/emotion').then(response => {
+            // console.log(response.data[0])
+            this.setState({
+                dataCumulativeMaxPotentialEmotion: response.data
+            }, () => {
+                // console.log(this.state.dataCumulativeMaxPotentialEmotion)
+                this.setState({
+                    loadedDataCumulativeMaxPotentialEmotion: true
+                })
+            }
+            )
+        })
+        API.get(constants.urlBackend +'/chart/pie/emotion').then(response =>{
+            // console.log("datapieresponse")
+            // console.log(response)
+            this.setState({
+                dataPie: response.data
+            }, () => {
+                // console.log("datapieresponse")
+                // console.log(this.state.dataPie)
+                this.setState({
+                    loadedDataPie: true
+                })
+            }
+            )
+        })
+    }
+
+
+
+    render() {
+
+        return (
+
+            &lt;div>
+                &lt;Navbar {...this.props} logout={this.props.logout} />
+                &lt;div className="nivoChart">
+                    
+                    {/* &lt;p className="welcomecolor">welcome&lt;/p> */}
+                    {this.state.loadedDataLinealEmotion ? &lt;MyResponsiveLine id="lineal-emotion-chart" data={this.state.dataLinealEmotion} axisBottom={{
+                        orient: 'bottom',
+                        tickSize: 5,
+                        tickPadding: 5,
+                        tickRotation: 0,
+                        legend: 'Lineal emotion',
+                        legendOffset: 36,
+                        legendPosition: 'middle'
+                    }} /> : &lt;div className="gridLoadingContainer2">&lt;CircularProgress color="secondary" iconStyle={"width: 1000, height:1000"} />
+                    &lt;p className="loadingText1">Loading...&lt;/p>&lt;/div>}
+                    {this.state.loadedDataCumulativeEmotion ? &lt;MyResponsiveLine id="cumulative-emotion-chart" data={this.state.dataCumulativeEmotion} axisBottom={{
+                        orient: 'bottom',
+                        tickSize: 5,
+                        tickPadding: 5,
+                        tickRotation: 0,
+                        legend: 'Cumulative emotion',
+                        legendOffset: 36,
+                        legendPosition: 'middle'
+                    }} /> : &lt;div className="gridLoadingContainer2">&lt;CircularProgress color="secondary" iconStyle={"width: 1000, height:1000"} />
+                    &lt;p className="loadingText1">Loading...&lt;/p>&lt;/div>}
+                    {this.state.loadedDataCumulativeMaxPotentialEmotion ? &lt;MyResponsiveLine id="cumulative-emotion-max-portential-chart" data={this.state.dataCumulativeMaxPotentialEmotion} axisBottom={{
+                        orient: 'bottom',
+                        tickSize: 5,
+                        tickPadding: 5,
+                        tickRotation: 0,
+                        legend: 'Cumulative emotion vs max potential cumulative emotion',
+                        legendOffset: 36,
+                        legendPosition: 'middle'
+                    }} /> : &lt;div className="gridLoadingContainer2">&lt;CircularProgress color="secondary" iconStyle={"width: 1000, height:1000"} />
+                    &lt;p className="loadingText1">Loading...&lt;/p>&lt;/div>}
+                    {this.state.loadedDataPie ?&lt;MyResponsivePie data={this.state.dataPie}/> : &lt;div className="gridLoadingContainer2">&lt;CircularProgress color="secondary" iconStyle={"width: 1000, height:1000"} />
+                &lt;p className="loadingText1">Loading...&lt;/p>&lt;/div>}
+                    
+                &lt;/div>
+            &lt;/div>
+
+
+        )
+    }
+}
+
+export default StatsPage</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Admin.html">Admin</a></li><li><a href="CalendarFieldModal.html">CalendarFieldModal</a></li><li><a href="CalendarFields.html">CalendarFields</a></li><li><a href="CalendarGrid.html">CalendarGrid</a></li><li><a href="Calendario.html">Calendario</a></li><li><a href="DeleteUserModal.html">DeleteUserModal</a></li><li><a href="DocsPage.html">DocsPage</a></li><li><a href="EditUserModal.html">EditUserModal</a></li><li><a href="LifeExpectancy.html">LifeExpectancy</a></li><li><a href="LoginForm.html">LoginForm</a></li><li><a href="LoginPage.html">LoginPage</a></li><li><a href="Navbar.html">Navbar</a></li><li><a href="ProfilePage.html">ProfilePage</a></li><li><a href="RegisterForm.html">RegisterForm</a></li><li><a href="StatsPage.html">StatsPage</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Mon Jun 08 2020 17:48:52 GMT+0200 (GMT+02:00)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
