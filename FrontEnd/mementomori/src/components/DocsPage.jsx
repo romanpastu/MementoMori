@@ -1,5 +1,11 @@
 import React from 'react'
 
+/**
+ * Component that displays some DocsRoutes.
+ * 
+ * @component
+ */
+
 class DocsPage extends React.Component{
     constructor(props){
         super(props)

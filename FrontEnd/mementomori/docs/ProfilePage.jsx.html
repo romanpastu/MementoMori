@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: ProfilePage.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: ProfilePage.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react'
+import './styles/ProfilePage.scss'
+import Navbar from './Navbar'
+import API from '../services/axiosObject.js'
+import constants from '../constants.js'
+import { Alert } from 'react-bootstrap'
+import { CircularProgress } from '@material-ui/core';
+import Cookies from 'js-cookie';
+import DeleteUserModal from '../components/AdminPanel/DeleteUserModal'
+
+/**
+ * Component that renders the user profile page.
+ * 
+ * @component
+ * @prop {function} logout Prop that allows to logout the user
+ */
+
+class ProfilePage extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            loading: true,
+            email: "",
+            firstName: "",
+            secondName: "",
+            password1: "",
+            password2: "",
+            success: false,
+            wrongEmail: false,
+            wrongName: false,
+            wrongPassword: false,
+            dbError: false,
+            showDeleteUserModal: false,
+            userDeletedError: false,
+            weakPassword: false
+
+        }
+    }
+
+    componentDidMount() {
+        API.get(constants.urlBackend + '/user/info').then(res => {
+            console.log(res.data)
+            this.setState({
+                email: res.data[0].email,
+                firstName: res.data[0].first_name,
+                secondName: res.data[0].second_name
+            }, () => {
+                this.setState({
+                    loading: false
+                })
+            })
+        }).catch(err => {
+            console.log(err)
+        })
+    }
+
+    handleChange = (evt) => {
+
+        const target = evt.target;
+        const value = target.value;
+        const name = target.name;
+
+        this.setState({
+            [name]: value
+        });
+    }
+
+    handleDismiss = () => {
+        console.log("hola")
+        this.setState({
+            success: false,
+            wrongEmail: false,
+            wrongName: false,
+            wrongPassword: false,
+            dbError: false,
+            userDeletedError: false,
+            weakPassword: false
+        })
+    }
+
+    handleSubmit = (evt) => {
+        evt.preventDefault();
+        console.log("hola")
+        this.setState({
+            success: false,
+            wrongEmail: false,
+            wrongName: false,
+            wrongPassword: false,
+            dbError: false,
+            userDeletedError: false,
+            weakPassword: false
+        })
+        var firstName = this.state.firstName;
+        var secondName = this.state.secondName;
+        var mail = this.state.email;
+        var password1 = this.state.password1;
+        var password2 = this.state.password2;
+
+        API.post(constants.urlBackend + '/user/update', { firstName, secondName, mail, password1, password2 }).then(res => {
+            this.setState({
+                success: true
+            })
+            console.log("updated")
+        }).catch(err => {
+            if (err.response.status == 200) {
+                this.setState({
+                    success: true
+                }, () => {
+                    console.log(this.state)
+                })
+            } else if (err.response.status == 401) {
+                console.log("wrong email")
+                this.setState({
+                    wrongEmail: true
+                }, () => {
+                    console.log(this.state)
+                })
+            } else if (err.response.status == 402) {
+                console.log("invalid names")
+                this.setState({
+                    wrongName: true
+                }, () => {
+                    console.log(this.state)
+                })
+            } else if (err.response.status == 403) {
+                console.log("passwords dont match")
+                this.setState({
+                    wrongPassword: true
+                }, () => {
+                    console.log(this.state)
+                })
+            } else if (err.response.status == 405) {
+                console.log("db error")
+                this.setState({
+                    dbError: true
+                }, () => {
+                    console.log(this.state)
+                })
+            }else if (err.response.status == 404) {
+                this.setState({
+                    weakPassword: true
+                }, () => {
+                    console.log(this.state)
+                })
+            }
+        })
+    }
+
+    deleteProfile = (evt) => {
+        
+        console.log("deleting")
+
+        API.post(constants.urlBackend+ '/user/delete').then(res =>{
+            this.props.logout();
+        }).catch(err =>{
+            if(!err.response){
+                this.setState({
+                    userDeletedError: true
+                })
+            }
+        })
+    }
+
+    showDeleteUserModal = (evt) => {
+        evt.preventDefault();
+        this.setState({
+            showDeleteUserModal: true
+        })
+    }
+
+    closeDeleteUserModal = (evt) => {
+        
+        this.setState({
+            showDeleteUserModal: false
+        }, () => {
+
+        })
+    }
+
+    render() {
+        if (this.state.loading == true) {
+            return &lt;div className="gridLoadingContainer">&lt;CircularProgress color="secondary" iconStyle={"width: 1000, height:1000"} />
+                &lt;p className="loadingText1">Loading...&lt;/p>&lt;/div>
+        }
+        return (
+            &lt;div>
+                &lt;Navbar {...this.props} logout={this.props.logout} />
+            
+                
+                &lt;div className="profileContainer">
+                {this.state.success ? &lt;Alert className="text-center " style={{ width: "50%", float: "none", margin: "0 auto", marginBottom: "1vw" }} variant="success" dismissible onClose={this.handleDismiss}> User updated&lt;/Alert>: null}
+                {this.state.wrongEmail ? &lt;Alert className="text-center " style={{ width: "50%", float: "none", margin: "0 auto", marginBottom: "1vw" }} variant="danger" dismissible onClose={this.handleDismiss}> Invalid Email Format&lt;/Alert>: null}
+                {this.state.userDeletedError ? &lt;Alert className="text-center " style={{ width: "50%", float: "none", margin: "0 auto", marginBottom: "1vw" }} variant="danger" dismissible onClose={this.handleDismiss}> There was an erro deleting the user&lt;/Alert>: null}
+                {this.state.wrongName ? &lt;Alert className="text-center " style={{ width: "50%", float: "none", margin: "0 auto", marginBottom: "1vw" }} variant="danger" dismissible onClose={this.handleDismiss}> Wrong Name format&lt;/Alert>: null}
+                {this.state.wrongPassword ? &lt;Alert className="text-center " style={{ width: "50%", float: "none", margin: "0 auto", marginBottom: "1vw" }} variant="danger" dismissible onClose={this.handleDismiss}> Password dont match&lt;/Alert>: null}
+                {this.state.dbError ? &lt;Alert className="text-center " style={{ width: "50%", float: "none", margin: "0 auto", marginBottom: "1vw" }} variant="danger" dismissible onClose={this.handleDismiss}> Database error&lt;/Alert>: null}
+                {this.state.weakPassword ? &lt;Alert variant="danger" dismissible onClose={this.handleDismiss}> Weak password. It must have 1 lowerCase, 1 UpperCase, 1 Number or special character, and be at least 8 char long &lt;/Alert> : null}
+                &lt;DeleteUserModal showDeleteUserModal={this.state.showDeleteUserModal} closeDeleteUserModal={this.closeDeleteUserModal} deleteUser={this.deleteProfile}  />
+                
+                    &lt;div className="profileCard">
+                        &lt;div className="text-center">
+                            &lt;p className="profileP">Personal Information&lt;/p>
+                        &lt;/div>
+
+                        &lt;form >
+                            &lt;div class="row">
+                                &lt;div class="col">
+                                    &lt;label for="inputEmail4">First Name&lt;/label>
+                                    &lt;input type="text" class="form-control" placeholder="First name" name="firstName" value={this.state.firstName} onChange={this.handleChange} />
+                                &lt;/div>
+                                &lt;div class="col">
+                                    &lt;label for="inputEmail4">Last Name&lt;/label>
+                                    &lt;input type="text" class="form-control" placeholder="Last name" name="secondName" value={this.state.secondName} onChange={this.handleChange} />
+                                &lt;/div>
+                            &lt;/div>
+                            &lt;div class="row" style={{ marginTop: "1vh" }}>
+                                &lt;div class="col">
+                                    &lt;label for="inputEmail4">Email&lt;/label>
+                                    &lt;input type="email" class="form-control" placeholder="Email" name="email" value={this.state.email} onChange={this.handleChange} />
+                                &lt;/div>
+                            &lt;/div>
+                            &lt;div class="row" style={{ marginTop: "1vh" }}>
+                                &lt;div class="col">
+                                    &lt;label for="inputEmail4">Api Key&lt;/label>
+                                    &lt;input type="email" class="form-control" placeholder="Api Key" name="apikey" readOnly value={Cookies.get('accesstoken')}  />
+                                    &lt;small className="docs" onClick={ () => this.props.history.push('/docs')}>docs&lt;/small>
+                                &lt;/div>
+                            &lt;/div>
+                            &lt;div class="row" style={{ marginTop: "1vh" }}>
+                                &lt;div class="col">
+                                    &lt;label for="inputEmail4">Password&lt;/label>
+                                    &lt;input type="password" class="form-control" placeholder="Password" name="password1" value={this.state.password1} onChange={this.handleChange} />
+                                    &lt;input type="password" class="form-control" placeholder="Repeat Password" name="password2" value={this.state.password2} onChange={this.handleChange} />
+                                &lt;/div>
+                            &lt;/div>
+                            &lt;div className="text-center buttonProfileUpdate">
+                                &lt;button type="submit" class="btn btn-primary" style={{ marginRight: "0.5vw" }} onClick={this.handleSubmit}>Update&lt;/button>
+                                &lt;button class="btn btn-danger" onClick={this.showDeleteUserModal} style={{ marginLeft: "0.5vw" }}>Delete Profile&lt;/button>
+                            &lt;/div>
+                        &lt;/form>
+                    &lt;/div>
+                &lt;/div>
+
+            &lt;/div>
+        )
+
+    }
+}
+
+
+export default ProfilePage;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Admin.html">Admin</a></li><li><a href="CalendarFieldModal.html">CalendarFieldModal</a></li><li><a href="CalendarFields.html">CalendarFields</a></li><li><a href="CalendarGrid.html">CalendarGrid</a></li><li><a href="Calendario.html">Calendario</a></li><li><a href="DocsPage.html">DocsPage</a></li><li><a href="LifeExpectancy.html">LifeExpectancy</a></li><li><a href="LoginForm.html">LoginForm</a></li><li><a href="LoginPage.html">LoginPage</a></li><li><a href="Navbar.html">Navbar</a></li><li><a href="ProfilePage.html">ProfilePage</a></li><li><a href="RegisterForm.html">RegisterForm</a></li><li><a href="StatsPage.html">StatsPage</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Mon Jun 08 2020 17:34:14 GMT+0200 (GMT+02:00)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

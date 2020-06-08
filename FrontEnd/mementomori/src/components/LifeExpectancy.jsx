@@ -4,8 +4,17 @@ import API from '../services/axiosObject.js';
 import constants from '../constants.js'
 import refreshTheToken from '../services/refreshTheToken.js'
 import { Alert } from 'react-bootstrap'
+
 var moment = require('moment');
+
+/**
+ * Component to set the user's life expectancy, which further allows to generate a calendar.
+ * 
+ * @component
+ * @prop {function} setYearsRedirect Function that allows to redirect the user to the dashboard, after setting their life expectancy
+ */
 class LifeExpectancy extends React.Component {
+
     constructor(props) {
         super(props)
         this.state = {
@@ -85,5 +94,6 @@ class LifeExpectancy extends React.Component {
         )
     }
 }
+
 
 export default LifeExpectancy;

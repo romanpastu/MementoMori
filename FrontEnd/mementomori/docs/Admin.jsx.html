@@ -1,4 +1,32 @@
-import React, { Component } from "react";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Admin.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Admin.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { Component } from "react";
 import API from '../services/axiosObject.js'
 import constants from '../constants.js'
 import './styles/Admin.scss'
@@ -271,19 +299,19 @@ class Admin extends Component {
             Tr = Reactable.Tr;
 
         if (users.length === 0) {
-            return <div className="gridLoadingContainer"><CircularProgress color="secondary" iconStyle={"width: 1000, height:1000"} />
-                <p className="loadingText1">Loading...</p></div>
+            return &lt;div className="gridLoadingContainer">&lt;CircularProgress color="secondary" iconStyle={"width: 1000, height:1000"} />
+                &lt;p className="loadingText1">Loading...&lt;/p>&lt;/div>
         }
         return (
-            <div>
-                <Navbar {...this.props} logout={this.props.logout} />
-                {this.state.userDeleted ? <div className="row " > <Alert className="text-center " style={{ width: "50%", float: "none", margin: "0 auto", marginBottom: "1vw" }} variant="success" dismissible onClose={this.handleDismiss}>
+            &lt;div>
+                &lt;Navbar {...this.props} logout={this.props.logout} />
+                {this.state.userDeleted ? &lt;div className="row " > &lt;Alert className="text-center " style={{ width: "50%", float: "none", margin: "0 auto", marginBottom: "1vw" }} variant="success" dismissible onClose={this.handleDismiss}>
                     User deleted properly
-                                    </Alert> </div> : null}
-                {this.state.userDeletedError ? <div className="row "> <Alert className="text-center " style={{ width: "50%", float: "none", margin: "0 auto ", marginBottom: "1vw" }} variant="danger" dismissible onClose={this.handleDismiss}>
+                                    &lt;/Alert> &lt;/div> : null}
+                {this.state.userDeletedError ? &lt;div className="row "> &lt;Alert className="text-center " style={{ width: "50%", float: "none", margin: "0 auto ", marginBottom: "1vw" }} variant="danger" dismissible onClose={this.handleDismiss}>
                     Error deleting the user
-                                    </Alert> </div> : null}
-                <Table
+                                    &lt;/Alert> &lt;/div> : null}
+                &lt;Table
                     className="table"
                     filterable={['Email']}
                     itemsPerPage={12}
@@ -292,17 +320,17 @@ class Admin extends Component {
                 >
                     {users.map((row) => {
                         return (
-                            <Tr className={row.className} key={row.id}>
-                                <Td column="Email">{row.email}</Td>
-                                <Td column="Manage"><div><FontAwesomeIcon className="editIcon" onClick={() => this.showEditUserModal(row.id, row.email, row.first_name, row.second_name)} icon={faEdit}></FontAwesomeIcon>
-                                    <FontAwesomeIcon className="editIcon" onClick={() => this.showDeleteUserModal(row.id, row.email)} icon={faTrashAlt}></FontAwesomeIcon>
-                                </div></Td>
-                            </Tr>
+                            &lt;Tr className={row.className} key={row.id}>
+                                &lt;Td column="Email">{row.email}&lt;/Td>
+                                &lt;Td column="Manage">&lt;div>&lt;FontAwesomeIcon className="editIcon" onClick={() => this.showEditUserModal(row.id, row.email, row.first_name, row.second_name)} icon={faEdit}>&lt;/FontAwesomeIcon>
+                                    &lt;FontAwesomeIcon className="editIcon" onClick={() => this.showDeleteUserModal(row.id, row.email)} icon={faTrashAlt}>&lt;/FontAwesomeIcon>
+                                &lt;/div>&lt;/Td>
+                            &lt;/Tr>
                         )
                     })}
-                </Table>
-                <DeleteUserModal showDeleteUserModal={this.state.showDeleteUserModal} closeDeleteUserModal={this.closeDeleteUserModal} userDeleted={this.state.userDeleted} deleteUser={this.deleteUser} handleDismiss={this.handleDismiss} />
-                <EditUserModal
+                &lt;/Table>
+                &lt;DeleteUserModal showDeleteUserModal={this.state.showDeleteUserModal} closeDeleteUserModal={this.closeDeleteUserModal} userDeleted={this.state.userDeleted} deleteUser={this.deleteUser} handleDismiss={this.handleDismiss} />
+                &lt;EditUserModal
                     handleChangeFirstName={this.handleChangeFirstName}
                     handleChangeSecondName={this.handleChangeSecondName}
                     handleChangeMail={this.handleChangeMail}
@@ -315,9 +343,31 @@ class Admin extends Component {
                     userUpdateErrors={this.state.userUpdateErrors}
                     handleDismiss={this.handleDismissUserEdit}
                 />
-            </div>
+            &lt;/div>
         )
     }
 }
 
-export default Admin
+export default Admin</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Admin.html">Admin</a></li><li><a href="CalendarFieldModal.html">CalendarFieldModal</a></li><li><a href="CalendarFields.html">CalendarFields</a></li><li><a href="CalendarGrid.html">CalendarGrid</a></li><li><a href="Calendario.html">Calendario</a></li><li><a href="DocsPage.html">DocsPage</a></li><li><a href="LifeExpectancy.html">LifeExpectancy</a></li><li><a href="LoginForm.html">LoginForm</a></li><li><a href="LoginPage.html">LoginPage</a></li><li><a href="Navbar.html">Navbar</a></li><li><a href="ProfilePage.html">ProfilePage</a></li><li><a href="RegisterForm.html">RegisterForm</a></li><li><a href="StatsPage.html">StatsPage</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Mon Jun 08 2020 17:34:14 GMT+0200 (GMT+02:00)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

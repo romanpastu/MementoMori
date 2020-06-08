@@ -11,6 +11,14 @@ function mapDispatchToProps(dispatch) {
     }
 }
 
+
+/**
+ * Component that contains Register Form rendered in the Login Page.
+ * 
+ * @component
+ * @prop {dispatcher} lifeExpectancySet Prop received by the Form, which when triggered sets a true/False value in the redux state of lifeExpectancySet
+ */
+
 class RegisterForm extends React.Component {
     constructor(props) {
         super(props)

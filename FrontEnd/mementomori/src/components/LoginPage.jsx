@@ -10,6 +10,15 @@ const mapStateToProps = state => {
     }
 }
 
+/**
+ * Component that contains the Login and Register Form, its the main page for unregistered users , used to acces to the app.
+ * 
+ * @component
+ * @prop {var} lifeExpectancySet Prop received by the LoginPage from the global redux state, which allows to check if the life expectancy has already been set
+ * @prop {var} authed Prop received by the LoginPage that allows to check if the user is already authed
+ * @prop {function} login Prop passed down to the login form child component
+ */
+
 class LoginPage extends React.Component {
     constructor(props) {
         super(props)

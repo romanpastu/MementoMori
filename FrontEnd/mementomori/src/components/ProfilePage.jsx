@@ -7,6 +7,14 @@ import { Alert } from 'react-bootstrap'
 import { CircularProgress } from '@material-ui/core';
 import Cookies from 'js-cookie';
 import DeleteUserModal from '../components/AdminPanel/DeleteUserModal'
+
+/**
+ * Component that renders the user profile page.
+ * 
+ * @component
+ * @prop {function} logout Prop that allows to logout the user
+ */
+
 class ProfilePage extends React.Component {
     constructor(props) {
         super(props)

@@ -4,7 +4,14 @@ import { faPowerOff, faUser, faColumns, faChartLine, faCalendar , faUserCog} fro
 import {isAdmin} from '../services/userInfo.js'
 import './styles/Navbar.scss'
 
-export default class Navbar extends Component {
+/**
+ * Component that renders the navbar.
+ * 
+ * @component
+ * @prop {function} logout Prop that allows to logout the user
+ */
+
+class Navbar extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -43,3 +50,4 @@ export default class Navbar extends Component {
         )
     }
 }
+export default Navbar
