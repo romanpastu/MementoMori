@@ -4,7 +4,8 @@ require('dotenv/config')
 const express = require("express");
 const app = express();
 const cors = require('cors');
-
+const https = require('https');
+const fs = require('fs');
 //express settings
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -31,6 +32,22 @@ const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
 
 
+/* Uncomment for https deployment (prod)
+//Certificate
+
+const privateKey = fs.readFileSync('/etc/letsencrypt/live/api.mementomori.io/privkey.pem', 'utf8');
+const certificate = fs.readFileSync('/etc/letsencrypt/live/api.mementomori.io/cert.pem', 'utf8');
+const ca = fs.readFileSync('/etc/letsencrypt/live/api.mementomori.io/chain.pem', 'utf8');
+
+const credentials = {
+	key: privateKey,
+	cert: certificate,
+	ca: ca
+};
+
+const httpsServer = https.createServer(credentials, app);
+
+*/
 
 //db settings
 const { db } = require('./database.js')
@@ -1503,6 +1520,9 @@ app.post("/user/delete", requireLogin, function (req, res) {
 })
 
 //Express port
+
+/*Replace app with httpsServer for prod deployment , deployment port == 1111*/
+
 app.listen(1234, () => {
   console.log("Server is listening on port: 1234");
 });
