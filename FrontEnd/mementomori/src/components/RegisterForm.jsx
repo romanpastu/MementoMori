@@ -32,10 +32,11 @@ class RegisterForm extends React.Component {
             passwordsMustBeEqual: false,
             wrongEmail: false,
             noFirstName: false,
-            wrongDate : false,
+            wrongDate: false,
             noDate: false,
             noPassword: false,
-            weakPassword: false
+            weakPassword: false,
+            userAlreadyExists: false
 
         }
         this.handleSubmit = this.handleSubmit.bind(this)
@@ -61,7 +62,8 @@ class RegisterForm extends React.Component {
             wrongDate: false,
             noDate: false,
             noPassword: false,
-            weakPassword: false
+            weakPassword: false,
+            userAlreadyExists: false
         })
         event.preventDefault();
         const { email, firstName, secondName, password1, password2, birthDate } = this.state;
@@ -74,51 +76,60 @@ class RegisterForm extends React.Component {
                 'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
             }
         }).then((res) => {
+            if (res.data != "User already exists") {
+                this.props.lifeExpectancySet(true)
+                this.props.login(email, password2, "register").
+                    then((data) => {
 
-            this.props.lifeExpectancySet(true)
-            this.props.login(email, password2, "register").
-                then((data) => {
+                    }).catch((err) => {
 
-                }).catch((err) => {
+                    })
 
-                })
-
-
-        }).catch((err) => {
-            if (err.response.status == 400) {
+            } else {
                 this.setState({
-                    passwordsMustBeEqual: true
-                })
-            }else if (err.response.status == 401){
-                this.setState({
-                    wrongEmail: true
-                })
-            }else if (err.response.status == 402){
-                this.setState({
-                    noFirstName: true
-                })
-            }else if (err.response.status == 403){
-                this.setState({
-                    wrongDate: true
+                    userAlreadyExists: true
                 })
             }
-            else if (err.response.status == 404){
-                this.setState({
-                    noDate: true
-                })
-            }else if (err.response.status == 405){
-                this.setState({
-                    noPassword: true
-                })
-            }else if(err.response.status == 406){
-                this.setState({
-                    weakPassword: true
-                })
+
+        }).catch((err) => {
+            console.log(err)
+            if (err.response.status != undefined) {
+                console.log("pero entra aqui?")
+                if (err.response.status == 400) {
+                    this.setState({
+                        passwordsMustBeEqual: true
+                    })
+                } else if (err.response.status == 401) {
+                    this.setState({
+                        wrongEmail: true
+                    })
+                } else if (err.response.status == 402) {
+                    this.setState({
+                        noFirstName: true
+                    })
+                } else if (err.response.status == 403) {
+                    this.setState({
+                        wrongDate: true
+                    })
+                }
+                else if (err.response.status == 404) {
+                    this.setState({
+                        noDate: true
+                    })
+                } else if (err.response.status == 405) {
+                    this.setState({
+                        noPassword: true
+                    })
+                } else if (err.response.status == 406) {
+                    this.setState({
+                        weakPassword: true
+                    })
+                }
             }
 
         })
     }
-    handleDismiss(){
+    handleDismiss() {
         this.setState({
             passwordsMustBeEqual: false,
             wrongEmail: false,
@@ -126,7 +137,8 @@ class RegisterForm extends React.Component {
             wrongDate: false,
             noDate: false,
             noPassword: false,
-            weakPassword: false
+            weakPassword: false,
+            userAlreadyExists: false
         })
     }
 
@@ -134,13 +146,14 @@ class RegisterForm extends React.Component {
         return (
             <div>
                 <form>
-                {this.state.passwordsMustBeEqual ? <Alert variant="danger" dismissible onClose={this.handleDismiss}> Passwords must be equal </Alert> : null}
-                {this.state.wrongEmail ? <Alert variant="danger" dismissible onClose={this.handleDismiss}> Wrong email </Alert> : null}
-                {this.state.noFirstName ? <Alert variant="danger" dismissible onClose={this.handleDismiss}> You must input a first name </Alert> : null}
-                {this.state.wrongDate ? <Alert variant="danger" dismissible onClose={this.handleDismiss}> Invalid Date </Alert> : null}
-                {this.state.noDate ? <Alert variant="danger" dismissible onClose={this.handleDismiss}> Theres no date </Alert> : null}
-                {this.state.noPassword ? <Alert variant="danger" dismissible onClose={this.handleDismiss}> Theres no password </Alert> : null}
-                {this.state.weakPassword ? <Alert variant="danger" dismissible onClose={this.handleDismiss}> Weak password. It must have 1 lowerCase, 1 UpperCase, 1 Number or special character, and be at least 8 char long </Alert> : null}
+                    {this.state.passwordsMustBeEqual ? <Alert variant="danger" dismissible onClose={this.handleDismiss}> Passwords must be equal </Alert> : null}
+                    {this.state.wrongEmail ? <Alert variant="danger" dismissible onClose={this.handleDismiss}> Wrong email </Alert> : null}
+                    {this.state.noFirstName ? <Alert variant="danger" dismissible onClose={this.handleDismiss}> You must input a first name </Alert> : null}
+                    {this.state.wrongDate ? <Alert variant="danger" dismissible onClose={this.handleDismiss}> Invalid Date </Alert> : null}
+                    {this.state.noDate ? <Alert variant="danger" dismissible onClose={this.handleDismiss}> Theres no date </Alert> : null}
+                    {this.state.noPassword ? <Alert variant="danger" dismissible onClose={this.handleDismiss}> Theres no password </Alert> : null}
+                    {this.state.userAlreadyExists ? <Alert variant="danger" dismissible onClose={this.handleDismiss}> User Already Exists </Alert> : null}
+                    {this.state.weakPassword ? <Alert variant="danger" dismissible onClose={this.handleDismiss}> Weak password. It must have 1 lowerCase, 1 UpperCase, 1 Number or special character, and be at least 8 char long </Alert> : null}
                     <div class="form-group">
                         <label for="exampleInputEmail1">Email address</label>
                         <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" onChange={this.handleChange} />

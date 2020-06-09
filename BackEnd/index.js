@@ -163,9 +163,9 @@ function requireLogin(req, res, next) {
  *        description: A successful response
  */
 app.post('/register', async (req, res) => {
-  console.log(req.body)
+
   const { email, firstName, secondName, password1, password2, birthDate } = req.body;
-  console.log(email, firstName, secondName, password1, password2, birthDate)
+
   var current_date = moment().format('YYYY-MM-DD');
   // if moment(birthDate).isAfter(m)
   if (password1 != password2) {
@@ -201,13 +201,16 @@ app.post('/register', async (req, res) => {
   }
 
 
+
   const password = password2;
   const hashedPassword = await hash(password, 10);
   db.query("INSERT INTO USERS (email, password, birth_date, first_name, second_name) VALUES ('" + email + "','" + hashedPassword + "','" + birthDate + "','" + firstName + "','" + secondName + "')").then(function (data) {
+    console.log("inserted cant")
+    console.log(data)
     db.query("SELECT id from users where email='" + email + "';").then(function (data) {
       db.query("INSERT INTO user_permissions values ('" + data[0].id + "', 'false', 'true', 'false', 'false', 'false')").then(function (data) {
         res.status(200).send("inserted")
-        console.log("inserted")
+
       }).catch(function (error) {
         console.log("ERROR: ", error)
         res.send("error")
@@ -217,6 +220,13 @@ app.post('/register', async (req, res) => {
       res.send("error")
     });
   }).catch(function (error) {
+    
+    if(error.code = '23505'){
+      console.log("se manda?")
+      res.send('User already exists')
+      
+    }
+    
     console.log("ERROR: ", error)
     res.send("error")
   });
@@ -248,7 +258,7 @@ app.post('/register', async (req, res) => {
  */
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
-  console.log(email, password)
+
   try {
     var user = "";
     db.query("SELECT * FROM users WHERE email='" + email + "'").then(async function (data) {
@@ -265,19 +275,16 @@ app.post('/login', async (req, res) => {
       //selects the permissions
       db.query("SELECT * FROM user_permissions WHERE user_id='" + user[0].id + "'").then(function (data) {
         var permited = [];
-        console.log("permisos de usuario")
         delete data[0].user_id
         for (var key in data[0]) {
           if (data[0].hasOwnProperty(key)) {
             if (data[0][key] === true) {
               permited.push(key)
             }
-            // console.log(key + " -> " + data[0][key]);
           }
         }
-        // console.log(permited)
+
         const accesstoken = createAccessToken(user[0].id, permited);
-        console.log(accesstoken)
         const refreshtoken = createRefreshToken(user[0].id);
         db.query("UPDATE users SET refreshtoken = '" + refreshtoken + "' WHERE id = '" + user[0].id + "';").then(function (data) {
           // sendRefreshToken(res, refreshtoken); //unnecesary 
@@ -330,10 +337,8 @@ app.post('/refresh_token', (req, res) => {
         if (data[0][key] === true) {
           permited.push(key)
         }
-        // console.log(key + " -> " + data[0][key]);
       }
     }
-    // console.log(permited)
 
     //now the we need to grab the refreshtoken of the user knowing its id
     db.query("SELECT * FROM users WHERE id='" + userId + "'").then(function (data) {
@@ -404,10 +409,7 @@ app.post('/logout', async (req, res) => {
   const token = authorization.split(' ')[1];
   var decoded = decode(token, { complete: true });
   var userId = decoded.payload.userId
-  console.log("logging out")
-  console.log(userId)
   db.query("UPDATE users set refreshtoken = 'null' where id=" + userId).then(res => {
-    console.log(res)
     res.status(200).send("logged out")
   }).catch(err => {
     console.log(res.send(err))
@@ -508,16 +510,13 @@ app.post('/generateCalendar', requireLogin, async (req, res) => {
 
   function filterDate(date) {
     var stringDate = moment(date).format('YYYY-MM-DD').toString();
-    console.log("dentro del filter date")
     var result = stringDate.match(/(?:(?!T).)*/)
     return result[0];
   }
 
   function getWeeksToLive(death_date, birth_date) {
     //returns the weeks to live between death and birth date, rounded to upper week
-
     var weeks_to_live = moment(death_date).diff(moment(birth_date), 'days') / 7;
-    console.log("semanas a vivir: " + Math.ceil(weeks_to_live))
     return Math.ceil(weeks_to_live);
   }
 
@@ -549,29 +548,27 @@ app.post('/generateCalendar', requireLogin, async (req, res) => {
 
 
     db.query("UPDATE users SET death_date = '" + moment(deathDate).format('YYYY-MM-DD').toString() + "' , weeks_to_live = '" + getWeeksToLive(deathDate, birth_date) + "' WHERE id = '" + userId + "';").then(data => {
-      console.log(data)
       /*******/
       //Sets the yearsToLive and registerDate in the database
       db.query("UPDATE users SET years_to_live =  '" + yearsToLive + "' , register_date = '" + registerDate + "'  WHERE id = '" + userId + "';").then(data => {
-        console.log(data)
+
         db.query("INSERT INTO calendar (user_id) values ('" + userId + "');").then(data => {
-          console.log(data)
+
           // res.send(data)
           /*******/
           /*gets the calendar id related to the current user*/
           db.query("SELECT id from calendar where user_id='" + userId + "';").then(data => {
-            console.log(data[0].id)
+
             /*******/
             //Sets all the field for the calendar
             db.query("INSERT INTO calendar_field (text, rating, calendar_id, week_number) select '', 0, c.id, g.wn from calendar c join users u on u.id = c.user_id cross join generate_series(1, u.weeks_to_live) as g(wn) where c.id='" + data[0].id + "';").then(data => {
-              console.log(data);
-              console.log("series generated")
+
               /******/
               //the lifeExpectanceSet restriction is removed and access to dashboard is granted
               db.query("UPDATE user_permissions SET life_expectancy =  'false' , dashboard = 'true' , stats = 'true', admin = 'false' , profile_info = 'true' WHERE user_id = '" + userId + "';").then(data => {
-                console.log("everything generated")
+
                 res.send("100")
-                console.log(data)
+
               }).catch(err => console.log(err))
             }).catch(err => console.log(err))
           })
@@ -624,14 +621,13 @@ app.get('/chart/lineal/emotion', requireLogin, async (req, res) => {
   }
 
   db.query("SELECT birth_date::varchar, register_date::varchar from users where id = '" + userId + "';").then(data => {
-    // console.log(data[0].birth_date)
+
     var currentWeek = getCurrentWeek(data[0].birth_date)
     // currentWeek = 1189 //dummy to select an incremented current week, delete
     var registerDate = getWeeksToRegisterDate(data[0].register_date, data[0].birth_date)
-    console.log(currentWeek)
-    console.log(registerDate)
+
     db.query("SELECT cf.rating, cf.week_number from calendar_field cf join calendar c on (c.id = cf.calendar_id) where week_number >='" + registerDate + "' and week_number <= '" + currentWeek + "' and user_id='" + userId + "';").then(response => {
-      console.log(data)
+
       var data = response;
       var dataComposed = []
       var obj = {}
@@ -813,8 +809,7 @@ app.get('/chart/cumulative-maxpotential/emotion', requireLogin, async (req, res)
         dataComposed.push(obj)
         obj = {}
       }
-      // console.log("composed data-------------")
-      // console.log(dataComposed)
+
       //sort the dataComposed array based on week number from less to more week number
       function compare_weekN(a, b) {
         if (a.x < b.x) {
@@ -1098,7 +1093,6 @@ app.get('/getUserGenerateCalendar', requireLogin, async (req, res) => {
 
   }).catch(err => {
 
-    console.log(err)
     res.send(err)
   })
 })
@@ -1127,7 +1121,7 @@ app.get('/getUserFieldsInfo', requireLogin, async (req, res) => {
   const token = authorization.split(' ')[1];
   var decoded = decode(token, { complete: true });
   var userId = decoded.payload.userId
-  console.log(userId)
+
   db.query("SELECT CF.text, CF.rating, CF.week_number from calendar C join calendar_field CF on C.id = CF.calendar_id where C.user_id = '" + userId + "';").then(data =>
     res.send(data)
   ).catch(err => {
@@ -1163,7 +1157,7 @@ app.get("/userlist", requireLogin, function (req, res) {
   }
   const token = authorization.split(' ')[1];
   var decoded = decode(token, { complete: true });
-  console.log(decoded)
+
   var permited = decoded.payload.permited;
   if (!permited.includes("admin")) {
     res.status(400).send("this actions is limited to admins")
@@ -1172,7 +1166,7 @@ app.get("/userlist", requireLogin, function (req, res) {
 
 
   db.query("SELECT * FROM users").then(data => {
-    console.log(data)
+
     res.send(data)
   }).catch(err => {
     res.send(err)
@@ -1209,7 +1203,7 @@ app.post("/user/delete/:id", requireLogin, function (req, res) {
   }
   const token = authorization.split(' ')[1];
   var decoded = decode(token, { complete: true });
-  console.log(decoded)
+
   var permited = decoded.payload.permited;
   if (!permited.includes("admin")) {
     res.status(400).send("this actions is limited to admins")
@@ -1270,7 +1264,7 @@ app.post("/user/update/:id", requireLogin, async (req, res) => {
   }
   const token = authorization.split(' ')[1];
   var decoded = decode(token, { complete: true });
-  console.log(decoded)
+
   var permited = decoded.payload.permited;
   if (!permited.includes("admin")) {
     res.status(400).send("this actions is limited to admins")
@@ -1298,13 +1292,13 @@ app.post("/user/update/:id", requireLogin, async (req, res) => {
 
 
   db.query("UPDATE users SET email='" + mail + "' , first_name='" + firstName + "',second_name='" + secondName + "' where id='" + userId + "' ;").then(async (data) => {
-    console.log("ultimo update")
+
 
     if (password1 != "") {
 
       var pass = await hash(password1, 10)
       db.query("UPDATE users SET password='" + pass + "' where id='" + userId + "';").then(data => {
-        console.log("primer update")
+
         res.status(200).send("user data updated")
       }).catch(err => {
         res.status(405).send("db error")
@@ -1373,7 +1367,7 @@ app.post('/user/update', requireLogin, function (req, res) {
   var userId = decoded.payload.userId
 
   const { firstName, secondName, mail, password1, password2 } = req.body
-  console.log(req.body)
+
 
   if (firstName == "" || secondName == "") {
     res.status(402).send("invalid names")
@@ -1394,7 +1388,7 @@ app.post('/user/update', requireLogin, function (req, res) {
   
 
   db.query("UPDATE users SET email='" + mail + "' , first_name='" + firstName + "',second_name='" + secondName + "' where id='" + userId + "' ;").then(async (data) => {
-    console.log("ultimo update")
+
 
     if (password1 != "") {
       if (!password2.match(/(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/)) {
@@ -1404,7 +1398,7 @@ app.post('/user/update', requireLogin, function (req, res) {
       
       var pass = await hash(password1, 10)
       db.query("UPDATE users SET password='" + pass + "' where id='" + userId + "';").then(data => {
-        console.log("primer update")
+
         res.status(200).send("user data updated")
       }).catch(err => {
         res.status(405).send("db error")
@@ -1469,7 +1463,6 @@ app.get('/user/info', requireLogin, function (req, res) {
  *        description: Various errors.
  */
 app.post("/user/delete", requireLogin, function (req, res) {
-  console.log(req.params.id)
   const authorization = req.headers['authorization'];
   if (authorization == undefined) {
     res.send("provide a valid token")
