@@ -117,9 +117,14 @@ class App extends React.Component {
         }
 
       }).catch(err => {
-
+        console.log("lo pilla?")
+        console.log(err)
         if (err == "Error: Network Error") {
           reject("Network error");
+        }else if(err == "Error: Request failed with status code 400"){
+          reject("error: 400")
+        }else if(err == "Error: Request failed with status code 401"){
+          reject("error: 401")
         }
       })
 
