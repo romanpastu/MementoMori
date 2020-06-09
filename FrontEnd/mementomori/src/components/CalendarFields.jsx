@@ -23,7 +23,7 @@ class CalendarFields extends React.Component {
             emotionRating:  this.props.rating,
             //   emotionRating:  Math.floor(Math.random() * 5) + 1 
         };
-        //console.log(props) //week number, beginning with 0
+
         this.showModal = this.showModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -34,20 +34,17 @@ class CalendarFields extends React.Component {
         this.setState({
             fieldId: this.props.weekId
         }, () => {
-            // console.log("initial show modal state")
-            // console.log(this.state.showModal)
+
         });
     }
 
 
     showModal() {
-        // console.log("showmodal state before any click")
-        // console.log(this.state.showModal)
+
         this.setState({
             showModal: true
         }, () => {
-            // console.log("clicked show modal")
-            // console.log(this.state.showModal)
+
         });
 
     }
@@ -59,8 +56,7 @@ class CalendarFields extends React.Component {
         this.setState({
             showModal: false
         }, () => {
-            // console.log("clicked closeModal")
-            // console.log(this.state.showModal)
+
         });
         if(timesUpdated >= 0){
             this.setState( {
@@ -73,10 +69,9 @@ class CalendarFields extends React.Component {
         this.setState({ 
             emotionRating: event.target.value 
         }, () => {
-             console.log("emotion state after change")
-            console.log(this.state.emotionRating)
+
         });
-       console.log("triggered")
+
     }
 
 

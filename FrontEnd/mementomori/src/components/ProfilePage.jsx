@@ -39,7 +39,7 @@ class ProfilePage extends React.Component {
 
     componentDidMount() {
         API.get(constants.urlBackend + '/user/info').then(res => {
-            console.log(res.data)
+
             this.setState({
                 email: res.data[0].email,
                 firstName: res.data[0].first_name,
@@ -50,7 +50,7 @@ class ProfilePage extends React.Component {
                 })
             })
         }).catch(err => {
-            console.log(err)
+
         })
     }
 
@@ -66,7 +66,7 @@ class ProfilePage extends React.Component {
     }
 
     handleDismiss = () => {
-        console.log("hola")
+
         this.setState({
             success: false,
             wrongEmail: false,
@@ -80,7 +80,7 @@ class ProfilePage extends React.Component {
 
     handleSubmit = (evt) => {
         evt.preventDefault();
-        console.log("hola")
+
         this.setState({
             success: false,
             wrongEmail: false,
@@ -100,47 +100,47 @@ class ProfilePage extends React.Component {
             this.setState({
                 success: true
             })
-            console.log("updated")
+
         }).catch(err => {
             if (err.response.status == 200) {
                 this.setState({
                     success: true
                 }, () => {
-                    console.log(this.state)
+
                 })
             } else if (err.response.status == 401) {
-                console.log("wrong email")
+
                 this.setState({
                     wrongEmail: true
                 }, () => {
-                    console.log(this.state)
+
                 })
             } else if (err.response.status == 402) {
-                console.log("invalid names")
+
                 this.setState({
                     wrongName: true
                 }, () => {
-                    console.log(this.state)
+
                 })
             } else if (err.response.status == 403) {
-                console.log("passwords dont match")
+
                 this.setState({
                     wrongPassword: true
                 }, () => {
-                    console.log(this.state)
+
                 })
             } else if (err.response.status == 405) {
-                console.log("db error")
+
                 this.setState({
                     dbError: true
                 }, () => {
-                    console.log(this.state)
+
                 })
             }else if (err.response.status == 404) {
                 this.setState({
                     weakPassword: true
                 }, () => {
-                    console.log(this.state)
+
                 })
             }
         })
@@ -148,7 +148,7 @@ class ProfilePage extends React.Component {
 
     deleteProfile = (evt) => {
         
-        console.log("deleting")
+
 
         API.post(constants.urlBackend+ '/user/delete').then(res =>{
             this.props.logout();

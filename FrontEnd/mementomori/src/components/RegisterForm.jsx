@@ -66,9 +66,6 @@ class RegisterForm extends React.Component {
         event.preventDefault();
         const { email, firstName, secondName, password1, password2, birthDate } = this.state;
 
-        console.log(email, firstName, secondName, password2, birthDate)
-        console.log("submited")
-
         axios({
             method: 'post',
             url: constants.urlBackend + "/register",
@@ -77,19 +74,16 @@ class RegisterForm extends React.Component {
                 'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
             }
         }).then((res) => {
-            console.log(email)
-            console.log(password2)
+
             this.props.lifeExpectancySet(true)
             this.props.login(email, password2, "register").
                 then((data) => {
-                    console.log("despues de hacer el login")
 
-                    console.log(data)
                 }).catch((err) => {
-                    console.log(err)
+
                 })
 
-            console.log(res)
+
         }).catch((err) => {
             if (err.response.status == 400) {
                 this.setState({
@@ -121,8 +115,7 @@ class RegisterForm extends React.Component {
                     weakPassword: true
                 })
             }
-            console.log("el error")
-            console.log(err)
+
         })
     }
     handleDismiss(){

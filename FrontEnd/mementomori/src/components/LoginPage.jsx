@@ -31,7 +31,7 @@ class LoginPage extends React.Component {
     }
 
     componentDidMount() {
-        console.log("authed? ",this.props.authed)
+
         if (this.props.authed == true && this.props.lifeExpectancySet == true) {
             this.props.history.push('/lifeExpectancy');
         } else if (this.props.lifeExpectancySet == false && this.props.authed == false) {

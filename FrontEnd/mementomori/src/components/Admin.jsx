@@ -66,7 +66,7 @@ class Admin extends Component {
             this.setState({
                 userList: response.data
             }, () => {
-                console.log(this.state.userList)
+        
             })
         })
     }
@@ -88,11 +88,8 @@ class Admin extends Component {
     }
 
     deleteUser() {
-        console.log("bn")
+
         API.post(constants.urlBackend + '/user/delete/' + this.state.rowId).then(response => {
-            console.log("Respuesta al borrar")
-            console.log(response.data)
-            console.log(response.status)
             if (response.status == 200) {
                 this.setState({
                     showDeleteUserModal: false,
@@ -186,7 +183,7 @@ class Admin extends Component {
     //handleDismiss for the user Edit
 
     handleDismissUserEdit() {
-        console.log("hola")
+
         let obj = Object.assign({}, this.state.userUpdateErrors)
 
         obj.success = false;
@@ -237,28 +234,27 @@ class Admin extends Component {
         var password2 = this.state.editUserInfo.password2
 
         API.post(constants.urlBackend + '/user/update/' + this.state.rowId, { firstName, secondName, mail, password1, password2 }).then(res => {
-            console.log(res)
-            console.log("updated")
+
             this.updateEditErrors(200)
             this.getUserList();
         }).catch(err => {
             if (err.response.status == 200) {
                 this.getUserList();
             } else if (err.response.status == 401) {
-                console.log("wrong email")
+
                 this.updateEditErrors(401)
             } else if (err.response.status == 402) {
-                console.log("invalid names")
+
                 this.updateEditErrors(402)
             } else if (err.response.status == 403) {
-                console.log("passwords dont match")
+
                 this.updateEditErrors(403)
             } else if (err.response.status == 405) {
-                console.log("db error")
+
                 this.updateEditErrors(405)
             }
         })
-        console.log(firstName, secondName, mail, password1, password2)
+
     }
 
 

@@ -37,7 +37,6 @@ class CalendarGrid extends React.Component {
         fieldsInfo: response.data,
         loaded: true
       }, () => {
-        console.log(this.state.fieldsInfo)
       })
 
     })

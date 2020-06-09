@@ -41,16 +41,13 @@ class LoginForm extends React.Component {
 
     handleSubmit = function(event) {
         event.preventDefault();
-        console.log("entra¿?")
+
         const { email, password } = this.state;
         this.props.login(email, password, "login").
             then(data => {
-                console.log("----")
-                console.log(data)
+
             }).catch((err) => {
-                console.log("-----")
-                console.log("this is the err")
-                console.log(err)
+
                 if(err == "error: 400" || err == "error: 401"){
                      this.setState({
                         wrongCombo: true

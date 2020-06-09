@@ -13,10 +13,7 @@ export default ({ component: Component, render: renderFn, authed, name, ...rest 
    if((accesstoken)){
     var decoded  = jwtDecode(accesstoken)
    }
-   console.log("------")
-   console.log(decoded.permited)
-console.log(decoded.permited.includes("life_expectancy"))
-console.log("------")
+
     return ( //Second case is for iframe based renders
       <Route {...rest} render={props => ( ( decoded.permited.includes(name) === true)) ? renderFn(props) : <Redirect to={{ pathname: '/dashboard', state: { from: props.location } }} />} />
     );

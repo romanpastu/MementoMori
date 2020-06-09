@@ -25,7 +25,7 @@ class Navbar extends Component {
             this.setState({
                 admin:true
             }, () =>{
-                console.log(this.state.admin)
+
             })
         }
     }

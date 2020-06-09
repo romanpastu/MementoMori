@@ -47,7 +47,7 @@ class Calendario extends React.Component {
         const userId = getUserId();
         
         API.get(constants.urlBackend +'/getUserGenerateCalendar').then(response => {
-            console.log(response.data)
+
             this.setState({
                 birth_date: moment(response.data.birthDate),
                 years_to_live: response.data.years_to_live,
@@ -55,10 +55,9 @@ class Calendario extends React.Component {
                 death_date: moment(response.data.death_date),
                 weeks_to_live: response.data.weeks_to_live
             }, () => {
-                console.log(this.state)
+
                 this.props.setCurrentWeek(this.getCurrentWeek())
-                console.log("esto es el almacenamiento")
-                console.log(store.getState().currentWeek)
+
             })
             
         })

@@ -37,7 +37,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    console.log("estados ", this.state.isAuthenticated, this.state.authenticationChecked)
+
     //calls the auth service to decide the auth state value
     isAuthenticated().then((result) => {
       if (result === true) {
@@ -72,7 +72,7 @@ class App extends React.Component {
         this.props.history.push("/login")
       })
     }).catch(err =>{
-      console.log(err)
+
     })
 
 
@@ -88,13 +88,13 @@ class App extends React.Component {
           'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
         }
       }).then((res) => {
-        console.log(res.data.accesstoken)
+
         if (res.data.accesstoken != undefined) {
           Cookies.set('accesstoken', res.data.accesstoken)
         }
-        console.log(direction)
+
         if (direction == "login") {
-          console.log("this is pushing to login")
+
           isAuthenticated().then((result) => {
 
             if (result === true) {
@@ -112,13 +112,12 @@ class App extends React.Component {
             }
           });
         } else if (direction == "register") {
-          console.log("this is pushing to register")
+
           this.props.history.push("/lifeExpectancy")
         }
 
       }).catch(err => {
-        console.log("lo pilla?")
-        console.log(err)
+
         if (err == "Error: Network Error") {
           reject("Network error");
         }else if(err == "Error: Request failed with status code 400"){
@@ -133,9 +132,9 @@ class App extends React.Component {
   }
 
   setYearsRedirect = () => {
-    console.log("llega a caso?")
+
     isAuthenticated().then((result) => {
-      console.log("en el redirect el status es: " + result)
+
       if (result === true) {
         this.setState({ isAuthenticated: true, authenticationChecked: true }, () => {
           this.props.history.push('/dashboard');

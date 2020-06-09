@@ -80,7 +80,7 @@ class CalendarFieldModal extends React.Component {
         this.props.close(this.state.originalEmotionRating, this.state.timesUpdated);
         //This is triggered when closing the modal, if the update button wasnt clicked, then its reseted to the original state
         if(this.state.timesUpdated >= 0){
-            console.log("text reseted")
+
             this.resetText();
 
         }
@@ -98,7 +98,7 @@ class CalendarFieldModal extends React.Component {
         const description = this.state.description;
         API.post(constants.urlBackend+"/update/field", { week_number, emotionRating, description }).then(response=>{
             if(response.status == 200){
-                console.log("saved")
+
                 //If we have saved the element properly, we update the timesSaved so its not 0 anymore
                 this.setState({
                     timesUpdated: this.state.timesUpdated +1,
@@ -124,7 +124,7 @@ class CalendarFieldModal extends React.Component {
             this.setState({
                 emotionRating: this.props.emotionRating
             })
-            console.log("triggered update")
+
         }
     }
 
