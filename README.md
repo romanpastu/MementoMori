@@ -38,6 +38,7 @@ Profile Page:
 - App: https://app.mementomori.io
 - Api: https://api.mementomori.io
 - Api Docs: https://api.mementomori.io/api-docs
+- Components Docs: https://github.com/romanpastu/MementoMori/tree/master/FrontEnd/mementomori/docs
 
 ------------
 
