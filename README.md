@@ -7,6 +7,10 @@
 **Scope of this project**: Based on the idea mentioned previously, this projects uses the same concept in order to create a life tracking application. This allows you to check the status of your life and creates a perception that life is finite, and should be enjoyed.
 
 ------------
+**Database Schema**
+[![db-schem](https://github.com/romanpastu/MementoMori/blob/master/Database/db-schema.png?raw=true "db-schem")](https://github.com/romanpastu/MementoMori/blob/master/Database/db-schema.png?raw=true "db-schem")
+
+------------
 
 **Preview:**
 
