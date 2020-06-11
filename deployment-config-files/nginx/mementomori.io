@@ -7,6 +7,7 @@ server {
    }
 
 
+
     listen 443 ssl; # managed by Certbot
     ssl_certificate /etc/letsencrypt/live/mementomori.io/fullchain.pem; # managed by Certbot
     ssl_certificate_key /etc/letsencrypt/live/mementomori.io/privkey.pem; # managed by Certbot
@@ -22,7 +23,7 @@ server {
 
    server_name 134.122.65.31 mementomori.io www.mementomori.io;
     listen 80;
-    return 404; # managed by Certbot
+    return 301 https://mementomori.io$request_uri; # managed by Certbot
 
 
 }
