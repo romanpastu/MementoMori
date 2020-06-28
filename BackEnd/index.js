@@ -1069,47 +1069,23 @@ app.get('/getUserGenerateCalendar', requireLogin, async (req, res) => {
   const token = authorization.split(' ')[1];
   var decoded = decode(token, { complete: true });
   var userId = decoded.payload.userId
-
-  db.query("SELECT * FROM users where id = '" + userId + "';").then(data => {
-
-
-    //individuals selects are done to skip the formating of a multiselect where a string should be reparsed
+  let selectCalendar = new PQ({text: 'SELECT birth_date::varchar, years_to_live::varchar, register_date::varchar, death_date::varchar, weeks_to_live from users where id = $1', values:[userId]})
+  db.query(selectCalendar).then(data =>{
     var dataToSend = [{}]
-    db.query("SELECT (birth_date::varchar) from users where id ='" + userId + "';").then(data => {
+    dataToSend[0].birthDate = data[0].birth_date;
+    dataToSend[0].years_to_live = data[0].years_to_live;
+    dataToSend[0].register_date = data[0].register_date;
+    dataToSend[0].death_date = data[0].death_date;
+    dataToSend[0].weeks_to_live = data[0].weeks_to_live;
+    res.send(dataToSend[0])
 
-      dataToSend[0].birthDate = data[0].birth_date;
-
-      db.query("SELECT (years_to_live::varchar) from users where id ='" + userId + "';").then(data => {
-        dataToSend[0].years_to_live = data[0].years_to_live;
-
-        db.query("SELECT (register_date::varchar) from users where id ='" + userId + "';").then(data => {
-          dataToSend[0].register_date = data[0].register_date;
-
-          db.query("SELECT (death_date::varchar) from users where id ='" + userId + "';").then(data => {
-            dataToSend[0].death_date = data[0].death_date;
-
-            db.query("SELECT (weeks_to_live) from users where id ='" + userId + "';").then(data => {
-              dataToSend[0].weeks_to_live = data[0].weeks_to_live;
-
-              res.send(dataToSend[0])
-              console.log(dataToSend)
-            })
-
-
-          })
-        })
-      })
-    })
-    
-    // dataToSend[0].birthDate = data[0].birth_date;
-    // dataToSend[0].years_to_live = data[0].years_to_live;
-    // dataToSend[0].register_date = data[0].register_date;
-    // dataToSend[0].death_date = data[0].death_date
-    console.log(dataToSend)
-  }).catch(err => {
-
+  }).catch(err =>{
+    console.log(err)
     res.send(err)
   })
+
+
+  
 })
 
 //get user field info
