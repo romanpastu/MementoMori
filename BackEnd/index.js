@@ -1071,21 +1071,14 @@ app.get('/getUserGenerateCalendar', requireLogin, async (req, res) => {
   var userId = decoded.payload.userId
   let selectCalendar = new PQ({text: 'SELECT birth_date::varchar, years_to_live::varchar, register_date::varchar, death_date::varchar, weeks_to_live from users where id = $1', values:[userId]})
   db.query(selectCalendar).then(data =>{
-    var dataToSend = [{}]
-    dataToSend[0].birthDate = data[0].birth_date;
-    dataToSend[0].years_to_live = data[0].years_to_live;
-    dataToSend[0].register_date = data[0].register_date;
-    dataToSend[0].death_date = data[0].death_date;
-    dataToSend[0].weeks_to_live = data[0].weeks_to_live;
-    res.send(dataToSend[0])
-
+    data[0]['birthDate'] = data[0]["birth_date"]
+    delete data[0]["birth_date"]
+    res.send(data[0])
   }).catch(err =>{
     console.log(err)
     res.send(err)
   })
 
-
-  
 })
 
 //get user field info
