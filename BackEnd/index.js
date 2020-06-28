@@ -51,7 +51,7 @@ const httpsServer = https.createServer(credentials, app);
 
 //db settings
 const { db } = require('./database.js')
-
+const PQ = require('pg-promise').ParameterizedQuery
 //moment
 var moment = require('moment');
 moment().format();
@@ -204,11 +204,14 @@ app.post('/register', async (req, res) => {
 
   const password = password2;
   const hashedPassword = await hash(password, 10);
-  db.query("INSERT INTO USERS (email, password, birth_date, first_name, second_name) VALUES ('" + email + "','" + hashedPassword + "','" + birthDate + "','" + firstName + "','" + secondName + "')").then(function (data) {
+  let insertUser = new PQ({text: 'INSERT INTO USERS (email, password, birth_date, first_name, second_name) VALUES ($1, $2, $3, $4, $5)', values: [email, hashedPassword, birthDate, firstName, secondName]})
+  db.query(insertUser).then(function (data) {
     console.log("inserted cant")
     console.log(data)
-    db.query("SELECT id from users where email='" + email + "';").then(function (data) {
-      db.query("INSERT INTO user_permissions values ('" + data[0].id + "', 'false', 'true', 'false', 'false', 'false')").then(function (data) {
+    let selectUser = new PQ({text: 'SELECT id from users where email = $1', values: [email]})
+    db.query(selectUser).then(function (data) {
+      let setPermissions = new PQ({text: 'INSERT INTO user_permissions values ($1, false, true, false, false, false)', values: [data[0].id]})
+      db.query(setPermissions).then(function (data) {
         res.status(200).send("inserted")
 
       }).catch(function (error) {
@@ -261,7 +264,8 @@ app.post('/login', async (req, res) => {
 
   try {
     var user = "";
-    db.query("SELECT * FROM users WHERE email='" + email + "'").then(async function (data) {
+    let selectUser = new PQ({text: 'SELECT * FROM users where email = $1', values: [email]})
+    db.query(selectUser).then(async function (data) {
       user = data;
       if (!user[0]) {
         res.status(400).send("error");
@@ -273,7 +277,8 @@ app.post('/login', async (req, res) => {
         throw new Error("Password not corect");
       }
       //selects the permissions
-      db.query("SELECT * FROM user_permissions WHERE user_id='" + user[0].id + "'").then(function (data) {
+      let selectUserPermissions = new PQ({text: 'SELECT * FROM user_permissions WHERE user_id = $1',values: [user[0].id]})
+      db.query(selectUserPermissions).then(function (data) {
         var permited = [];
         delete data[0].user_id
         for (var key in data[0]) {
@@ -286,7 +291,8 @@ app.post('/login', async (req, res) => {
 
         const accesstoken = createAccessToken(user[0].id, permited);
         const refreshtoken = createRefreshToken(user[0].id);
-        db.query("UPDATE users SET refreshtoken = '" + refreshtoken + "' WHERE id = '" + user[0].id + "';").then(function (data) {
+        let setUserRefreshToken = new PQ({text:'UPDATE users SET refreshtoken = $1 where id = $2',values: [refreshtoken,user[0].id]})
+        db.query(setUserRefreshToken).then(function (data) {
           // sendRefreshToken(res, refreshtoken); //unnecesary 
           sendAccessToken(res, req, accesstoken);
         }).catch(function (error) {
@@ -327,8 +333,8 @@ app.post('/refresh_token', (req, res) => {
   userId = userId.userId
 
   var token = ""
-
-  db.query("SELECT * FROM user_permissions WHERE user_id='" + userId + "'").then(function (data) {
+  let selectUserPermissions = new PQ({text: 'SELECT * FROM user_permissions WHERE user_id = $1', values: [userId]})
+  db.query(selectUserPermissions).then(function (data) {
     var permited = [];
     console.log("permisos de usuario")
     delete data[0].user_id
@@ -339,9 +345,9 @@ app.post('/refresh_token', (req, res) => {
         }
       }
     }
-
+    let selectUser = new PQ({text: 'SELECT * FROM users where id = $1', values:[userId]})
     //now the we need to grab the refreshtoken of the user knowing its id
-    db.query("SELECT * FROM users WHERE id='" + userId + "'").then(function (data) {
+    db.query(selectUser).then(function (data) {
       var user = data;
       token = user[0].refreshtoken;
       var id = user[0].id;
@@ -355,7 +361,8 @@ app.post('/refresh_token', (req, res) => {
       }
 
       user = "";
-      db.query("SELECT * FROM users WHERE id='" + id + "'").then(function (data) {
+      let selectUser = new PQ({text: 'SELECT * FROM users where id = $1', values:[id]})
+      db.query(selectUser).then(function (data) {
         user = data;
         if (!user) return res.send({ accesstoken: '' });
         //if user exists check if refreshtoken exist on user
@@ -367,8 +374,8 @@ app.post('/refresh_token', (req, res) => {
         //if token exist create a new Refresh and Accestoken
         const accesstoken = createAccessToken(user[0].id, permited);
         const refreshtoken = createRefreshToken(user[0].id);
-
-        db.query("UPDATE users SET refreshtoken = '" + refreshtoken + "' WHERE id = '" + user[0].id + "';").then(function (data) {
+        let setRefreshToken = new PQ({text: 'UPDATE users SET refreshtoken = $1 where id = $2', values:[refreshtoken, user[0].id]})
+        db.query(setRefreshToken).then(function (data) {
           // sendRefreshToken(res, refreshtoken); //unnecesary
           return res.send({ accesstoken });
 
@@ -409,10 +416,11 @@ app.post('/logout', async (req, res) => {
   const token = authorization.split(' ')[1];
   var decoded = decode(token, { complete: true });
   var userId = decoded.payload.userId
-  db.query("UPDATE users set refreshtoken = 'null' where id=" + userId).then(res => {
+  let setRefreshTokenNull = new PQ({text: "UPDATE users set refreshtoken = 'null' where id = $1", values:[userId]})
+  db.query(setRefreshTokenNull).then(data => {
     res.status(200).send("logged out")
   }).catch(err => {
-    console.log(res.send(err))
+    console.log(err)
     res.send(err)
   })
 
@@ -534,7 +542,8 @@ app.post('/generateCalendar', requireLogin, async (req, res) => {
 
 
   //sets the deathDate and weeksToLive in the database
-  db.query("SELECT * from users where id =" + userId).then(data => {
+  let selectUser = new PQ({text: 'SELECT * FROM users where id = $1', values:[userId]})
+  db.query(selectUser).then(data => {
     var birth_date = data[0].birth_date
     var deathDate = ""
     //sets the death_date and the weeks to live
@@ -546,26 +555,30 @@ app.post('/generateCalendar', requireLogin, async (req, res) => {
       throw new Error("The resulting total weeks are smaller than the weeks spent up to register")
     }
 
-
-    db.query("UPDATE users SET death_date = '" + moment(deathDate).format('YYYY-MM-DD').toString() + "' , weeks_to_live = '" + getWeeksToLive(deathDate, birth_date) + "' WHERE id = '" + userId + "';").then(data => {
+    let setUserData = new PQ({text: 'UPDATE users SET death_date = $1 , weeks_to_live = $2 where id = $3', values: [moment(deathDate).format('YYYY-MM-DD').toString(),getWeeksToLive(deathDate, birth_date),userId]})
+    db.query(setUserData).then(data => {
       /*******/
       //Sets the yearsToLive and registerDate in the database
-      db.query("UPDATE users SET years_to_live =  '" + yearsToLive + "' , register_date = '" + registerDate + "'  WHERE id = '" + userId + "';").then(data => {
-
-        db.query("INSERT INTO calendar (user_id) values ('" + userId + "');").then(data => {
+      let setUserData2 = new PQ({text: 'UPDATE users SET years_to_live = $1, register_date = $2 where id = $3', values: [yearsToLive,registerDate,userId]})
+      db.query(setUserData2).then(data => {
+        let insertCalendar = new PQ({text: 'INSERT INTO calendar (user_id) values ($1)', values: [userId]})
+        db.query(insertCalendar).then(data => {
 
           // res.send(data)
           /*******/
           /*gets the calendar id related to the current user*/
-          db.query("SELECT id from calendar where user_id='" + userId + "';").then(data => {
+          let selectCalendarId = new PQ({text: 'SELECT id from calendar where user_id = $1', values:[userId]})
+          db.query(selectCalendarId).then(data => {
 
             /*******/
             //Sets all the field for the calendar
-            db.query("INSERT INTO calendar_field (text, rating, calendar_id, week_number) select '', 0, c.id, g.wn from calendar c join users u on u.id = c.user_id cross join generate_series(1, u.weeks_to_live) as g(wn) where c.id='" + data[0].id + "';").then(data => {
+            let generateCalendarSeries = new PQ({text: "INSERT INTO calendar_field (text, rating, calendar_id, week_number) select '', 0, c.id, g.wn from calendar c join users u on u.id = c.user_id cross join generate_series(1, u.weeks_to_live) as g(wn) where c.id= $1 ;", values: [data[0].id]})
+            db.query(generateCalendarSeries).then(data => {
 
               /******/
               //the lifeExpectanceSet restriction is removed and access to dashboard is granted
-              db.query("UPDATE user_permissions SET life_expectancy =  'false' , dashboard = 'true' , stats = 'true', admin = 'false' , profile_info = 'true' WHERE user_id = '" + userId + "';").then(data => {
+              let removeRestriction = new PQ({text: "UPDATE user_permissions SET life_expectancy =  'false' , dashboard = 'true' , stats = 'true', admin = 'false' , profile_info = 'true' WHERE user_id = $1", values:[userId]})
+              db.query(removeRestriction).then(data => {
 
                 res.send("100")
 
@@ -619,14 +632,14 @@ app.get('/chart/lineal/emotion', requireLogin, async (req, res) => {
     var weeks_to_date = moment(new Date(register_date)).diff(birth_date, 'days') / 7;
     return Math.floor(weeks_to_date);
   }
-
-  db.query("SELECT birth_date::varchar, register_date::varchar from users where id = '" + userId + "';").then(data => {
+  let selectChartData = new PQ({text: "SELECT birth_date::varchar, register_date::varchar from users where id = $1 ;", values : [userId]})
+  db.query(selectChartData).then(data => {
 
     var currentWeek = getCurrentWeek(data[0].birth_date)
     // currentWeek = 1189 //dummy to select an incremented current week, delete
     var registerDate = getWeeksToRegisterDate(data[0].register_date, data[0].birth_date)
-
-    db.query("SELECT cf.rating, cf.week_number from calendar_field cf join calendar c on (c.id = cf.calendar_id) where week_number >='" + registerDate + "' and week_number <= '" + currentWeek + "' and user_id='" + userId + "';").then(response => {
+    let selectChartData2 = new PQ({text: "SELECT cf.rating, cf.week_number from calendar_field cf join calendar c on (c.id = cf.calendar_id) where week_number >= $1 and week_number <= $2 and user_id = $3", values : [registerDate,currentWeek,userId]})
+    db.query(selectChartData2).then(response => {
 
       var data = response;
       var dataComposed = []
@@ -702,14 +715,14 @@ app.get('/chart/cumulative/emotion', requireLogin, async (req, res) => {
     var weeks_to_date = moment(new Date(register_date)).diff(birth_date, 'days') / 7;
     return Math.floor(weeks_to_date);
   }
-
-  db.query("SELECT birth_date::varchar, register_date::varchar from users where id = '" + userId + "';").then(data => {
-
+  let selectChartData = new PQ({text: "SELECT birth_date::varchar, register_date::varchar from users where id = $1;", values: [userId]})
+  db.query(selectChartData).then(data => {
+    
     var currentWeek = getCurrentWeek(data[0].birth_date)
     // currentWeek = 1189 //dummy to select an incremented current week, delete
     var registerDate = getWeeksToRegisterDate(data[0].register_date, data[0].birth_date)
-
-    db.query("SELECT cf.rating, cf.week_number from calendar_field cf join calendar c on (c.id = cf.calendar_id) where week_number >='" + registerDate + "' and week_number <= '" + currentWeek + "' and user_id='" + userId + "';").then(response => {
+    let selectChartData2 = new PQ({text: "SELECT cf.rating, cf.week_number from calendar_field cf join calendar c on (c.id = cf.calendar_id) where week_number >= $1 and week_number <= $2 and user_id = $3", values: [registerDate,currentWeek,userId]})
+    db.query(selectChartData2).then(response => {
       var data = response;
       var dataComposed = []
       var obj = {}
@@ -791,14 +804,14 @@ app.get('/chart/cumulative-maxpotential/emotion', requireLogin, async (req, res)
     var weeks_to_date = moment(new Date(register_date)).diff(birth_date, 'days') / 7;
     return Math.floor(weeks_to_date);
   }
-
-  db.query("SELECT birth_date::varchar, register_date::varchar from users where id = '" + userId + "';").then(data => {
+  let selectData = new PQ({text: "SELECT birth_date::varchar, register_date::varchar from users where id = $1;", values: [userId]})
+  db.query(selectData).then(data => {
 
     var currentWeek = getCurrentWeek(data[0].birth_date)
     // currentWeek = 1189 //dummy to select an incremented current week, delete
     var registerDate = getWeeksToRegisterDate(data[0].register_date, data[0].birth_date)
-
-    db.query("SELECT cf.rating, cf.week_number from calendar_field cf join calendar c on (c.id = cf.calendar_id) where week_number >='" + registerDate + "' and week_number <= '" + currentWeek + "' and user_id='" + userId + "';").then(response => {
+    let selectData2 = new PQ({text:"SELECT cf.rating, cf.week_number from calendar_field cf join calendar c on (c.id = cf.calendar_id) where week_number >= $1 and week_number <= $2 and user_id = $3", values: [registerDate,currentWeek,userId]})
+    db.query(selectData2).then(response => {
       var data = response;
       var dataComposed = []
       var obj = {}
@@ -897,14 +910,14 @@ app.get('/chart/pie/emotion', requireLogin, async (req, res) => {
     var weeks_to_date = moment(new Date(register_date)).diff(birth_date, 'days') / 7;
     return Math.floor(weeks_to_date);
   }
-
-  db.query("SELECT birth_date::varchar, register_date::varchar from users where id = '" + userId + "';").then(data => {
+  let selectData = new PQ({text: 'SELECT birth_date::varchar, register_date::varchar from users where id = $1 ;', values: [userId]})
+  db.query(selectData).then(data => {
 
     var currentWeek = getCurrentWeek(data[0].birth_date)
     // currentWeek = 1400 //dummy to select an incremented current week, delete
     var registerDate = getWeeksToRegisterDate(data[0].register_date, data[0].birth_date)
-
-    db.query("SELECT cf.rating, cf.week_number from calendar_field cf join calendar c on (c.id = cf.calendar_id) where week_number >='" + registerDate + "' and week_number <= '" + currentWeek + "' and user_id='" + userId + "';").then(response => {
+    let selectData2 = new PQ({text: "SELECT cf.rating, cf.week_number from calendar_field cf join calendar c on (c.id = cf.calendar_id) where week_number >= $1 and week_number <= $2 and user_id = $3", values: [registerDate, currentWeek, userId]})
+    db.query(selectData2).then(response => {
       var data = response;
       var data = data.map(function (obj) {
         return Object.keys(obj).sort().map(function (key) {
@@ -1013,10 +1026,10 @@ app.post('/update/field', requireLogin, async (req, res) => {
   const emotionrating = req.body.emotionRating
   const description = req.body.description
 
-
-  db.query("SELECT cf.id from calendar_field cf join calendar c on (c.id = cf.calendar_id) where week_number='" + week_number + "' and user_id='" + userId + "';").then(data => {
-
-    db.query("UPDATE calendar_field SET text = '" + description + "' , rating = '" + emotionrating + "' where id= '" + data[0].id + "';").then(data => {
+  let selectData = new PQ({text: "SELECT cf.id from calendar_field cf join calendar c on (c.id = cf.calendar_id) where week_number= $1 and user_id = $2", values:[week_number, userId]})
+  db.query(selectData).then(data => {
+    let updateField = new PQ({text: "UPDATE calendar_field SET text = $1, rating = $2 where id= $3", values:[description,emotionrating,data[0].id]})
+    db.query(updateField).then(data => {
 
       res.send(200)
     }).catch(err => {
@@ -1079,6 +1092,7 @@ app.get('/getUserGenerateCalendar', requireLogin, async (req, res) => {
               dataToSend[0].weeks_to_live = data[0].weeks_to_live;
 
               res.send(dataToSend[0])
+              console.log(dataToSend)
             })
 
 
@@ -1086,11 +1100,12 @@ app.get('/getUserGenerateCalendar', requireLogin, async (req, res) => {
         })
       })
     })
+    
     // dataToSend[0].birthDate = data[0].birth_date;
     // dataToSend[0].years_to_live = data[0].years_to_live;
     // dataToSend[0].register_date = data[0].register_date;
     // dataToSend[0].death_date = data[0].death_date
-
+    console.log(dataToSend)
   }).catch(err => {
 
     res.send(err)
@@ -1121,8 +1136,8 @@ app.get('/getUserFieldsInfo', requireLogin, async (req, res) => {
   const token = authorization.split(' ')[1];
   var decoded = decode(token, { complete: true });
   var userId = decoded.payload.userId
-
-  db.query("SELECT CF.text, CF.rating, CF.week_number from calendar C join calendar_field CF on C.id = CF.calendar_id where C.user_id = '" + userId + "';").then(data =>
+  let selectUserFieldsInfo = new PQ({text: "SELECT CF.text, CF.rating, CF.week_number from calendar C join calendar_field CF on C.id = CF.calendar_id where C.user_id = $1 ;", values:[userId]})
+  db.query(selectUserFieldsInfo).then(data =>
     res.send(data)
   ).catch(err => {
     console.log(err)
@@ -1164,9 +1179,8 @@ app.get("/userlist", requireLogin, function (req, res) {
     throw new Error("Token doesn't belong to an admin")
   }
 
-
-  db.query("SELECT * FROM users").then(data => {
-
+  let selectUsers = new PQ({text: 'SELECT * FROM users'})
+  db.query(selectUsers).then(data => {
     res.send(data)
   }).catch(err => {
     res.send(err)
@@ -1209,8 +1223,8 @@ app.post("/user/delete/:id", requireLogin, function (req, res) {
     res.status(400).send("this actions is limited to admins")
     throw new Error("Token doesn't belong to an admin")
   }
-
-  db.query("DELETE FROM users where id=" + req.params.id).then(data => {
+  let deleteUser = new PQ({text: 'DELETE FROM users where id = $1', values: [req.params.id]})
+  db.query(deleteUser).then(data => {
     res.status(200).send("deleted");
   }).catch(err => res.send(err))
 })
@@ -1290,15 +1304,15 @@ app.post("/user/update/:id", requireLogin, async (req, res) => {
     throw new Error("Passwords dont mach")
   }
 
-
-  db.query("UPDATE users SET email='" + mail + "' , first_name='" + firstName + "',second_name='" + secondName + "' where id='" + userId + "' ;").then(async (data) => {
+  let updateUser = new PQ({text: 'UPDATE users SET email = $1 , first_name = $2 , second_name = $3 where id = $4', values:[mail, firstName, secondName, userId]})
+  db.query(updateUser).then(async (data) => {
 
 
     if (password1 != "") {
 
       var pass = await hash(password1, 10)
-      db.query("UPDATE users SET password='" + pass + "' where id='" + userId + "';").then(data => {
-
+      let updateUserPassword = new PQ({text: 'UPDATE users SET password = $1 where id = $2', values: [pass, userId]})
+      db.query(updateUserPassword).then(data => {
         res.status(200).send("user data updated")
       }).catch(err => {
         res.status(405).send("db error")
@@ -1386,8 +1400,8 @@ app.post('/user/update', requireLogin, function (req, res) {
   }
 
   
-
-  db.query("UPDATE users SET email='" + mail + "' , first_name='" + firstName + "',second_name='" + secondName + "' where id='" + userId + "' ;").then(async (data) => {
+  let updateQuery = new PQ({text: 'UPDATE users SET email = $1 , first_name = $2 , second_name = $3 where id = $4', values:[mail, firstName, secondName, userId]})
+  db.query(updateQuery).then(async (data) => {
 
 
     if (password1 != "") {
@@ -1397,7 +1411,8 @@ app.post('/user/update', requireLogin, function (req, res) {
       }
       
       var pass = await hash(password1, 10)
-      db.query("UPDATE users SET password='" + pass + "' where id='" + userId + "';").then(data => {
+      let updatePasswordQuery = new PQ({text: 'UPDATE users SET password = $1 where id = $2', values:[pass, userId]})
+      db.query(updatePasswordQuery).then(data => {
 
         res.status(200).send("user data updated")
       }).catch(err => {
@@ -1437,8 +1452,8 @@ app.get('/user/info', requireLogin, function (req, res) {
   const token = authorization.split(' ')[1];
   var decoded = decode(token, { complete: true });
   var userId = decoded.payload.userId
-
-  db.query("SELECT * FROM users where id='" + userId + "'").then(data => {
+  let selectInfo = new PQ({text: 'SELECT * FROM users where id= $1', values: [userId]})
+  db.query(selectInfo).then(data => {
     res.send(data)
   }).catch(err => {
     res.send(err)
@@ -1470,7 +1485,8 @@ app.post("/user/delete", requireLogin, function (req, res) {
   const token = authorization.split(' ')[1];
   var decoded = decode(token, { complete: true });
   var userId = decoded.payload.userId
-  db.query("DELETE FROM users where id=" + userId).then(data => {
+  let deleteUser = new PQ({text: 'DELETE FROM users where id = $1', values: [userId]})
+  db.query(deleteUser).then(data => {
     res.status(200).send("deleted");
   }).catch(err => res.send(err))
 })
