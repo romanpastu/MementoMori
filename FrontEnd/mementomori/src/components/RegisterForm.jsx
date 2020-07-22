@@ -70,7 +70,7 @@ class RegisterForm extends React.Component {
 
         axios({
             method: 'post',
-            url: constants.urlBackend + "/register",
+            url: constants.urlBackend + "/auth/register",
             data: qs.stringify({ email, firstName, secondName, password1, password2, birthDate }),
             headers: {
                 'content-type': 'application/x-www-form-urlencoded;charset=utf-8'

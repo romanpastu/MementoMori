@@ -32,7 +32,7 @@ class CalendarGrid extends React.Component {
 
   componentDidMount() {
 
-    API.get(constants.urlBackend + '/getUserFieldsInfo').then(response => {
+    API.get(constants.urlBackend + '/calendar/getUserFieldsInfo').then(response => {
       this.setState({
         fieldsInfo: response.data,
         loaded: true

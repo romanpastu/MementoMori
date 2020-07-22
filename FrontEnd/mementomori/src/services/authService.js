@@ -8,7 +8,7 @@ export default function isAuthenticated() {
 
     var accesstoken = Cookies.get('accesstoken');
 
-    return axios({ method: 'post', url: constants.urlBackend+"/verify", headers: { Authorization: `Bearer ${accesstoken}` } })
+    return axios({ method: 'post', url: constants.urlBackend+"/auth/verify", headers: { Authorization: `Bearer ${accesstoken}` } })
         .then(function (response) {
             //console.log(JSON.stringify(response))
             if (response.data.status === "valid") {
@@ -22,14 +22,14 @@ export default function isAuthenticated() {
                 //We also send the userId back to the server in order to identify the refreshtoken that belongs to the user
                 var uid = Cookies.get('user')
 
-                return axios({ method: 'post', url: constants.urlBackend+"/refresh_token", data: qs.stringify({ uid }), headers: { Authorization: `Bearer ${accesstoken}` } })
+                return axios({ method: 'post', url: constants.urlBackend+"/auth/refresh_token", data: qs.stringify({ uid }), headers: { Authorization: `Bearer ${accesstoken}` } })
                     .then(function (response) {
                         accesstoken = response.data.accesstoken;
                         Cookies.set('accesstoken', response.data.accesstoken)
                         //Once ive got the new accesstoken, I do the verification of the token and return true or false based on the verification result.
                         if (accesstoken != "") {
                             //the refreshing process was correct, we attempt the verification of the freshly  obtained access token
-                            return axios({ method: 'post', url: constants.urlBackend+"/verify", headers: { Authorization: `Bearer ${accesstoken}` } })
+                            return axios({ method: 'post', url: constants.urlBackend+"/auth/verify", headers: { Authorization: `Bearer ${accesstoken}` } })
                                 .then(function (response) {
                                     if (response.data.status === "valid") {
                                         //the new accesstoken is valid, returns true
