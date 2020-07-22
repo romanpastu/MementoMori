@@ -1,17 +1,14 @@
-const express = require('express')
-const router = express.Router()
-const { db } = require('../database/database')
-const PQ = require('pg-promise').ParameterizedQuery
-const { requireLogin } = require("../controllers/auth")
-const { verify, decode } = require('jsonwebtoken')
-const { hash, compare } = require('bcryptjs')
-const { createAccessToken, createRefreshToken, sendAccessToken, sendRefreshToken } = require('../helpers/token.js')
-const { isAuth } = require('../helpers/isAuth.js')
+const express = require('express');
 
-var moment = require('moment');
+const router = express.Router();
+
+const moment = require('moment');
+
 moment().format();
 
-const { register, login, verifyToken , logout, refreshToken} = require('../controllers/auth')
+const {
+  register, login, verifyToken, logout, refreshToken,
+} = require('../controllers/auth');
 /**
  * @swagger
  * /register:
@@ -62,7 +59,7 @@ const { register, login, verifyToken , logout, refreshToken} = require('../contr
  *      '406':
  *        description: A successful response
  */
-router.post('/register', register)
+router.post('/register', register);
 /**
  * @swagger
  * /login:
@@ -87,7 +84,7 @@ router.post('/register', register)
  *      '401':
  *        description: Wrong password and email combinations
  */
-router.post('/login', login)
+router.post('/login', login);
 /**
  * @swagger
  * /refresh_token:
@@ -101,7 +98,7 @@ router.post('/login', login)
  *      'accesstoken':
  *        description: Empty if a wrong token is provided, else it will return a new accesstoken
  */
-router.post('/refresh_token', refreshToken )
+router.post('/refresh_token', refreshToken);
 /**
  * @swagger
  * /logout:
@@ -113,12 +110,14 @@ router.post('/refresh_token', refreshToken )
  *       - status code
  *    responses:
  *      '200':
- *        description: Access Token Loged out Successfully || Provide a valid token. Logging out happens in both cases, but access token might not get invalidated if the connection was lost.
+ *        description: Access Token Loged out Successfully || Provide a valid token.
+ *        Logging out happens in both cases, but access token might not get invalidated
+ *        if the connection was lost.
  */
-//logout
-router.post('/logout', logout)
+// logout
+router.post('/logout', logout);
 
-//token verification route 
+// token verification route
 /**
  * @swagger
  * /verify:
@@ -134,6 +133,6 @@ router.post('/logout', logout)
  *      '$error':
  *        description: An error might happen [Token expired, token malformed, Token invalid....].
  */
-router.post('/verify', verifyToken)
+router.post('/verify', verifyToken);
 
 module.exports = router;

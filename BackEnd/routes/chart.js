@@ -1,14 +1,17 @@
-const express = require('express')
-const router = express.Router()
-const { db } = require('../database/database')
-const PQ = require('pg-promise').ParameterizedQuery
-const { requireLogin } = require("../controllers/auth")
-const { decode } = require('jsonwebtoken')
-var moment = require('moment');
+const express = require('express');
+
+const router = express.Router();
+
+const moment = require('moment');
+const { requireLogin } = require('../controllers/auth');
+
 moment().format();
 
-const { generatePieChart, generateCumulativeMaxPotentialChart, generateCumulativeChart, generateLinealChart } = require('../controllers/chart')
-//charts
+const {
+  generatePieChart, generateCumulativeMaxPotentialChart,
+  generateCumulativeChart, generateLinealChart,
+} = require('../controllers/chart');
+// charts
 
 /**
  * @swagger
@@ -26,9 +29,9 @@ const { generatePieChart, generateCumulativeMaxPotentialChart, generateCumulativ
  *        description: Various errors.
  */
 
-router.get('/pie/emotion', requireLogin, generatePieChart)
+router.get('/pie/emotion', requireLogin, generatePieChart);
 
-//get cumulative emotion vs max potential emotion chart data
+// get cumulative emotion vs max potential emotion chart data
 /**
  * @swagger
  * /chart/cumulative-maxpotential/emotion:
@@ -44,9 +47,9 @@ router.get('/pie/emotion', requireLogin, generatePieChart)
  *      '$error':
  *        description: Various errors.
  */
-router.get('/cumulative-maxpotential/emotion', generateCumulativeMaxPotentialChart)
+router.get('/cumulative-maxpotential/emotion', generateCumulativeMaxPotentialChart);
 
-//get cumulative emotion chart data
+// get cumulative emotion chart data
 /**
  * @swagger
  * /chart/cumulative/emotion:
@@ -62,9 +65,9 @@ router.get('/cumulative-maxpotential/emotion', generateCumulativeMaxPotentialCha
  *      '$error':
  *        description: Various errors.
  */
-router.get('/cumulative/emotion', requireLogin, generateCumulativeChart)
+router.get('/cumulative/emotion', requireLogin, generateCumulativeChart);
 
-//get lineal emotion chart data
+// get lineal emotion chart data
 /**
  * @swagger
  * /chart/lineal/emotion:
@@ -80,6 +83,6 @@ router.get('/cumulative/emotion', requireLogin, generateCumulativeChart)
  *      '$error':
  *        description: Various errors.
  */
-router.get('/lineal/emotion', requireLogin, generateLinealChart)
+router.get('/lineal/emotion', requireLogin, generateLinealChart);
 
 module.exports = router;

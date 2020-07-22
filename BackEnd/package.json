@@ -28,5 +28,10 @@
     "swagger-jsdoc": "^4.0.0",
     "swagger-ui-dist": "^3.26.0",
     "swagger-ui-express": "^4.1.4"
+  },
+  "devDependencies": {
+    "eslint": "^7.5.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.0"
   }
 }

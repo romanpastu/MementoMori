@@ -1,13 +1,13 @@
-const express = require('express')
-const router = express.Router()
-const { db } = require('../database/database')
-const PQ = require('pg-promise').ParameterizedQuery
-const { requireLogin } = require("../controllers/auth")
-const { decode } = require('jsonwebtoken')
-var moment = require('moment');
+const express = require('express');
+
+const router = express.Router();
+
+const moment = require('moment');
+const { requireLogin } = require('../controllers/auth');
+
 moment().format();
-const { updateUser, getUserInfo, deleteUser } = require('../controllers/user')
-//for user
+const { updateUser, getUserInfo, deleteUser } = require('../controllers/user');
+// for user
 /**
  * @swagger
  * /user/update:
@@ -49,9 +49,9 @@ const { updateUser, getUserInfo, deleteUser } = require('../controllers/user')
  *      '405':
  *        description: Error / DB Error.
  */
-router.post('/update', requireLogin, updateUser)
+router.post('/update', requireLogin, updateUser);
 
-//for user
+// for user
 /**
 * @swagger
 * /user/info:
@@ -67,9 +67,9 @@ router.post('/update', requireLogin, updateUser)
 *      '$error':
 *        description: Various errors.
 */
-router.get('/info', requireLogin, getUserInfo)
+router.get('/info', requireLogin, getUserInfo);
 
-//for user
+// for user
 /**
 * @swagger
 * /user/delete:
@@ -85,6 +85,6 @@ router.get('/info', requireLogin, getUserInfo)
 *      '$error':
 *        description: Various errors.
 */
-router.post("/delete", requireLogin, deleteUser)
+router.post('/delete', requireLogin, deleteUser);
 
 module.exports = router;

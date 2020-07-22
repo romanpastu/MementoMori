@@ -1,14 +1,13 @@
-const express = require('express')
-const router = express.Router()
-const { db } = require('../database/database')
-const PQ = require('pg-promise').ParameterizedQuery
-const { requireLogin } = require("../controllers/auth")
-const {  decode } = require('jsonwebtoken')
-var moment = require('moment');
+const express = require('express');
+
+const router = express.Router();
+const moment = require('moment');
+const { requireLogin } = require('../controllers/auth');
+
 moment().format();
 
-const { getUserList, deleteUser, updateUser } = require('../controllers/admin')
-//User Crud Related Routes
+const { getUserList, deleteUser, updateUser } = require('../controllers/admin');
+// User Crud Related Routes
 /**
  * @swagger
  * /userlist:
@@ -26,9 +25,9 @@ const { getUserList, deleteUser, updateUser } = require('../controllers/admin')
  *      '$error':
  *        description: Various errors.
  */
-router.get("/userlist", requireLogin, getUserList)
+router.get('/userlist', requireLogin, getUserList);
 
-//for admin
+// for admin
 /**
  * @swagger
  * /user/delete/:id:
@@ -51,9 +50,9 @@ router.get("/userlist", requireLogin, getUserList)
  *      '$error':
  *        description: Various errors.
  */
-router.post("/user/delete/:id", requireLogin, deleteUser)
+router.post('/user/delete/:id', requireLogin, deleteUser);
 
-  //for admin
+// for admin
 /**
  * @swagger
  * /user/update/:id:
@@ -95,6 +94,6 @@ router.post("/user/delete/:id", requireLogin, deleteUser)
  *      '405':
  *        description: Error / DB Error.
  */
-router.post("/user/update/:id", requireLogin, updateUser)
+router.post('/user/update/:id', requireLogin, updateUser);
 
 module.exports = router;

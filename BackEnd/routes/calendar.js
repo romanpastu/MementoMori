@@ -1,13 +1,14 @@
-const express = require('express')
-const router = express.Router()
-const { db } = require('../database/database')
-const PQ = require('pg-promise').ParameterizedQuery
-const { requireLogin } = require("../controllers/auth")
-const { decode } = require('jsonwebtoken')
-var moment = require('moment');
+const express = require('express');
+
+const router = express.Router();
+const moment = require('moment');
+const { requireLogin } = require('../controllers/auth');
+
 moment().format();
-const { getUserCalendar, getUserFieldsInfo, updateField, generateCalendar } = require('../controllers/calendar')
-//get user
+const {
+  getUserCalendar, getUserFieldsInfo, updateField, generateCalendar,
+} = require('../controllers/calendar');
+// get user
 /**
  * @swagger
  * /getUserGenerateCalendar:
@@ -23,9 +24,9 @@ const { getUserCalendar, getUserFieldsInfo, updateField, generateCalendar } = re
  *      '$error':
  *        description: Various errors.
  */
-router.get('/getUserGenerateCalendar', requireLogin, getUserCalendar)
+router.get('/getUserGenerateCalendar', requireLogin, getUserCalendar);
 
-//get user field info
+// get user field info
 /**
  * @swagger
  * /getUserFieldsInfo:
@@ -41,10 +42,9 @@ router.get('/getUserGenerateCalendar', requireLogin, getUserCalendar)
  *      '$error':
  *        description: Various errors.
  */
-router.get('/getUserFieldsInfo', requireLogin, getUserFieldsInfo)
+router.get('/getUserFieldsInfo', requireLogin, getUserFieldsInfo);
 
-
-//update field
+// update field
 /**
  * @swagger
  * /update/field:
@@ -72,9 +72,9 @@ router.get('/getUserFieldsInfo', requireLogin, getUserFieldsInfo)
  *      '$error':
  *        description: Various errors.
  */
-router.post('/update/field', requireLogin, updateField)
+router.post('/update/field', requireLogin, updateField);
 
-//generate calendar - user restricted
+// generate calendar - user restricted
 /**
  * @swagger
  * /generateCalendar:
@@ -103,8 +103,6 @@ router.post('/update/field', requireLogin, updateField)
  *      '408':
  *         description: The resulting total weeks are smaller than the weeks spent up to register
  */
-router.post('/generateCalendar', requireLogin, generateCalendar)
-
-
+router.post('/generateCalendar', requireLogin, generateCalendar);
 
 module.exports = router;
