@@ -62,7 +62,7 @@ class Admin extends Component {
     }
 
     getUserList() {
-        API.get(constants.urlBackend + '/userlist').then(response => {
+        API.get(constants.urlBackend + '/admin/userlist').then(response => {
             this.setState({
                 userList: response.data
             }, () => {
@@ -89,7 +89,7 @@ class Admin extends Component {
 
     deleteUser() {
 
-        API.post(constants.urlBackend + '/user/delete/' + this.state.rowId).then(response => {
+        API.post(constants.urlBackend + '/admin/user/delete/' + this.state.rowId).then(response => {
             if (response.status == 200) {
                 this.setState({
                     showDeleteUserModal: false,
@@ -233,7 +233,7 @@ class Admin extends Component {
         var password1 = this.state.editUserInfo.password1
         var password2 = this.state.editUserInfo.password2
 
-        API.post(constants.urlBackend + '/user/update/' + this.state.rowId, { firstName, secondName, mail, password1, password2 }).then(res => {
+        API.post(constants.urlBackend + '/admin/user/update/' + this.state.rowId, { firstName, secondName, mail, password1, password2 }).then(res => {
 
             this.updateEditErrors(200)
             this.getUserList();

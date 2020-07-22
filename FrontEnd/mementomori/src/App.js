@@ -62,7 +62,7 @@ class App extends React.Component {
   } trade
 
   logout = () => {
-    API.post(constants.urlBackend + "/logout").then(res => {
+    API.post(constants.urlBackend + "/auth/logout").then(res => {
       Cookies.remove('accesstoken')
       this.setState({
         isAuthenticated: false,
@@ -82,7 +82,7 @@ class App extends React.Component {
     return new Promise((resolve, reject) => {
       axios({
         method: 'post',
-        url: constants.urlBackend + "/login",
+        url: constants.urlBackend + "/auth/login",
         data: qs.stringify({ email, password }),
         headers: {
           'content-type': 'application/x-www-form-urlencoded;charset=utf-8'

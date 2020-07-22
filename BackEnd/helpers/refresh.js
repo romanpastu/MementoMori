@@ -1,5 +1,5 @@
 const { verify } = require('jsonwebtoken');
-const {db} = require('./database.js')
+const {db} = require('../database/database.js')
 const { createAccessToken, createRefreshToken, sendAccessToken, sendRefreshToken } = require('./token.js')
 
 
