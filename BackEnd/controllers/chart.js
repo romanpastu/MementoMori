@@ -2,10 +2,7 @@ const express = require('express')
 const { db } = require('../database/database')
 const PQ = require('pg-promise').ParameterizedQuery
 const { verify, decode } = require('jsonwebtoken')
-const { hash, compare } = require('bcryptjs')
-const { createAccessToken, createRefreshToken, sendAccessToken, sendRefreshToken } = require('../helpers/token.js')
-const { isAuth } = require('../helpers/isAuth.js')
-const {refresh} = require('../helpers/refresh')
+const {getCurrentWeek, getWeeksToRegisterDate} = require("../helpers/date")
 
 var moment = require('moment');
 moment().format();
@@ -19,16 +16,7 @@ async function generatePieChart ( req, res)  {
     var decoded = decode(token, { complete: true });
     var userId = decoded.payload.userId
 
-    function getCurrentWeek(birth_date) {
-        var current_date = moment();
-        var weeks_to_date = moment(new Date(current_date)).diff(birth_date, 'days') / 7;
-        return Math.floor(weeks_to_date);
-    }
-
-    function getWeeksToRegisterDate(register_date, birth_date) {
-        var weeks_to_date = moment(new Date(register_date)).diff(birth_date, 'days') / 7;
-        return Math.floor(weeks_to_date);
-    }
+   
     let selectData = new PQ({ text: 'SELECT birth_date::varchar, register_date::varchar from users where id = $1 ;', values: [userId] })
     db.query(selectData).then(data => {
 
@@ -113,16 +101,7 @@ async function generateCumulativeMaxPotentialChart ( req, res)  {
     var decoded = decode(token, { complete: true });
     var userId = decoded.payload.userId
 
-    function getCurrentWeek(birth_date) {
-        var current_date = moment();
-        var weeks_to_date = moment(new Date(current_date)).diff(birth_date, 'days') / 7;
-        return Math.floor(weeks_to_date);
-    }
-
-    function getWeeksToRegisterDate(register_date, birth_date) {
-        var weeks_to_date = moment(new Date(register_date)).diff(birth_date, 'days') / 7;
-        return Math.floor(weeks_to_date);
-    }
+   
     let selectData = new PQ({ text: "SELECT birth_date::varchar, register_date::varchar from users where id = $1;", values: [userId] })
     db.query(selectData).then(data => {
 
@@ -202,17 +181,7 @@ async function generateCumulativeChart ( req, res)  {
     const token = authorization.split(' ')[1];
     var decoded = decode(token, { complete: true });
     var userId = decoded.payload.userId
-  
-    function getCurrentWeek(birth_date) {
-      var current_date = moment();
-      var weeks_to_date = moment(new Date(current_date)).diff(birth_date, 'days') / 7;
-      return Math.floor(weeks_to_date);
-    }
-  
-    function getWeeksToRegisterDate(register_date, birth_date) {
-      var weeks_to_date = moment(new Date(register_date)).diff(birth_date, 'days') / 7;
-      return Math.floor(weeks_to_date);
-    }
+
     let selectChartData = new PQ({text: "SELECT birth_date::varchar, register_date::varchar from users where id = $1;", values: [userId]})
     db.query(selectChartData).then(data => {
       
@@ -276,16 +245,7 @@ async function generateLinealChart ( req, res)  {
     var decoded = decode(token, { complete: true });
     var userId = decoded.payload.userId
   
-    function getCurrentWeek(birth_date) {
-      var current_date = moment();
-      var weeks_to_date = moment(new Date(current_date)).diff(birth_date, 'days') / 7;
-      return Math.floor(weeks_to_date);
-    }
-  
-    function getWeeksToRegisterDate(register_date, birth_date) {
-      var weeks_to_date = moment(new Date(register_date)).diff(birth_date, 'days') / 7;
-      return Math.floor(weeks_to_date);
-    }
+
     let selectChartData = new PQ({text: "SELECT birth_date::varchar, register_date::varchar from users where id = $1 ;", values : [userId]})
     db.query(selectChartData).then(data => {
   
