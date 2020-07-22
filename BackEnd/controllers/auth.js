@@ -11,21 +11,20 @@ const { db } = require('../database/database');
 moment().format();
 
 function requireLogin(req, res, next) {
+  async function result() {
+    const data = await refresh(req);
+    const userId = isAuthRefreshed(data.accesstoken);
+    if (userId !== null) {
+      next();
+    }
+  }
   try {
     const userId = isAuth(req);
     if (userId !== null) {
       next();
     }
   } catch (err) {
-    if (err.message == 'jwt expired') {
-      async function result() {
-        const data = await refresh(req);
-
-        const userId = isAuthRefreshed(data.accesstoken);
-        if (userId !== null) {
-          next();
-        }
-      }
+    if (err.message === 'jwt expired') {
       result();
     }
     if (err.message !== 'jwt expired') {
@@ -238,9 +237,7 @@ async function refreshToken(req, res) {
         const accesstoken = createAccessToken(user[0].id, permited);
         const refreshtoken = createRefreshToken(user[0].id);
         const setRefreshToken = new PQ({ text: 'UPDATE users SET refreshtoken = $1 where id = $2', values: [refreshtoken, user[0].id] });
-        db.query(setRefreshToken).then((data) =>
-          // sendRefreshToken(res, refreshtoken); //unnecesary
-          res.send({ accesstoken })).catch((error) => {
+        db.query(setRefreshToken).then(() => res.send({ accesstoken })).catch((error) => {
           console.log('ERROR: ', error);
         });
       }).catch((error) => {
