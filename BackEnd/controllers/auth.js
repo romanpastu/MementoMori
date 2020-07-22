@@ -1,11 +1,11 @@
 const express = require('express')
-const router = express.Router()
 const { db } = require('../database/database')
 const PQ = require('pg-promise').ParameterizedQuery
 const { verify, decode } = require('jsonwebtoken')
 const { hash, compare } = require('bcryptjs')
 const { createAccessToken, createRefreshToken, sendAccessToken, sendRefreshToken } = require('../helpers/token.js')
 const { isAuth } = require('../helpers/isAuth.js')
+const {refresh} = require('../helpers/refresh')
 
 var moment = require('moment');
 moment().format();
