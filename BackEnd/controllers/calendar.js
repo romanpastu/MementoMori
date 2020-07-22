@@ -2,7 +2,7 @@ const PQ = require('pg-promise').ParameterizedQuery;
 const { decode } = require('jsonwebtoken');
 const moment = require('moment');
 const { db } = require('../database/database');
-
+const { getWeeksToRegisterDate, getWeeksToLive, filterDate } = require('../helpers/date')
 moment().format();
 
 async function getUserCalendar(req, res) {
@@ -77,23 +77,6 @@ async function generateCalendar(req, res) {
   const yearsToLive = Math.trunc(req.body.yearsToLive).toString();
   const { registerDate } = req.body;
 
-  function filterDate(date) {
-    const stringDate = moment(date).format('YYYY-MM-DD').toString();
-    const result = stringDate.match(/(?:(?!T).)*/);
-    return result[0];
-  }
-
-  function getWeeksToLive(death_date, birth_date) {
-    // returns the weeks to live between death and birth date, rounded to upper week
-    const weeks_to_live = moment(death_date).diff(moment(birth_date), 'days') / 7;
-    return Math.ceil(weeks_to_live);
-  }
-
-  function getWeeksToRegisterDate(register_date, birth_date) {
-    const weeks_to_date = moment(new Date(filterDate(register_date))).diff(birth_date, 'days') / 7;
-    // Returns lived weeks to date rounded to lower number because we dont want to overwrite the current ongoing week
-    return Math.floor(weeks_to_date);
-  }
 
   if (yearsToLive > 100 || yearsToLive < 1) {
     res.status(400).send(new Error('Invalid years'));
@@ -106,6 +89,7 @@ async function generateCalendar(req, res) {
     const { birth_date } = data[0];
     let deathDate = '';
     // sets the death_date and the weeks to live
+
     deathDate = moment(filterDate(birth_date)).add(yearsToLive, 'years');
 
     // check that the weeks to live are bigger than the weeks to register date
