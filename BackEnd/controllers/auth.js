@@ -106,12 +106,12 @@ async function register(req, res) {
 
 async function login(req, res) {
   const { email, password } = req.body;
-
   try {
     let user = '';
     const selectUser = new PQ({ text: 'SELECT * FROM users where email = $1', values: [email] });
     db.query(selectUser).then(async (data) => {
       user = data;
+      
       if (!user[0]) {
         return res.status(403).json({
           error: 'User doesnt exist'
@@ -120,7 +120,7 @@ async function login(req, res) {
       const valid = await compare(password, user[0].password);
 
       if (!valid) {
-       return res.status(403).json({
+        return res.status(403).json({
           error: 'Password not correct'
         });
       }
@@ -142,7 +142,6 @@ async function login(req, res) {
         const refreshtoken = createRefreshToken(user[0].id);
         const setUserRefreshToken = new PQ({ text: 'UPDATE users SET refreshtoken = $1 where id = $2', values: [refreshtoken, user[0].id] });
         db.query(setUserRefreshToken).then((data) => {
-          // sendRefreshToken(res, refreshtoken); //unnecesary
           sendAccessToken(res, req, accesstoken);
         }).catch((err) => {
           return res.status(500).json({
