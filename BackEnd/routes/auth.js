@@ -2,6 +2,9 @@ const express = require('express');
 
 const router = express.Router();
 
+const {userLoginValidator} = require('../validators/auth')
+const {runValidation} = require('../validators/index')
+
 const moment = require('moment');
 
 moment().format();
@@ -84,7 +87,7 @@ router.post('/register', register);
  *      '401':
  *        description: Wrong password and email combinations
  */
-router.post('/login', login);
+router.post('/login',  login);
 /**
  * @swagger
  * /refresh_token:

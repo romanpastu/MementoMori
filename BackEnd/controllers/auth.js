@@ -113,14 +113,18 @@ async function login(req, res) {
     db.query(selectUser).then(async (data) => {
       user = data;
       if (!user[0]) {
-        res.status(400).send('error');
-        throw new Error('User doesnt exist');
+        return res.status(403).json({
+          error: 'User doesnt exist'
+        });
       }
       const valid = await compare(password, user[0].password);
+
       if (!valid) {
-        res.status(401).send('error');
-        throw new Error('Password not corect');
+       return res.status(403).json({
+          error: 'Password not correct'
+        });
       }
+
       // selects the permissions
       const selectUserPermissions = new PQ({ text: 'SELECT * FROM user_permissions WHERE user_id = $1', values: [user[0].id] });
       db.query(selectUserPermissions).then((data) => {
