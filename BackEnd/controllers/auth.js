@@ -144,18 +144,22 @@ async function login(req, res) {
         db.query(setUserRefreshToken).then((data) => {
           // sendRefreshToken(res, refreshtoken); //unnecesary
           sendAccessToken(res, req, accesstoken);
-        }).catch((error) => {
-          console.log('ERROR: ', error);
+        }).catch((err) => {
+          return res.status(500).json({
+            error: `${err.message}`
+          })
         });
       });
-    }).catch((error) => {
+    }).catch((err) => {
       console.log('ERROR: ', error);
-      res.send(error);
+      return res.status(500).json({
+        error: `${err.message}`
+      })
     });
   } catch (err) {
-    res.send({
-      error: `${err.message}`,
-    });
+    return res.status(500).json({
+      error: `${err.message}`
+    })
   }
 }
 
