@@ -20,7 +20,7 @@
     "fs": "0.0.1-security",
     "https": "^1.0.0",
     "jsonwebtoken": "^8.5.1",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "mongoose": "^5.8.6",
     "nodemon": "^2.0.2",
     "pg-promise": "^10.9.4",
